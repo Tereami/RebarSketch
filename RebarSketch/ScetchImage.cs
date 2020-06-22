@@ -87,6 +87,11 @@ namespace RebarSketch
                 if (param.IsVariable) fontSize2 = fontSize2 * 0.8f;
                 Font fnt = new Font(SupportSettings.fontName, fontSize2, SupportSettings.fontStyle);
 
+                if(param.value.EndsWith("°"))
+                {
+                    fnt = new Font("Isocpeur", fontSize2, SupportSettings.fontStyle);
+                }
+
                 gr.TranslateTransform(b, h);
                 gr.RotateTransform(-angle);
 
