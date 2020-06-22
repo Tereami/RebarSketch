@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>RebarSketch</Name>
+    <Assembly>
+      C:\Users\azuev\source\repos\Tereami\RebarSketch\RebarSketch\bin\R2020\RebarSketch.dll
+    </Assembly>
+    <ClientId>f9403064-2cb4-4784-a8bd-a6436e229dfb</ClientId>
+    <FullClassName>RebarSketch.App</FullClassName>
+    <VendorId>Weandrevit</VendorId>
+    <VendorDescription>weandrevit.ru</VendorDescription>
+  </AddIn>
+</RevitAddIns>

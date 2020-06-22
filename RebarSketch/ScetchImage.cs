@@ -67,12 +67,15 @@ namespace RebarSketch
             gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
             gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
             gr.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Default;
-            StringFormat format = new StringFormat()
-            {
-                Alignment = StringAlignment.Center,
-                LineAlignment = StringAlignment.Center,
-            };
-
+            //StringFormat format = new StringFormat()
+            //{
+            //    Alignment = StringAlignment.Center,
+            //    LineAlignment = StringAlignment.Center,
+            //};
+            StringFormat format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
+            
 
             foreach (ScetchParameter param in parameters)
             {
@@ -81,7 +84,7 @@ namespace RebarSketch
                 float angle = param.Rotation;
 
                 float fontSize2 = SupportSettings.fontSize;
-                //if (param.IsVariable) fontSize2 = fontSize2 * 0.8f;
+                if (param.IsVariable) fontSize2 = fontSize2 * 0.8f;
                 Font fnt = new Font(SupportSettings.fontName, fontSize2, SupportSettings.fontStyle);
 
                 gr.TranslateTransform(b, h);
@@ -98,6 +101,13 @@ namespace RebarSketch
                 gr.ScaleTransform(widthScale, 1f);
 
                 gr.DrawString(param.value, fnt, Brushes.Black, 0, 0, format);
+
+                //string unicodeConvert = Uri.UnescapeDataString(param.value);
+                //gr.DrawString(unicodeConvert, fnt, Brushes.Black, 0, 0, format);
+
+                //System.Globalization.CultureInfo _provider = new System.Globalization.CultureInfo("en-us");
+                //String drawString = param.value.ToString(_provider);
+                //gr.DrawString(drawString, fnt, Brushes.Black, 0, 0, format);
 
                 if (param.HaveSpacing)
                 {

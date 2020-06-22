@@ -176,7 +176,7 @@ namespace RebarSketch
                         if (lengthParam.DisplayUnitType == DisplayUnitType.DUT_DECIMAL_DEGREES)
                         {
                             val = SupportMath.RoundDegrees(val);
-                            textVal = val.ToString("F0") + "°";
+                            textVal = val.ToString("F0") + '\u00B0';
                             sparam.value = textVal;
                         }
                     }
