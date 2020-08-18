@@ -11,6 +11,7 @@ namespace RebarSketch
         public static double RoundMillimeters(double value, bool roundForSmallDetail)
         {
             double mms = value * 304.8;
+            mms = Math.Round(mms, 1);
             if(roundForSmallDetail)
             {
                 mms = SupportSettings.lengthAccuracy * Math.Round(mms / SupportSettings.lengthAccuracy);
