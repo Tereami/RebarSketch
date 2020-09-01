@@ -35,6 +35,10 @@
             this.buttonBrowse = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.labelConfigIniPath = new System.Windows.Forms.Label();
+            this.labelAppDataConfigPath = new System.Windows.Forms.Label();
+            this.buttonHelp = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -49,24 +53,24 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(16, 43);
+            this.radioButton1.Location = new System.Drawing.Point(16, 87);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(142, 17);
+            this.radioButton1.Size = new System.Drawing.Size(187, 17);
             this.radioButton1.TabIndex = 1;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Серверное хранилище:";
+            this.radioButton1.Text = "Пользовательская библиотека:";
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(16, 93);
+            this.radioButton2.Checked = true;
+            this.radioButton2.Location = new System.Drawing.Point(16, 39);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(140, 17);
+            this.radioButton2.Size = new System.Drawing.Size(152, 17);
             this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "Локальное хранилище";
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "Стандартная библиотека";
             this.radioButton2.UseVisualStyleBackColor = true;
             this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
@@ -74,15 +78,15 @@
             // 
             this.textBoxPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPath.Location = new System.Drawing.Point(16, 67);
+            this.textBoxPath.Location = new System.Drawing.Point(16, 111);
             this.textBoxPath.Name = "textBoxPath";
-            this.textBoxPath.Size = new System.Drawing.Size(229, 20);
+            this.textBoxPath.Size = new System.Drawing.Size(414, 20);
             this.textBoxPath.TabIndex = 2;
             // 
             // buttonBrowse
             // 
             this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonBrowse.Location = new System.Drawing.Point(251, 65);
+            this.buttonBrowse.Location = new System.Drawing.Point(436, 109);
             this.buttonBrowse.Name = "buttonBrowse";
             this.buttonBrowse.Size = new System.Drawing.Size(75, 22);
             this.buttonBrowse.TabIndex = 3;
@@ -94,7 +98,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(251, 127);
+            this.buttonCancel.Location = new System.Drawing.Point(355, 188);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
@@ -105,7 +109,7 @@
             // buttonOk
             // 
             this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(170, 127);
+            this.buttonOk.Location = new System.Drawing.Point(274, 188);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
             this.buttonOk.TabIndex = 5;
@@ -113,13 +117,54 @@
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 148);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(197, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Настройки будут сохранены в файле:";
+            // 
+            // labelConfigIniPath
+            // 
+            this.labelConfigIniPath.AutoSize = true;
+            this.labelConfigIniPath.Location = new System.Drawing.Point(13, 167);
+            this.labelConfigIniPath.Name = "labelConfigIniPath";
+            this.labelConfigIniPath.Size = new System.Drawing.Size(162, 13);
+            this.labelConfigIniPath.TabIndex = 6;
+            this.labelConfigIniPath.Text = "%appdata%\\bim-starter\\config.ini";
+            // 
+            // labelAppDataConfigPath
+            // 
+            this.labelAppDataConfigPath.AutoSize = true;
+            this.labelAppDataConfigPath.Location = new System.Drawing.Point(34, 59);
+            this.labelAppDataConfigPath.Name = "labelAppDataConfigPath";
+            this.labelAppDataConfigPath.Size = new System.Drawing.Size(35, 13);
+            this.labelAppDataConfigPath.TabIndex = 7;
+            this.labelAppDataConfigPath.Text = "label4";
+            // 
+            // buttonHelp
+            // 
+            this.buttonHelp.Location = new System.Drawing.Point(436, 188);
+            this.buttonHelp.Name = "buttonHelp";
+            this.buttonHelp.Size = new System.Drawing.Size(75, 23);
+            this.buttonHelp.TabIndex = 8;
+            this.buttonHelp.Text = "Справка";
+            this.buttonHelp.UseVisualStyleBackColor = true;
+            this.buttonHelp.Click += new System.EventHandler(this.buttonHelp_Click);
+            // 
             // FormSelectPath
             // 
             this.AcceptButton = this.buttonOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(334, 162);
+            this.ClientSize = new System.Drawing.Size(519, 223);
+            this.Controls.Add(this.buttonHelp);
+            this.Controls.Add(this.labelAppDataConfigPath);
+            this.Controls.Add(this.labelConfigIniPath);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonBrowse);
@@ -145,5 +190,9 @@
         private System.Windows.Forms.Button buttonBrowse;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonOk;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelConfigIniPath;
+        private System.Windows.Forms.Label labelAppDataConfigPath;
+        private System.Windows.Forms.Button buttonHelp;
     }
 }

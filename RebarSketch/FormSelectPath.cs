@@ -12,11 +12,13 @@ namespace RebarSketch
 {
     public partial class FormSelectPath : Form
     {
-        public bool CheckServerPath;
+        public bool UseServerPath;
         public string ServerPath;
-        public FormSelectPath()
+        public FormSelectPath(string appDataPath)
         {
             InitializeComponent();
+            labelConfigIniPath.Text = System.IO.Path.Combine(appDataPath, @"bim-starter\config.ini");
+            labelAppDataConfigPath.Text = System.IO.Path.Combine(appDataPath, @"Autodesk\Revit\Addins\BimStarterConfig\");
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
@@ -40,7 +42,7 @@ namespace RebarSketch
         private void buttonOk_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
-            this.CheckServerPath = radioButton1.Checked;
+            this.UseServerPath = radioButton1.Checked;
             this.ServerPath = textBoxPath.Text;
             this.Close();
         }
@@ -51,6 +53,11 @@ namespace RebarSketch
             dialog.ShowNewFolderButton = false;
             if (dialog.ShowDialog() != DialogResult.OK) return;
             textBoxPath.Text = dialog.SelectedPath;
+        }
+
+        private void buttonHelp_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://bim-starter.com/plugins/rebarsketch/");
         }
     }
 }

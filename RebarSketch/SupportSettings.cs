@@ -18,15 +18,20 @@ namespace RebarSketch
         public static System.Drawing.FontStyle fontStyle = System.Drawing.FontStyle.Regular;
         public static string imageParamName;
 
-        public static bool Activate()
+        public static string Activate()
         {
             string assemblyName = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string assemblyFolder = System.IO.Path.GetDirectoryName(assemblyName);
 
-            string programdataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string rbspath = Path.Combine(programdataPath, "RibbonBimStarter");
-            if (!Directory.Exists(rbspath)) Directory.CreateDirectory(rbspath);
-            string configPath = Path.Combine(rbspath, "config.ini");
+            string appdataFolder =
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string bimstarterFolder =
+                System.IO.Path.Combine(appdataFolder, "bim-starter");
+            if (!System.IO.Directory.Exists(bimstarterFolder))
+            {
+                System.IO.Directory.CreateDirectory(bimstarterFolder);
+            }
+            string configPath = Path.Combine(bimstarterFolder, "config.ini");
 
             string weandrevitPath = "";
             if (File.Exists(configPath))
@@ -35,22 +40,23 @@ namespace RebarSketch
             }
             else
             {
-                FormSelectPath form = new FormSelectPath();
-                if (form.ShowDialog() != System.Windows.Forms.DialogResult.OK) return false;
-                if (form.CheckServerPath)
+                FormSelectPath form = new FormSelectPath(appdataFolder);
+                if (form.ShowDialog() != System.Windows.Forms.DialogResult.OK) return "Cancelled";
+                if (form.UseServerPath)
                 {
                     weandrevitPath = form.ServerPath;
                 }
                 else
                 {
-                    weandrevitPath = rbspath;
+                    weandrevitPath = Path.Combine(appdataFolder, @"Autodesk\Revit\Addins\BimStarterConfig\");
                 }
                 File.WriteAllText(configPath, weandrevitPath);
             }
 
             //string weandrevitPath = FileSupport.GetMainWeandrevitFolder(addinPath);
             libraryPath = Path.Combine(weandrevitPath, "RebarSketch", "library");
-            if (!Directory.Exists(libraryPath)) throw new Exception("Selected directory is not RebarSketch library path");
+            if (!Directory.Exists(libraryPath)) 
+                return ("Library directory not exists: " + libraryPath);
 
             string settingsFile = Path.Combine(weandrevitPath, "RebarSketch", "settings.txt");
             string[] settings = FileSupport.ReadFileWithAnyDecoding(settingsFile);
@@ -64,7 +70,7 @@ namespace RebarSketch
 
 
             FileSupport.CheckAndDeleteFolder(tempPath);
-            return true;
+            return string.Empty;
         }
     }
 }

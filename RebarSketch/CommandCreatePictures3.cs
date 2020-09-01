@@ -17,7 +17,12 @@ namespace RebarSketch
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
             //считываем файл настроек
-            SupportSettings.Activate();
+            string activateMessage = SupportSettings.Activate();
+            if (!string.IsNullOrEmpty(activateMessage))
+            {
+                message = activateMessage;
+                return Result.Failed;
+            }
 
             //выбираем арматуру, которую будем обрабатывать
             Autodesk.Revit.UI.Selection.Selection sel = commandData.Application.ActiveUIDocument.Selection;
@@ -30,11 +35,11 @@ namespace RebarSketch
             }
 
 
-            if(selIds.Count > 0)
+            if (selIds.Count > 0)
             {
                 ElementId selId = selIds.First();
                 Element selElem = doc.GetElement(selId);
-                if(selElem.Category.Id.IntegerValue != new ElementId(BuiltInCategory.OST_Rebar).IntegerValue)
+                if (selElem.Category.Id.IntegerValue != new ElementId(BuiltInCategory.OST_Rebar).IntegerValue)
                 {
                     message = "Перед запуском перейдите в Ведомость деталей, выберите все строчки и после этого запускайте плагин.";
                     return Result.Failed;
@@ -42,7 +47,7 @@ namespace RebarSketch
             }
 
             List<Element> col = new List<Element>();
-            foreach(ElementId rebarId in selIds)
+            foreach (ElementId rebarId in selIds)
             {
                 Element elem = doc.GetElement(rebarId);
                 col.Add(elem);
@@ -52,7 +57,7 @@ namespace RebarSketch
 
             View activeView = commandData.Application.ActiveUIDocument.ActiveView;
             ViewSchedule vs = activeView as ViewSchedule;
-            if (vs == null) 
+            if (vs == null)
             {
                 message = "Перед запуском перейдите в Ведомость деталей, выберите все строчки и после этого запускайте плагин.";
                 return Result.Failed;
@@ -88,7 +93,7 @@ namespace RebarSketch
 
             System.IO.Directory.CreateDirectory(SupportSettings.tempPath);
 
-            
+
 
             //разделяю арматуру на обычную и переменной длины
             List<Element> standartRebars = new List<Element>();
@@ -184,7 +189,7 @@ namespace RebarSketch
                     ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, st, imagesPrefix);
                 }
 
-                
+
                 //заполняю картинки для арматуры переменной длины
                 foreach (var kvp in variableRebarBase)
                 {
@@ -209,7 +214,7 @@ namespace RebarSketch
                         {
                             string paramName = sparam.Name;
                             Parameter lengthParam = rebar.LookupParameter(paramName);
-                            if(lengthParam == null)
+                            if (lengthParam == null)
                             {
                                 message = "Параметр " + paramName + " не найден в " + SupportNames.GetElementName(rebar)
                                     + ". Возможно, попытка свести в одну позицию стержни разной формы. "
@@ -233,11 +238,11 @@ namespace RebarSketch
                         minValue = SupportMath.RoundMillimeters(minValue, roundForSmallDimension);
                         double maxValue = values.Max();
                         maxValue = SupportMath.RoundMillimeters(maxValue, roundForSmallDimension);
-                        double spacing = (maxValue - minValue) / (count-1);
+                        double spacing = (maxValue - minValue) / (count - 1);
                         spacing = SupportSettings.lengthAccuracy * Math.Round(spacing / SupportSettings.lengthAccuracy); //Math.Round(spacing, 0);
 
                         string line = "";
-                        
+
                         if (minValue == maxValue || count == 1)
                         {
                             sparam.value = minValue.ToString("F0");
