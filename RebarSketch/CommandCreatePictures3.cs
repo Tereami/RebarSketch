@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,15 +15,23 @@ namespace RebarSketch
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            Debug.Listeners.Clear();
+            Debug.Listeners.Add(new Logger());
+            Debug.WriteLine("Start rebar scetch");
+
+
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
+            Debug.WriteLine("Read settings");
             //считываем файл настроек
             string activateMessage = SupportSettings.Activate();
             if (!string.IsNullOrEmpty(activateMessage))
             {
                 message = activateMessage;
+                Debug.WriteLine("Read settings failed: " + message);
                 return Result.Failed;
             }
+            Debug.WriteLine("Read settings success");
 
             //выбираем арматуру, которую будем обрабатывать
             Autodesk.Revit.UI.Selection.Selection sel = commandData.Application.ActiveUIDocument.Selection;
@@ -31,6 +40,7 @@ namespace RebarSketch
             if (selIds.Count == 0)
             {
                 message = "Перед запуском перейдите в Ведомость деталей, выберите все строчки и после этого запускайте плагин.";
+                Debug.WriteLine("No selected elements");
                 return Result.Failed;
             }
 
@@ -42,6 +52,7 @@ namespace RebarSketch
                 if (selElem.Category.Id.IntegerValue != new ElementId(BuiltInCategory.OST_Rebar).IntegerValue)
                 {
                     message = "Перед запуском перейдите в Ведомость деталей, выберите все строчки и после этого запускайте плагин.";
+                    Debug.WriteLine("No selected rebar elements");
                     return Result.Failed;
                 }
             }
@@ -60,6 +71,7 @@ namespace RebarSketch
             if (vs == null)
             {
                 message = "Перед запуском перейдите в Ведомость деталей, выберите все строчки и после этого запускайте плагин.";
+                Debug.WriteLine("Active view is not ViewSchedule");
                 return Result.Failed;
             }
 
@@ -73,6 +85,7 @@ namespace RebarSketch
                 .Where(i => i.Name.StartsWith(imagesPrefix))
                 .Select(i => i.Id)
                 .ToList();
+            Debug.WriteLine("Old scetch images found: " + oldImageIds.Count.ToString());
 
             if (oldImageIds.Count > 0)
             {
@@ -92,7 +105,7 @@ namespace RebarSketch
             lib.Activate(SupportSettings.libraryPath);
 
             System.IO.Directory.CreateDirectory(SupportSettings.tempPath);
-
+            Debug.WriteLine("Create temp folder: " + SupportSettings.tempPath);
 
 
             //разделяю арматуру на обычную и переменной длины
@@ -109,6 +122,7 @@ namespace RebarSketch
                     variableRebars.Add(rebar);
             }
 
+            Debug.WriteLine("Standart rebars: " + standartRebars.Count.ToString() + ", variable rebars: " + variableRebars.Count.ToString());
 
 
             //группировка арматуры переменной длины по марке
@@ -120,6 +134,7 @@ namespace RebarSketch
                 {
                     string msg = "Обнаружены арматурные стержни переменной длины, для которых не назначена Марки. ";
                     msg += "Группировка для таких стержней выполняется по Марке, которую нужно назначить заранее.";
+                    Debug.WriteLine("Non-marked variable rebars is found");
                     TaskDialog.Show("Ошибка", msg);
                     return Result.Failed;
                 }
@@ -165,6 +180,7 @@ namespace RebarSketch
                         {
                             message = "Параметр " + paramName + " не найден в " + SupportNames.GetElementName(rebar)
                                 + ". Возможно, нужно обновить семейство.";
+                            Debug.WriteLine(message);
                             return Result.Failed;
                         }
 
@@ -176,14 +192,15 @@ namespace RebarSketch
                             val = SupportMath.RoundMillimeters(val, roundForSmallDimension);
                             textVal = val.ToString("F0");
                             sparam.value = textVal;
+                            
                         }
-
                         if (lengthParam.DisplayUnitType == DisplayUnitType.DUT_DECIMAL_DEGREES)
                         {
                             val = SupportMath.RoundDegrees(val);
                             textVal = val.ToString("F0") + "°";
                             sparam.value = textVal;
                         }
+                        Debug.WriteLine("ScetchParameter name " + sparam.Name + " value = " + textVal);
                     }
 
                     ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, st, imagesPrefix);
@@ -219,13 +236,20 @@ namespace RebarSketch
                                 message = "Параметр " + paramName + " не найден в " + SupportNames.GetElementName(rebar)
                                     + ". Возможно, попытка свести в одну позицию стержни разной формы. "
                                     + ". При использовании арматуры \"Переменной длины\" следует вручную назначить разные \"Марки\" для стержней разных позиций.";
+                                Debug.WriteLine("No found parameter " + paramName + " in element " + rebar.Id.IntegerValue.ToString());
                                 return Result.Failed;
                             }
                             double val = rebar.LookupParameter(paramName).AsDouble();
                             if (variableValues.ContainsKey(paramName))
+                            {
                                 variableValues[paramName].Add(val);
+                                
+                            }
                             else
+                            {
                                 variableValues.Add(paramName, new HashSet<double> { val });
+                            }
+                            Debug.WriteLine("Add variableValues " + paramName + " = " + val.ToString());
                         }
                     }
 
@@ -270,6 +294,7 @@ namespace RebarSketch
 
                     foreach (Element rebar in rebars)
                     {
+                        Debug.WriteLine("Processed rebar id " + rebar.Id.IntegerValue.ToString());
                         ScetchImage si = new ScetchImage(rebar, st);
 
                         ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, st, imagesPrefix);
@@ -287,9 +312,11 @@ namespace RebarSketch
                 {
                     errorFamilyMessage = errorFamilyMessage + fam + "; ";
                 }
+                Debug.WriteLine(errorFamilyMessage);
                 TaskDialog.Show("Отчет", errorFamilyMessage);
             }
 
+            Debug.WriteLine("Scetches finish success");
             return Result.Succeeded;
         }
     }

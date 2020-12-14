@@ -150,6 +150,7 @@
     <Compile Include="FormSelectPath.Designer.cs">
       <DependentUpon>FormSelectPath.cs</DependentUpon>
     </Compile>
+    <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScetchImage.cs" />
     <Compile Include="ScetchLibrary.cs" />
