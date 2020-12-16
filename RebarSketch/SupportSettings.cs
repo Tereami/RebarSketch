@@ -26,6 +26,7 @@ namespace RebarSketch
     {
         public static string assemblyPath = "";
         public static string libraryPath = "";
+        public static string configFilePath = "";
         public static string tempPath;
         public static string fontName = "Isocpeur";
         public static float fontSize = 25;
@@ -47,18 +48,19 @@ namespace RebarSketch
                 Debug.WriteLine("Create folder: " + bimstarterFolder);
                 System.IO.Directory.CreateDirectory(bimstarterFolder);
             }
-            string configPath = Path.Combine(bimstarterFolder, "config.ini");
+            configFilePath = Path.Combine(bimstarterFolder, "config.ini");
 
             string weandrevitPath = "";
-            if (File.Exists(configPath))
+            if (File.Exists(configFilePath))
             {
-                Debug.WriteLine("Read file: " + configPath);
-                weandrevitPath = File.ReadAllLines(configPath)[0];
+                Debug.WriteLine("Read file: " + configFilePath);
+                weandrevitPath = File.ReadAllLines(configFilePath)[0];
             }
             else
             {
                 Debug.WriteLine("First start, show dialog window and select config folder");
-                FormSelectPath form = new FormSelectPath(appdataFolder);
+                string configDefaultFolder = Path.Combine(appdataFolder, @"Autodesk\Revit\Addins\20xx\BimStarter");
+                FormSelectPath form = new FormSelectPath(configFilePath, configDefaultFolder);
                 if (form.ShowDialog() != System.Windows.Forms.DialogResult.OK) return "Cancelled";
                 if (form.UseServerPath)
                 {
@@ -66,11 +68,11 @@ namespace RebarSketch
                 }
                 else
                 {
-                    weandrevitPath = Path.Combine(appdataFolder, @"Autodesk\Revit\Addins\BimStarterConfig\");
+                    weandrevitPath = configDefaultFolder;
                 }
                 Debug.WriteLine("Selected user path: " + weandrevitPath);
-                File.WriteAllText(configPath, weandrevitPath);
-                Debug.WriteLine("Written to file: " + configPath);
+                File.WriteAllText(configFilePath, weandrevitPath);
+                Debug.WriteLine("Written to file: " + configFilePath);
             }
 
             libraryPath = Path.Combine(weandrevitPath, "RebarSketch", "library");

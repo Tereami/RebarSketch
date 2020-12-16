@@ -14,11 +14,11 @@ namespace RebarSketch
     {
         public bool UseServerPath;
         public string ServerPath;
-        public FormSelectPath(string appDataPath)
+        public FormSelectPath(string configFilePath, string defaultConfigFolder)
         {
             InitializeComponent();
-            labelConfigIniPath.Text = System.IO.Path.Combine(appDataPath, @"bim-starter\config.ini");
-            labelAppDataConfigPath.Text = System.IO.Path.Combine(appDataPath, @"Autodesk\Revit\Addins\BimStarterConfig\");
+            labelConfigIniPath.Text = configFilePath;
+            labelAppDataConfigPath.Text = defaultConfigFolder;
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)

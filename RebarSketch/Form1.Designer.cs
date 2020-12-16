@@ -42,19 +42,20 @@
             this.btnLoadTemplate = new System.Windows.Forms.Button();
             this.btnAddRow = new System.Windows.Forms.Button();
             this.btnDeleteRow = new System.Windows.Forms.Button();
+            this.buttonOpenLibraryFolder = new System.Windows.Forms.Button();
+            this.buttonOpenConfigFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // btwNewForm
             // 
-            this.btwNewForm.Location = new System.Drawing.Point(393, 12);
+            this.btwNewForm.Location = new System.Drawing.Point(402, 12);
             this.btwNewForm.Name = "btwNewForm";
             this.btwNewForm.Size = new System.Drawing.Size(125, 23);
             this.btwNewForm.TabIndex = 0;
             this.btwNewForm.Text = "Новая форма";
             this.btwNewForm.UseVisualStyleBackColor = true;
-            this.btwNewForm.Visible = false;
             this.btwNewForm.Click += new System.EventHandler(this.btnNewForm_Click);
             // 
             // pictureBox1
@@ -65,7 +66,7 @@
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox1.Location = new System.Drawing.Point(12, 41);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(507, 257);
+            this.pictureBox1.Size = new System.Drawing.Size(515, 327);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
@@ -74,7 +75,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.Enabled = false;
-            this.btnSave.Location = new System.Drawing.Point(393, 504);
+            this.btnSave.Location = new System.Drawing.Point(402, 644);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(125, 23);
             this.btnSave.TabIndex = 2;
@@ -86,7 +87,7 @@
             // 
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRefresh.Enabled = false;
-            this.btnRefresh.Location = new System.Drawing.Point(394, 305);
+            this.btnRefresh.Location = new System.Drawing.Point(402, 374);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(125, 23);
             this.btnRefresh.TabIndex = 3;
@@ -109,9 +110,9 @@
             this.Angle,
             this.Fit});
             this.dataGridView1.Enabled = false;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 333);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 403);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(506, 165);
+            this.dataGridView1.Size = new System.Drawing.Size(515, 235);
             this.dataGridView1.TabIndex = 5;
             // 
             // ParameterName
@@ -174,7 +175,7 @@
             // 
             this.btnAddRow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnAddRow.Enabled = false;
-            this.btnAddRow.Location = new System.Drawing.Point(12, 305);
+            this.btnAddRow.Location = new System.Drawing.Point(12, 374);
             this.btnAddRow.Name = "btnAddRow";
             this.btnAddRow.Size = new System.Drawing.Size(23, 23);
             this.btnAddRow.TabIndex = 7;
@@ -186,7 +187,7 @@
             // 
             this.btnDeleteRow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDeleteRow.Enabled = false;
-            this.btnDeleteRow.Location = new System.Drawing.Point(41, 305);
+            this.btnDeleteRow.Location = new System.Drawing.Point(41, 374);
             this.btnDeleteRow.Name = "btnDeleteRow";
             this.btnDeleteRow.Size = new System.Drawing.Size(23, 23);
             this.btnDeleteRow.TabIndex = 7;
@@ -194,11 +195,33 @@
             this.btnDeleteRow.UseVisualStyleBackColor = true;
             this.btnDeleteRow.Click += new System.EventHandler(this.btnDeleteRow_Click);
             // 
+            // buttonOpenLibraryFolder
+            // 
+            this.buttonOpenLibraryFolder.Location = new System.Drawing.Point(12, 644);
+            this.buttonOpenLibraryFolder.Name = "buttonOpenLibraryFolder";
+            this.buttonOpenLibraryFolder.Size = new System.Drawing.Size(125, 23);
+            this.buttonOpenLibraryFolder.TabIndex = 8;
+            this.buttonOpenLibraryFolder.Text = "Папка библиотеки";
+            this.buttonOpenLibraryFolder.UseVisualStyleBackColor = true;
+            this.buttonOpenLibraryFolder.Click += new System.EventHandler(this.buttonOpenLibraryFolder_Click);
+            // 
+            // buttonOpenConfigFile
+            // 
+            this.buttonOpenConfigFile.Location = new System.Drawing.Point(143, 644);
+            this.buttonOpenConfigFile.Name = "buttonOpenConfigFile";
+            this.buttonOpenConfigFile.Size = new System.Drawing.Size(125, 23);
+            this.buttonOpenConfigFile.TabIndex = 8;
+            this.buttonOpenConfigFile.Text = "Файл config";
+            this.buttonOpenConfigFile.UseVisualStyleBackColor = true;
+            this.buttonOpenConfigFile.Click += new System.EventHandler(this.buttonOpenConfigFile_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(539, 558);
+            this.ClientSize = new System.Drawing.Size(539, 679);
+            this.Controls.Add(this.buttonOpenConfigFile);
+            this.Controls.Add(this.buttonOpenLibraryFolder);
             this.Controls.Add(this.btnDeleteRow);
             this.Controls.Add(this.btnAddRow);
             this.Controls.Add(this.btnLoadTemplate);
@@ -211,7 +234,7 @@
             this.MinimumSize = new System.Drawing.Size(547, 582);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Генератор форм v22.04.2020";
+            this.Text = "Генератор форм v15.12.2020";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -236,6 +259,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Y;
         private System.Windows.Forms.DataGridViewTextBoxColumn Angle;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Fit;
+        private System.Windows.Forms.Button buttonOpenLibraryFolder;
+        private System.Windows.Forms.Button buttonOpenConfigFile;
     }
 
 }

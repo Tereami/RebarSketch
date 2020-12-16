@@ -20,6 +20,7 @@ namespace RebarSketch
         {
             InitializeComponent();
             executionFolder = SupportSettings.libraryPath;
+            this.Text = "Редактор форм арматуры. Версия " + System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString();
         }
 
         private void btnNewForm_Click(object sender, EventArgs e)
@@ -224,6 +225,30 @@ namespace RebarSketch
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonOpenLibraryFolder_Click(object sender, EventArgs e)
+        {
+            if (System.IO.Directory.Exists(SupportSettings.libraryPath))
+            {
+                System.Diagnostics.Process.Start(SupportSettings.libraryPath);
+            }
+            else
+            {
+                MessageBox.Show("Не найдена папка " + SupportSettings.libraryPath);
+            }
+        }
+
+        private void buttonOpenConfigFile_Click(object sender, EventArgs e)
+        {
+            if(System.IO.File.Exists(SupportSettings.configFilePath))
+            {
+                System.Diagnostics.Process.Start(SupportSettings.configFilePath);
+            }
+            else
+            {
+                MessageBox.Show("Не найден файл " + SupportSettings.configFilePath);
+            }
         }
 
         //private void InitializeComponent()
