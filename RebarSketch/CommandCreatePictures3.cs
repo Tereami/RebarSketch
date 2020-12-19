@@ -17,7 +17,7 @@ namespace RebarSketch
         {
             Debug.Listeners.Clear();
             Debug.Listeners.Add(new Logger());
-            Debug.WriteLine("Start rebar scetch");
+            Debug.WriteLine("Start rebar scetch, revit version" + commandData.Application.Application.VersionName);
 
 
             Document doc = commandData.Application.ActiveUIDocument.Document;

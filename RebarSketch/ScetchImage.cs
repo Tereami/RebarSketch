@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,12 +51,15 @@ namespace RebarSketch
 
         public void Generate(string imagePrefix)
         {
+            Debug.WriteLine("Generate new image, prefix " + imagePrefix);
             Bitmap templateImage = new Bitmap(Template.templateImagePath);
 
             WriteBitmap(templateImage, Template.parameters);
 
             ScetchImagePath = System.IO.Path.Combine(@"C:\RebarScetch\", imagePrefix + "_" + ImageKey + ".bmp");
+            
             templateImage.Save(ScetchImagePath);
+            Debug.WriteLine("New bitmap path: " + ScetchImagePath);
         }
 
 
@@ -63,6 +67,7 @@ namespace RebarSketch
 
         public static void WriteBitmap(Bitmap templateImage, List<ScetchParameter> parameters)
         {
+            Debug.WriteLine("Write text to bitmap, parameters count: " + parameters.Count.ToString());
             Graphics gr = Graphics.FromImage(templateImage);
             gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
             gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
@@ -124,6 +129,7 @@ namespace RebarSketch
                 gr.RotateTransform(angle);
                 gr.TranslateTransform(-b, -h);
             }
+            Debug.WriteLine("Write bitmap success");
         }
 
 

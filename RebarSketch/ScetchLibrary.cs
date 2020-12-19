@@ -43,18 +43,39 @@ namespace RebarSketch
 
             if (imagesBase.ContainsKey(si.ImageKey)) //такая картинка уже ранее генерировалась и есть в проекте
             {
+                Debug.WriteLine("Scetch exists, get from base");
                 var baseImage = imagesBase[si.ImageKey];
                 rebar.LookupParameter(imageParamName).Set(baseImage.imageType.Id);
-                Debug.WriteLine("Scetch exists, get from base");
+                Debug.WriteLine("Set imagetype id" + baseImage.imageType.Id.IntegerValue.ToString() + " to rebar id" + rebar.Id.IntegerValue.ToString());
             }
             else //такая картинка еще не генерировалась - генерируем, добавляем в базу
             {
                 si.Generate(imagesPrefix);
+#if R2017 || R2018 || R2019
                 imType2 = ImageType.Create(doc, si.ScetchImagePath);
-                rebar.LookupParameter(imageParamName).Set(imType2.Id);
+#else
+                imType2 = ImageType.Create(doc, new ImageTypeOptions(si.ScetchImagePath));
+#endif
+                Debug.WriteLine("Create imagetype id=" + imType2.Id.IntegerValue.ToString());
+                Parameter imageparam = rebar.LookupParameter(imageParamName);
+                if(imageparam == null)
+                {
+                    string msg = "Нет параметра " + imageParamName + " в элементе id" + rebar.Id.IntegerValue.ToString();
+                    Debug.WriteLine(msg);
+                    System.Windows.Forms.MessageBox.Show(msg);
+                    throw new Exception(msg);
+                }
+                if(imageparam.StorageType != StorageType.ElementId)
+                {
+                    string msg = "Неверный тип параметра " + imageParamName;
+                    Debug.WriteLine(msg);
+                    System.Windows.Forms.MessageBox.Show(msg);
+                    System.Environment.Exit(1);
+                }
+                imageparam.Set(imType2.Id);
                 si.imageType = imType2;
                 imagesBase.Add(si.ImageKey, si);
-                Debug.WriteLine("Scetch created, ImageType id=" + imType2.Id.IntegerValue.ToString());
+                Debug.WriteLine("Scetch is created, ImageType id=" + imType2.Id.IntegerValue.ToString());
             }
         }
 
