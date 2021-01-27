@@ -41,13 +41,7 @@ namespace RebarSketch
                 Autodesk.Revit.DB.Structure.Rebar r = rebar as Autodesk.Revit.DB.Structure.Rebar;
 #if R2017
                 Element shape = doc.GetElement(r.RebarShapeId);
-#elif R2018
-                Element shape = doc.GetElement(r.GetShapeId());
-#elif R2019
-                Element shape = doc.GetElement(r.GetShapeId());
-#elif R2020
-                Element shape = doc.GetElement(r.GetShapeId());
-#elif R2021
+#else
                 Element shape = doc.GetElement(r.GetShapeId());
 #endif
                 familyName = shape.Name;
@@ -91,14 +85,14 @@ namespace RebarSketch
                     //variableLengthParam = typeParameters.First();
                     variableLengthParam = rebarType.LookupParameter("Рзм.ПеременнаяДлина");
                 }
-                catch { return -1; }
+                catch { return 0; }
             }
             //else
             //{
             //    //variableLengthParam = parameters.First();
             //}
 
-            if (variableLengthParam == null) return -1;
+            if (variableLengthParam == null) return 0;
 
             int checkIsVariable = variableLengthParam.AsInteger();
             return checkIsVariable;
