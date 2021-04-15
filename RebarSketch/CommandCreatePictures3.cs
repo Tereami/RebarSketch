@@ -16,7 +16,7 @@ namespace RebarSketch
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             Debug.Listeners.Clear();
-            Debug.Listeners.Add(new Logger());
+            Debug.Listeners.Add(new RbsLogger.Logger("RebarSketch"));
             Debug.WriteLine("Start rebar scetch, revit version" + commandData.Application.Application.VersionName);
 
 
@@ -187,19 +187,29 @@ namespace RebarSketch
                         string textVal = lengthParam.Definition.Name;
                         double val = lengthParam.AsDouble();
 
-                        if (lengthParam.DisplayUnitType == DisplayUnitType.DUT_MILLIMETERS)
-                        {
-                            val = SupportMath.RoundMillimeters(val, roundForSmallDimension);
-                            textVal = val.ToString("F0");
-                            sparam.value = textVal;
-                            
-                        }
-                        if (lengthParam.DisplayUnitType == DisplayUnitType.DUT_DECIMAL_DEGREES)
+
+#if R2022
+                        ForgeTypeId forgeType = lengthParam.GetUnitTypeId();
+                        string unittype = forgeType.TypeId;
+                        bool isMillimeters = unittype.Contains("millimeters");
+                        bool isDegrees = unittype.Contains("degrees");
+#else
+                        bool isMillimeters = lengthParam.DisplayUnitType == DisplayUnitType.DUT_MILLIMETERS;
+                        bool isDegrees = lengthParam.DisplayUnitType == DisplayUnitType.DUT_DECIMAL_DEGREES;
+#endif
+                        if (isDegrees)
                         {
                             val = SupportMath.RoundDegrees(val);
                             textVal = val.ToString("F0") + "°";
                             sparam.value = textVal;
                         }
+                        else
+                        {
+                            val = SupportMath.RoundMillimeters(val, roundForSmallDimension);
+                            textVal = val.ToString("F0");
+                            sparam.value = textVal;
+                        }
+
                         Debug.WriteLine("ScetchParameter name " + sparam.Name + " value = " + textVal);
                     }
 

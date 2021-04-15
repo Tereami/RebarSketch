@@ -53,19 +53,22 @@ namespace RebarSketch
                 si.Generate(imagesPrefix);
 #if R2017 || R2018 || R2019
                 imType2 = ImageType.Create(doc, si.ScetchImagePath);
-#else
+#elif R2020 
                 imType2 = ImageType.Create(doc, new ImageTypeOptions(si.ScetchImagePath));
+#elif R2021 || R2022
+                ImageTypeOptions ito = new ImageTypeOptions(si.ScetchImagePath, false, ImageTypeSource.Import);
+                imType2 = ImageType.Create(doc, ito);
 #endif
                 Debug.WriteLine("Create imagetype id=" + imType2.Id.IntegerValue.ToString());
                 Parameter imageparam = rebar.LookupParameter(imageParamName);
-                if(imageparam == null)
+                if (imageparam == null)
                 {
                     string msg = "Нет параметра " + imageParamName + " в элементе id" + rebar.Id.IntegerValue.ToString();
                     Debug.WriteLine(msg);
                     System.Windows.Forms.MessageBox.Show(msg);
                     throw new Exception(msg);
                 }
-                if(imageparam.StorageType != StorageType.ElementId)
+                if (imageparam.StorageType != StorageType.ElementId)
                 {
                     string msg = "Неверный тип параметра " + imageParamName;
                     Debug.WriteLine(msg);
@@ -87,7 +90,7 @@ namespace RebarSketch
             ScetchTemplate st = new ScetchTemplate();
             st.formName = name;
 
-            if(AsSubtype)
+            if (AsSubtype)
             {
                 st.IsSubtype = true;
                 string subtypeNumberString = name.Split('_').Last();
@@ -124,19 +127,24 @@ namespace RebarSketch
             }
             string[] paramsArray = FileSupport.ReadFileWithAnyDecoding(paramsFile);
             st.parameters = new List<ScetchParameter>();
-            foreach (string p in paramsArray)
+            for(int i = 0; i < paramsArray.Length; i++)
             {
+                string p = paramsArray[i];
                 if (p.StartsWith("#")) continue;
                 ScetchParameter sp = new ScetchParameter();
                 string[] paramInfo = p.Split(',');
-                if(paramInfo.Length < 4)
+                if (paramInfo.Length < 4)
                 {
                     continue;
                 }
                 sp.Name = paramInfo[0];
-                sp.PositionX = int.Parse(paramInfo[1]);
-                sp.PositionY = int.Parse(paramInfo[2]);
-                sp.Rotation = int.Parse(paramInfo[3]);
+                bool checkParseX = float.TryParse(paramInfo[1], out sp.PositionX);
+                bool checkParseY = float.TryParse(paramInfo[2], out sp.PositionY);
+                bool checkParseR = float.TryParse(paramInfo[3], out sp.Rotation);
+                if (!checkParseX || !checkParseY || !checkParseR)
+                {
+                    throw new ArgumentException("Incorrect syntax in file " + paramsFile.Replace("\\", " \\") + ", line " + i);
+                }
 
                 sp.NeedsWrap = false;
                 if (paramInfo.Length > 4)
@@ -219,14 +227,14 @@ namespace RebarSketch
                 {
                     if (name == familyName)
                     {
-                        
+
                         if (st.IsSubtype)
                         {
                             Parameter subtypeNumberParam = rebar.LookupParameter("Арм.НомерПодтипаФормы");
                             if (subtypeNumberParam == null) return null;
 
                             int subtypeNumber = subtypeNumberParam.AsInteger();
-                            if(st.SubtypeNumber == subtypeNumber)
+                            if (st.SubtypeNumber == subtypeNumber)
                             {
                                 Debug.WriteLine("Scetch template as Subtype " + subtypeNumber.ToString());
                                 return st;

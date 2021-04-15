@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing.Imaging;
 using Autodesk.Revit.DB;
 using System.Drawing;
 
@@ -40,7 +41,7 @@ namespace RebarSketch
         public static string GenerateTemporary(string templateImagePath, List<ScetchParameter> parameters)
         {
             string folder = System.IO.Path.GetDirectoryName(templateImagePath);
-            Bitmap templateImage = new Bitmap(templateImagePath);
+            Bitmap templateImage = ScetchImage.GetBitmap(templateImagePath);
             WriteBitmap(templateImage, parameters);
 
             string imageGuid = Guid.NewGuid().ToString();
@@ -52,7 +53,7 @@ namespace RebarSketch
         public void Generate(string imagePrefix)
         {
             Debug.WriteLine("Generate new image, prefix " + imagePrefix);
-            Bitmap templateImage = new Bitmap(Template.templateImagePath);
+            Bitmap templateImage = ScetchImage.GetBitmap(Template.templateImagePath);
 
             WriteBitmap(templateImage, Template.parameters);
 
@@ -62,12 +63,27 @@ namespace RebarSketch
             Debug.WriteLine("New bitmap path: " + ScetchImagePath);
         }
 
+        public static Bitmap GetBitmap(string path)
+        {
+            Bitmap bmp = new Bitmap(path);
+            PixelFormat pixformat = bmp.PixelFormat;
+            if (Enum.GetName(typeof(PixelFormat), pixformat).Contains("ndexed"))
+            {
+                string msg = "INCORRECT IMAGE FORMAT: " + path.Replace("\\", " \\")
+                    + ", PLEASE RESAVE IMAGE WITH 24bit ColorDepth, PaintNET strongly recommended";
+                Debug.WriteLine(msg);
+                throw new Exception(msg);
+            }
+            return bmp;
+        }
+
 
 
 
         public static void WriteBitmap(Bitmap templateImage, List<ScetchParameter> parameters)
         {
             Debug.WriteLine("Write text to bitmap, parameters count: " + parameters.Count.ToString());
+            
             Graphics gr = Graphics.FromImage(templateImage);
             gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
             gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;

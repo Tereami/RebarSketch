@@ -52,13 +52,6 @@ namespace RebarSketch
             return Result.Succeeded;
         }
 
-        private System.Windows.Media.ImageSource PngImageSource(string embeddedPathname)
-        {
-            System.IO.Stream st = this.GetType().Assembly.GetManifestResourceStream(embeddedPathname);
-            PngBitmapDecoder decoder = new PngBitmapDecoder(st, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-            return decoder.Frames[0];
-        }
-
         public void SavingDocumentEventHandler(object sender, DocumentSavingEventArgs args)
         {
             Document doc = args.Document;

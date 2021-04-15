@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace RebarSketch
@@ -52,19 +47,25 @@ namespace RebarSketch
 
 
             st.parameters = new List<ScetchParameter>();
-            foreach (string p in paramsArray)
+            for (int i = 0; i < paramsArray.Length; i++)
             {
+                string p = paramsArray[i];
                 if (p.StartsWith("#")) continue;
+                if (p.Length < 1) continue;
                 string[] paramInfo = p.Split(',');
+                if (paramInfo.Length < 4)
+                {
+                    throw new Exception("Incorrect syntax in file " + paramsFile + ", line " + i);
+                }
                 string paramName = paramInfo[0];
                 string posX = paramInfo[1];
                 string posY = paramInfo[2];
                 string r = paramInfo[3];
 
                 bool needsWrap = false;
-                if(paramInfo.Length >4)
+                if (paramInfo.Length > 4)
                 {
-                    if(paramInfo[4] == "1")
+                    if (paramInfo[4] == "1")
                     {
                         needsWrap = true;
                     }
@@ -102,13 +103,6 @@ namespace RebarSketch
             string paramsFileName = System.IO.Path.Combine(executionFolder, "parameters.txt");
             System.IO.File.Delete(paramsFileName);
 
-            //SaveFileDialog saveDialog = new SaveFileDialog();
-            //saveDialog.AddExtension = true;
-            //saveDialog.DefaultExt = "txt";
-            //saveDialog.Filter = "TXT file(*.txt)| *.txt";
-            //if (saveDialog.ShowDialog() != DialogResult.OK) return;
-
-            //string txtFile = saveDialog.FileName;
             System.IO.StreamWriter writer = System.IO.File.CreateText(paramsFileName);
 
             writer.WriteLine("#Имя параметра,отступ слева,отступ сверху,угол поворота");
@@ -122,7 +116,7 @@ namespace RebarSketch
                 line += row.Cells[4].Value.ToString();
 
                 bool needsWrap = (bool)row.Cells[5].Value;
-                if(needsWrap) line += "," + "1";
+                if (needsWrap) line += "," + "1";
                 else line += "," + "0";
 
 
@@ -241,7 +235,7 @@ namespace RebarSketch
 
         private void buttonOpenConfigFile_Click(object sender, EventArgs e)
         {
-            if(System.IO.File.Exists(SupportSettings.configFilePath))
+            if (System.IO.File.Exists(SupportSettings.configFilePath))
             {
                 System.Diagnostics.Process.Start(SupportSettings.configFilePath);
             }

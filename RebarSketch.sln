@@ -12,6 +12,7 @@ Global
 		R2019|Any CPU = R2019|Any CPU
 		R2020|Any CPU = R2020|Any CPU
 		R2021|Any CPU = R2021|Any CPU
+		R2022|Any CPU = R2022|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F9403064-2CB4-4784-A8BD-A6436E229DFB}.R2017|Any CPU.ActiveCfg = R2017|Any CPU
@@ -24,6 +25,8 @@ Global
 		{F9403064-2CB4-4784-A8BD-A6436E229DFB}.R2020|Any CPU.Build.0 = R2020|Any CPU
 		{F9403064-2CB4-4784-A8BD-A6436E229DFB}.R2021|Any CPU.ActiveCfg = R2021|Any CPU
 		{F9403064-2CB4-4784-A8BD-A6436E229DFB}.R2021|Any CPU.Build.0 = R2021|Any CPU
+		{F9403064-2CB4-4784-A8BD-A6436E229DFB}.R2022|Any CPU.ActiveCfg = R2022|Any CPU
+		{F9403064-2CB4-4784-A8BD-A6436E229DFB}.R2022|Any CPU.Build.0 = R2022|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
