@@ -245,6 +245,20 @@ namespace RebarSketch
             }
         }
 
+        private void buttonResetLibrary_Click(object sender, EventArgs e)
+        {
+            if (System.IO.File.Exists(SupportSettings.configFilePath))
+            {
+                System.IO.File.Delete(SupportSettings.configFilePath);
+                MessageBox.Show("Настройки сброшены. При запуске Ведомости деталей будет повторен запрос пути к библиотеке.");
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Не найден файл " + SupportSettings.configFilePath);
+            }
+        }
+
         //private void InitializeComponent()
         //{
         //    this.SuspendLayout();
