@@ -14,10 +14,12 @@ namespace RebarSketch
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            Document doc = commandData.Application.ActiveUIDocument.Document;
-            SupportSettings.Activate();
+            App.ActivatePaths();
 
-            Form1 form = new Form1();
+            GlobalSettings sets = GlobalSettings.Read();
+
+            Document doc = commandData.Application.ActiveUIDocument.Document;
+            Form1 form = new Form1(sets);
 
             form.ShowDialog();
 

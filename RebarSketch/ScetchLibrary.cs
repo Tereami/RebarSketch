@@ -31,11 +31,16 @@ namespace RebarSketch
 
 
 
-        public static void SearchAndApplyScetch(Dictionary<string, ScetchImage> imagesBase, Element rebar, ScetchTemplate st, string imagesPrefix)
+        public static void SearchAndApplyScetch(
+            Dictionary<string, ScetchImage> imagesBase, 
+            Element rebar,
+            ScetchTemplate st,
+            string imagesPrefix,
+            GlobalSettings sets)
         {
             Debug.WriteLine("Try to apply scetch for rebar id" + rebar.Id.IntegerValue.ToString());
             Document doc = rebar.Document;
-            string imageParamName = SupportSettings.imageParamName;
+            string imageParamName = sets.imageParamName;
             ScetchImage si = new ScetchImage(rebar, st);
             ImageType imType2 = null;
 
@@ -50,7 +55,7 @@ namespace RebarSketch
             }
             else //такая картинка еще не генерировалась - генерируем, добавляем в базу
             {
-                si.Generate(imagesPrefix);
+                si.Generate(sets, imagesPrefix);
 #if R2017 || R2018 || R2019
                 imType2 = ImageType.Create(doc, si.ScetchImagePath);
 #elif R2020 
@@ -146,12 +151,12 @@ namespace RebarSketch
                     throw new ArgumentException("Incorrect syntax in file " + paramsFile.Replace("\\", " \\") + ", line " + i);
                 }
 
-                sp.NeedsWrap = false;
+                sp.IsNarrow = false;
                 if (paramInfo.Length > 4)
                 {
                     if (paramInfo[4] == "1")
                     {
-                        sp.NeedsWrap = true;
+                        sp.IsNarrow = true;
                     }
                 }
 

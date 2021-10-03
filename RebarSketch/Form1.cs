@@ -11,11 +11,15 @@ namespace RebarSketch
         public string templateImagePath;
         public string curTempImage = "";
 
-        public Form1()
+        private GlobalSettings sets;
+
+        public Form1(GlobalSettings gsets)
         {
             InitializeComponent();
-            executionFolder = SupportSettings.libraryPath;
-            this.Text = "Редактор форм арматуры. Версия " + System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString();
+            executionFolder = App.libraryPath;
+            sets = gsets;
+            this.Text = "Редактор форм арматуры. Версия " +
+                System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString();
         }
 
         private void btnNewForm_Click(object sender, EventArgs e)
@@ -30,112 +34,62 @@ namespace RebarSketch
 
         private void btnLoadTemplate_Click(object sender, EventArgs e)
         {
-            bool checkDialog = this.LoadAndActivatePicture();
-            if (!checkDialog) return;
-
-            dataGridView1.Rows.Clear();
-
-            string paramsFile = System.IO.Path.Combine(executionFolder, "parameters.txt");
-            bool check = System.IO.File.Exists(paramsFile);
-            if (!check) throw new Exception("Файл параметров не найден в папке с картинкой");
-
-
-            ScetchTemplate st = new ScetchTemplate();
-
-
-            string[] paramsArray = FileSupport.ReadFileWithAnyDecoding(paramsFile);
-
-
-            st.parameters = new List<ScetchParameter>();
-            for (int i = 0; i < paramsArray.Length; i++)
-            {
-                string p = paramsArray[i];
-                if (p.StartsWith("#")) continue;
-                if (p.Length < 1) continue;
-                string[] paramInfo = p.Split(',');
-                if (paramInfo.Length < 4)
-                {
-                    throw new Exception("Incorrect syntax in file " + paramsFile + ", line " + i);
-                }
-                string paramName = paramInfo[0];
-                string posX = paramInfo[1];
-                string posY = paramInfo[2];
-                string r = paramInfo[3];
-
-                bool needsWrap = false;
-                if (paramInfo.Length > 4)
-                {
-                    if (paramInfo[4] == "1")
-                    {
-                        needsWrap = true;
-                    }
-                }
-
-                dataGridView1.Rows.Add(paramName, paramName, posX, posY, r, needsWrap);
-            }
-
-            this.RefreshImage();
-            btnDeleteRow.Enabled = true;
-        }
-
-        private bool LoadAndActivatePicture()
-        {
             OpenFileDialog openDialog = new OpenFileDialog();
             openDialog.InitialDirectory = executionFolder;
             openDialog.Title = "Выберите картинку";
             openDialog.Multiselect = false;
             openDialog.Filter = "PNG images(*.png)| *.png";
 
-            if (openDialog.ShowDialog() != DialogResult.OK) return false;
+            if (openDialog.ShowDialog() != DialogResult.OK)
+                return;
 
             templateImagePath = openDialog.FileName;
             executionFolder = System.IO.Path.GetDirectoryName(templateImagePath);
 
-            pictureBox1.Load(templateImagePath);
-
-
             this.ActivateControls();
+            dataGridView1.Rows.Clear();
+
+            string xmlConfigFilePath = System.IO.Path.Combine(executionFolder, "config.xml");
+            XmlSketchItem xsi = null;
+            if (System.IO.File.Exists(xmlConfigFilePath))
+                xsi = XmlSketchItem.LoadFromXml(xmlConfigFilePath);
+            else
+                xsi = XmlSketchItem.LoadFromTxt(executionFolder);
+
+            for (int i = 0; i < xsi.parameters.Count; i++)
+            {
+                ScetchParameter sp = xsi.parameters[i];
+                dataGridView1.Rows.Add(sp.Name, i, sp.FontSize,
+                    sp.PositionX, sp.PositionY, sp.Rotation, sp.IsNarrow, sp.LengthAccuracy, sp.MinValueForRound);
+            }
+
+            richTextBoxFamilies.Lines = xsi.families.ToArray();
+
+            //this.RefreshImage();
+        }
+
+        private bool LoadAndActivatePicture()
+        {
+
+
+            //pictureBox1.Load(templateImagePath);
+
             return true;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string paramsFileName = System.IO.Path.Combine(executionFolder, "parameters.txt");
-            System.IO.File.Delete(paramsFileName);
+            XmlSketchItem xsi = CreateSketchItemByGrid();
 
-            System.IO.StreamWriter writer = System.IO.File.CreateText(paramsFileName);
-
-            writer.WriteLine("#Имя параметра,отступ слева,отступ сверху,угол поворота");
-
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-                string line = "";
-                line += row.Cells[0].Value.ToString() + ",";
-                line += row.Cells[2].Value.ToString() + ",";
-                line += row.Cells[3].Value.ToString() + ",";
-                line += row.Cells[4].Value.ToString();
-
-                bool needsWrap = (bool)row.Cells[5].Value;
-                if (needsWrap) line += "," + "1";
-                else line += "," + "0";
-
-
-                writer.WriteLine(line);
-            }
-
-            writer.Close();
+            XmlSketchItem.Save(executionFolder, xsi);
 
             pictureBox1.Dispose();
-            dataGridView1.Rows.Clear();
-            btnAddRow.Enabled = false;
-            btnRefresh.Enabled = false;
-            dataGridView1.Enabled = false;
-            btnSave.Enabled = false;
+            this.Close();
         }
 
         private void btnAddRow_Click(object sender, EventArgs e)
         {
-            dataGridView1.Rows.Add("Арм_А", "000", "100", "200", "0", false);
+            dataGridView1.Rows.Add("Арм_А", "000", "50", "100", "200", "0", false, 5, 20);
             btnDeleteRow.Enabled = true;
         }
 
@@ -157,36 +111,49 @@ namespace RebarSketch
             this.RefreshImage();
         }
 
+        private XmlSketchItem CreateSketchItemByGrid()
+        {
+            XmlSketchItem xsi = new XmlSketchItem();
+            xsi.parameters = new List<ScetchParameter>();
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                ScetchParameter sparam = new ScetchParameter();
+
+                var cells = row.Cells;
+
+                sparam.Name = row.Cells[0].Value.ToString();
+                sparam.FontSize = float.Parse(cells[2].Value.ToString());
+                sparam.PositionX = (float)cells[3].Value;
+                sparam.PositionY = (float)cells[4].Value;
+                sparam.Rotation = (float)cells[5].Value;
+                sparam.IsNarrow = (bool)cells[6].Value;
+                sparam.LengthAccuracy = (double)cells[7].Value;
+                sparam.MinValueForRound = (double)cells[8].Value;
+
+                xsi.parameters.Add(sparam);
+
+                //writer.WriteLine(line);
+            }
+
+            xsi.families = new List<string>();
+
+            foreach (string fam in richTextBoxFamilies.Lines)
+            {
+                xsi.families.Add(fam);
+            }
+            return xsi;
+        }
+
 
         private void RefreshImage()
         {
-            //считать параметры из таблицы
-            List<ScetchParameter> parameters = new List<ScetchParameter>();
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-                ScetchParameter param = new ScetchParameter();
-                param.Name = row.Cells[0].Value.ToString();
-                param.value = row.Cells[1].Value.ToString();
-
-                string posXstring = row.Cells[2].Value.ToString();
-                param.PositionX = float.Parse(posXstring);
-
-                string posYstring = row.Cells[3].Value.ToString();
-                param.PositionY = float.Parse(posYstring);
-
-                string rotateString = row.Cells[4].Value.ToString();
-                param.Rotation = float.Parse(rotateString);
-
-                param.NeedsWrap = (bool)row.Cells[5].Value;
-
-                parameters.Add(param);
-            }
-
+            XmlSketchItem xsi = CreateSketchItemByGrid();
 
             //взять картинку
             //нанести на неё размеры
             //временно сохранить картинку
-            string newTempImage = ScetchImage.GenerateTemporary(templateImagePath, parameters);
+            string newTempImage = ScetchImage.GenerateTemporary(sets, templateImagePath, xsi.parameters);
 
             //вывести в форму
             pictureBox1.Load(newTempImage);
@@ -202,8 +169,10 @@ namespace RebarSketch
         private void ActivateControls()
         {
             btnAddRow.Enabled = true;
+            btnDeleteRow.Enabled = true;
             btnRefresh.Enabled = true;
             dataGridView1.Enabled = true;
+            richTextBoxFamilies.Enabled = true;
             btnSave.Enabled = true;
         }
 
@@ -216,46 +185,41 @@ namespace RebarSketch
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void buttonOpenLibraryFolder_Click(object sender, EventArgs e)
         {
-            if (System.IO.Directory.Exists(SupportSettings.libraryPath))
+            if (System.IO.Directory.Exists(App.libraryPath))
             {
-                System.Diagnostics.Process.Start(SupportSettings.libraryPath);
+                System.Diagnostics.Process.Start(App.libraryPath);
             }
             else
             {
-                MessageBox.Show("Не найдена папка " + SupportSettings.libraryPath);
+                MessageBox.Show("Не найдена папка " + App.libraryPath);
             }
         }
 
         private void buttonOpenConfigFile_Click(object sender, EventArgs e)
         {
-            if (System.IO.File.Exists(SupportSettings.configFilePath))
+            if (System.IO.File.Exists(App.configFilePath))
             {
-                System.Diagnostics.Process.Start(SupportSettings.configFilePath);
+                System.Diagnostics.Process.Start(App.configFilePath);
             }
             else
             {
-                MessageBox.Show("Не найден файл " + SupportSettings.configFilePath);
+                MessageBox.Show("Не найден файл " + App.configFilePath);
             }
         }
 
         private void buttonResetLibrary_Click(object sender, EventArgs e)
         {
-            if (System.IO.File.Exists(SupportSettings.configFilePath))
+            if (System.IO.File.Exists(App.configFilePath))
             {
-                System.IO.File.Delete(SupportSettings.configFilePath);
+                System.IO.File.Delete(App.configFilePath);
                 MessageBox.Show("Настройки сброшены. При запуске Ведомости деталей будет повторен запрос пути к библиотеке.");
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Не найден файл " + SupportSettings.configFilePath);
+                MessageBox.Show("Не найден файл " + App.configFilePath);
             }
         }
 
@@ -264,19 +228,9 @@ namespace RebarSketch
             this.RefreshImage();
         }
 
-        //private void InitializeComponent()
-        //{
-        //    this.SuspendLayout();
-        //    // 
-        //    // Form1
-        //    // 
-        //    this.ClientSize = new System.Drawing.Size(292, 273);
-        //    this.Name = "Form1";
-        //    this.Load += new System.EventHandler(this.Form1_Load);
-        //    this.ResumeLayout(false);
-
-        //}
-
-
+        private void button1_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://bim-starter.com/plugins/rebarsketch/");
+        }
     }
 }

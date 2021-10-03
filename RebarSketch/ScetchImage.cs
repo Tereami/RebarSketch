@@ -19,7 +19,7 @@ namespace RebarSketch
         public string ImageKey;
         public string ScetchImagePath;
 
-        bool roundForSmallDimension;
+        //bool roundForSmallDimension;
 
         public ScetchImage(Element elem, ScetchTemplate template)
         {
@@ -27,7 +27,7 @@ namespace RebarSketch
             Template = template;
             ImageKey = template.formName;
 
-            roundForSmallDimension = SupportMath.CheckNeedsRoundSmallDimension(elem);
+            //roundForSmallDimension = SupportMath.CheckNeedsRoundSmallDimension(elem);
 
             foreach (ScetchParameter param in Template.parameters)
             {
@@ -38,11 +38,11 @@ namespace RebarSketch
             }
         }
 
-        public static string GenerateTemporary(string templateImagePath, List<ScetchParameter> parameters)
+        public static string GenerateTemporary(GlobalSettings sets, string templateImagePath, List<ScetchParameter> parameters)
         {
             string folder = System.IO.Path.GetDirectoryName(templateImagePath);
             Bitmap templateImage = ScetchImage.GetBitmap(templateImagePath);
-            WriteBitmap(templateImage, parameters);
+            WriteBitmap(sets, templateImage, parameters);
 
             string imageGuid = Guid.NewGuid().ToString();
             string tempImagePath = System.IO.Path.Combine(folder, "temp_" + imageGuid + ".bmp");
@@ -50,12 +50,12 @@ namespace RebarSketch
             return tempImagePath;
         }
 
-        public void Generate(string imagePrefix)
+        public void Generate(GlobalSettings sets, string imagePrefix)
         {
             Debug.WriteLine("Generate new image, prefix " + imagePrefix);
             Bitmap templateImage = ScetchImage.GetBitmap(Template.templateImagePath);
 
-            WriteBitmap(templateImage, Template.parameters);
+            WriteBitmap(sets, templateImage, Template.parameters);
 
             ScetchImagePath = System.IO.Path.Combine(@"C:\RebarScetch\", imagePrefix + "_" + ImageKey + ".bmp");
             
@@ -80,7 +80,7 @@ namespace RebarSketch
 
 
 
-        public static void WriteBitmap(Bitmap templateImage, List<ScetchParameter> parameters)
+        public static void WriteBitmap(GlobalSettings sets, Bitmap templateImage, List<ScetchParameter> parameters)
         {
             Debug.WriteLine("Write text to bitmap, parameters count: " + parameters.Count.ToString());
             
@@ -104,13 +104,13 @@ namespace RebarSketch
                 float h = param.PositionY;
                 float angle = param.Rotation;
 
-                float fontSize2 = SupportSettings.fontSize;
+                float fontSize2 = param.FontSize;
                 if (param.IsVariable) fontSize2 = fontSize2 * 0.8f;
-                Font fnt = new Font(SupportSettings.fontName, fontSize2, SupportSettings.fontStyle);
+                Font fnt = new Font(sets.fontName, fontSize2, sets.fontStyle);
 
                 if(param.value.EndsWith("°"))
                 {
-                    fnt = new Font("Isocpeur", fontSize2, SupportSettings.fontStyle);
+                    fnt = new Font("Isocpeur", fontSize2, sets.fontStyle);
                 }
 
                 gr.TranslateTransform(b, h);
@@ -118,7 +118,7 @@ namespace RebarSketch
 
                 float widthScale = 0.85f;
 
-                if (param.NeedsWrap)
+                if (param.IsNarrow)
                 {
                     if (param.value.Length > 10) widthScale = 0.5f;
                     else if (param.value.Length > 6) widthScale = 0.6f;
@@ -156,16 +156,19 @@ namespace RebarSketch
 
             for (int i = 0; i < this.Template.parameters.Count; i++)
             {
-                string val1 = this.Template.parameters[i].value;
-                string val2 = other.Template.parameters[i].value;
+                ScetchParameter sparam1 = this.Template.parameters[i];
+                string val1 = sparam1.value;
+
+                ScetchParameter sparam2 = other.Template.parameters[i];
+                string val2 = sparam2.value;
                 double val1double = 0;
                 double val2double = 0;
                 bool check1IsDouble = double.TryParse(val1, out val1double);
                 bool check2IsDouble = double.TryParse(val2, out val2double);
                 if (check1IsDouble && check2IsDouble)
                 {
-                    val1double = SupportMath.RoundMillimeters(val1double, this.roundForSmallDimension);
-                    val2double = SupportMath.RoundMillimeters(val2double, other.roundForSmallDimension);
+                    val1double = SupportMath.RoundMillimeters(val1double, sparam1.MinValueForRound, sparam1.LengthAccuracy);
+                    val2double = SupportMath.RoundMillimeters(val2double, sparam2.MinValueForRound, sparam1.LengthAccuracy);
                     if (val1double != val2double) return false;
                 }
 

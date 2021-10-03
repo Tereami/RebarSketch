@@ -15,24 +15,15 @@ namespace RebarSketch
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            Debug.Listeners.Clear();
-            Debug.Listeners.Add(new RbsLogger.Logger("RebarSketch"));
-            Debug.WriteLine("Start rebar scetch, revit version" + commandData.Application.Application.VersionName);
-
+            App.ActivatePaths();
+            Debug.WriteLine("Start rebar sketch, revit version" + commandData.Application.Application.VersionName);
 
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
             Debug.WriteLine("Read settings");
             //считываем файл настроек
-            string activateMessage = SupportSettings.Activate();
-            if (!string.IsNullOrEmpty(activateMessage))
-            {
-                message = activateMessage;
-                Debug.WriteLine("Read settings failed: " + message);
-                return Result.Failed;
-            }
-            Debug.WriteLine("Read settings success");
-
+            GlobalSettings sets = GlobalSettings.Read();
+            
             //выбираем арматуру, которую будем обрабатывать
             Autodesk.Revit.UI.Selection.Selection sel = commandData.Application.ActiveUIDocument.Selection;
             List<ElementId> selIds = sel.GetElementIds().ToList();
@@ -64,8 +55,6 @@ namespace RebarSketch
                 col.Add(elem);
             }
 
-
-
             View activeView = commandData.Application.ActiveUIDocument.ActiveView;
             ViewSchedule vs = activeView as ViewSchedule;
             if (vs == null)
@@ -74,8 +63,6 @@ namespace RebarSketch
                 Debug.WriteLine("Active view is not ViewSchedule");
                 return Result.Failed;
             }
-
-
 
             //очищаю ранее созданные картинки для данной ведомости деталей
             string imagesPrefix = vs.Id.IntegerValue.ToString();
@@ -97,15 +84,11 @@ namespace RebarSketch
                 }
             }
 
-
-
-
-
             ScetchLibrary lib = new ScetchLibrary();
-            lib.Activate(SupportSettings.libraryPath);
+            lib.Activate(App.libraryPath);
 
-            System.IO.Directory.CreateDirectory(SupportSettings.tempPath);
-            Debug.WriteLine("Create temp folder: " + SupportSettings.tempPath);
+            System.IO.Directory.CreateDirectory(sets.tempPath);
+            Debug.WriteLine("Create temp folder: " + sets.tempPath);
 
 
             //разделяю арматуру на обычную и переменной длины
@@ -168,7 +151,7 @@ namespace RebarSketch
                     }
 
                     //для арматуры округляем размеры, для закладных деталей (класс арматуры меньше нуля) - нет
-                    bool roundForSmallDimension = SupportMath.CheckNeedsRoundSmallDimension(rebar);
+                    //bool roundForSmallDimension = SupportMath.CheckNeedsRoundSmallDimension(rebar);
 
 
                     foreach (ScetchParameter sparam in st.parameters)
@@ -205,7 +188,7 @@ namespace RebarSketch
                         }
                         else
                         {
-                            val = SupportMath.RoundMillimeters(val, roundForSmallDimension);
+                            val = SupportMath.RoundMillimeters(val, sparam.MinValueForRound, sparam.LengthAccuracy);
                             textVal = val.ToString("F0");
                             sparam.value = textVal;
                         }
@@ -213,7 +196,7 @@ namespace RebarSketch
                         Debug.WriteLine("ScetchParameter name " + sparam.Name + " value = " + textVal);
                     }
 
-                    ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, st, imagesPrefix);
+                    ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, st, imagesPrefix, sets);
                 }
 
 
@@ -222,8 +205,6 @@ namespace RebarSketch
                 {
                     string mark = kvp.Key;
                     List<Element> rebars = kvp.Value;
-
-                    bool roundForSmallDimension = SupportMath.CheckNeedsRoundSmallDimension(rebars.First());
 
                     string formName = ScetchTemplate.GetFormNameByElement(rebars.First());
                     ScetchTemplate st = lib.GetTemlateByFamilyName(formName, rebars.First());
@@ -269,11 +250,11 @@ namespace RebarSketch
                         HashSet<double> values = variableValues[paramName];
                         int count = values.Count();
                         double minValue = values.Min();
-                        minValue = SupportMath.RoundMillimeters(minValue, roundForSmallDimension);
+                        minValue = SupportMath.RoundMillimeters(minValue, sparam.MinValueForRound, sparam.LengthAccuracy);
                         double maxValue = values.Max();
-                        maxValue = SupportMath.RoundMillimeters(maxValue, roundForSmallDimension);
+                        maxValue = SupportMath.RoundMillimeters(maxValue, sparam.MinValueForRound, sparam.LengthAccuracy);
                         double spacing = (maxValue - minValue) / (count - 1);
-                        spacing = SupportSettings.lengthAccuracy * Math.Round(spacing / SupportSettings.lengthAccuracy); //Math.Round(spacing, 0);
+                        spacing = sparam.LengthAccuracy * Math.Round(spacing / sparam.LengthAccuracy); //Math.Round(spacing, 0);
 
                         string line = "";
 
@@ -307,13 +288,13 @@ namespace RebarSketch
                         Debug.WriteLine("Processed rebar id " + rebar.Id.IntegerValue.ToString());
                         ScetchImage si = new ScetchImage(rebar, st);
 
-                        ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, st, imagesPrefix);
+                        ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, st, imagesPrefix, sets);
                     }
                 }
                 t2.Commit();
             }
 
-            FileSupport.CheckAndDeleteFolder(SupportSettings.tempPath);
+            FileSupport.CheckAndDeleteFolder(sets.tempPath);
 
             if (errorRebarNames.Count > 0)
             {

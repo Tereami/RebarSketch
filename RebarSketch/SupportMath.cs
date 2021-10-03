@@ -8,20 +8,24 @@ namespace RebarSketch
 {
     public static class SupportMath
     {
-        public static double RoundMillimeters(double value, bool roundForSmallDetail)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value">Length in feets</param>
+        /// <param name="minValueForRound">No round if value less than this</param>
+        /// <param name="lengthAccuracy"></param>
+        /// <returns>Rounded value in millimeters</returns>
+        public static double RoundMillimeters(double value, double minValueForRound, double lengthAccuracy)
         {
             double mms = value * 304.8;
             mms = Math.Round(mms, 1);
-            if(roundForSmallDetail)
+            if (value > minValueForRound)
             {
-                mms = SupportSettings.lengthAccuracy * Math.Round(mms / SupportSettings.lengthAccuracy);
+                mms = lengthAccuracy * Math.Round(mms / lengthAccuracy);
             }
             else
             {
-                if (mms < 50)
-                {
-                    mms = Math.Round(mms);
-                }
+                mms = Math.Round(mms);
             }
             return mms;
         }
@@ -34,17 +38,17 @@ namespace RebarSketch
         }
 
 
-        public static bool CheckNeedsRoundSmallDimension(Autodesk.Revit.DB.Element elem)
-        {
-            Autodesk.Revit.DB.Parameter classParam = elem.LookupParameter("Арм.КлассЧисло");
-            if (classParam != null && classParam.HasValue)
-            {
-                double rebarClass = classParam.AsDouble();
-                if (rebarClass < 0)
-                    return false;
-            }
-            return true;
-        }
+        //public static bool CheckNeedsRoundSmallDimension(Autodesk.Revit.DB.Element elem)
+        //{
+        //    Autodesk.Revit.DB.Parameter classParam = elem.LookupParameter("Арм.КлассЧисло");
+        //    if (classParam != null && classParam.HasValue)
+        //    {
+        //        double rebarClass = classParam.AsDouble();
+        //        if (rebarClass < 0)
+        //            return false;
+        //    }
+        //    return true;
+        //}
 
     }
 }

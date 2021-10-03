@@ -117,7 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label5.Text" xml:space="preserve">
-    <value>При работе в однопользовательском режиме укажите путь к папке bim-starter на локальном компьютере (подробнее в Справке). "Стандартную библиотеку" использовать только для учебных целей, т.к. внесенные в неё изменения будут сброшены при обновлении bim-starter.</value>
-  </data>
 </root>

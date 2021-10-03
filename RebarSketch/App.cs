@@ -1,4 +1,19 @@
-﻿using System;
+﻿#region License
+/*Данный код опубликован под лицензией Creative Commons Attribution-ShareAlike.
+Разрешено использовать, распространять, изменять и брать данный код за основу для производных в коммерческих и
+некоммерческих целях, при условии указания авторства и если производные лицензируются на тех же условиях.
+Код поставляется "как есть". Автор не несет ответственности за возможные последствия использования.
+Зуев Александр, 2020, все права защищены.
+This code is listed under the Creative Commons Attribution-ShareAlike license.
+You may use, redistribute, remix, tweak, and build upon this work non-commercially and commercially,
+as long as you credit the author by linking back and license your new creations under the same terms.
+This code is provided 'as is'. Author disclaims any implied warranty.
+Zuev Aleksandr, 2020, all rigths reserved.*/
+#endregion
+#region usings
+using System;
+using System.Diagnostics;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,18 +23,24 @@ using Autodesk.Revit.ApplicationServices;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB;
+#endregion
 
 namespace RebarSketch
 {
     [Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)]
     public class App : IExternalApplication
     {
+        public static string assemblyPath = "";
+        public static string rebarSketchPath = "";
+        public static string libraryPath = "";
+        public static string configFilePath = "";
+
+
         public Result OnStartup(UIControlledApplication application)
         {
+            ActivatePaths();
 
-            SupportSettings.assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-
-            string tabName = "Weandrevit";
+            string tabName = "BIM-STARTER TEST";
             try { application.CreateRibbonTab(tabName); } catch { }
 
             RibbonPanel panel1 = application.CreateRibbonPanel(tabName, "Ведомость деталей");
@@ -27,21 +48,28 @@ namespace RebarSketch
             PushButton btnCreatePictures = panel1.AddItem(new PushButtonData(
                 "CreatePictures",
                 "Создать",
-                SupportSettings.assemblyPath,
+                assemblyPath,
                 "RebarSketch.CommandCreatePictures3")
                ) as PushButton;
 
             PushButton btnFormGenerator = panel1.AddItem(new PushButtonData(
                 "FormGenerator",
                 "Генератор",
-                SupportSettings.assemblyPath,
+                assemblyPath,
                 "RebarSketch.CommandFormGenerator")
+                ) as PushButton;
+
+            PushButton btnSettings = panel1.AddItem(new PushButtonData(
+                "SketchSettings",
+                "Настройки",
+                assemblyPath,
+                "RebarSketch.CommandSettings")
                 ) as PushButton;
 
 
             //события
-            ControlledApplication ctrlApp = application.ControlledApplication;
-            ctrlApp.DocumentSaving += new EventHandler<DocumentSavingEventArgs>(SavingDocumentEventHandler);
+            //ControlledApplication ctrlApp = application.ControlledApplication;
+            //ctrlApp.DocumentSaving += new EventHandler<DocumentSavingEventArgs>(SavingDocumentEventHandler);
 
 
             return Result.Succeeded;
@@ -52,6 +80,64 @@ namespace RebarSketch
             return Result.Succeeded;
         }
 
+        public static void ActivatePaths()
+        {
+            Debug.Listeners.Clear();
+            Debug.Listeners.Add(new RbsLogger.Logger("RebarSketch"));
+
+            assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+            //string assemblyFolder = System.IO.Path.GetDirectoryName(assemblyName);
+
+            string appdataFolder =
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string bimstarterRootFolder =
+                System.IO.Path.Combine(appdataFolder, "bim-starter");
+            if (!System.IO.Directory.Exists(bimstarterRootFolder))
+            {
+                Debug.WriteLine("Create folder: " + bimstarterRootFolder);
+                System.IO.Directory.CreateDirectory(bimstarterRootFolder);
+            }
+            configFilePath = Path.Combine(bimstarterRootFolder, "config.ini");
+
+            string bimstarterStoragePath = "";
+            if (File.Exists(configFilePath))
+            {
+                Debug.WriteLine("Read file: " + configFilePath);
+                bimstarterStoragePath = File.ReadAllLines(configFilePath)[0];
+            }
+            else
+            {
+                Debug.WriteLine("First start, show dialog window and select config folder");
+                string configDefaultFolder = Path.Combine(appdataFolder, @"Autodesk\Revit\Addins\20xx\BimStarter");
+                FormSelectPath form = new FormSelectPath(configFilePath, configDefaultFolder);
+                if (form.ShowDialog() != System.Windows.Forms.DialogResult.OK) 
+                    return;
+
+                if (form.UseServerPath)
+                {
+                    bimstarterStoragePath = form.ServerPath;
+                }
+                else
+                {
+                    bimstarterStoragePath = configDefaultFolder;
+                }
+                Debug.WriteLine("Selected user path: " + bimstarterStoragePath);
+                File.WriteAllText(configFilePath, bimstarterStoragePath);
+                Debug.WriteLine("Success write to file: " + configFilePath);
+            }
+
+            rebarSketchPath = Path.Combine(bimstarterStoragePath, "RebarSketch");
+            libraryPath = Path.Combine(rebarSketchPath, "library");
+            Debug.WriteLine("Library path: " + libraryPath);
+            if (!Directory.Exists(libraryPath))
+            {
+                Debug.WriteLine("Library isnt found");
+                TaskDialog.Show("Rebar Sketch", "Library directory isnt found: " + libraryPath);
+            }
+        }
+
+        /*
         public void SavingDocumentEventHandler(object sender, DocumentSavingEventArgs args)
         {
             Document doc = args.Document;
@@ -63,7 +149,7 @@ namespace RebarSketch
             }
         }
 
-
+        
         public List<Element> CheckRebars(Document doc)
         {
             List<ParameterElement> paramsCheck = new FilteredElementCollector(doc)
@@ -129,5 +215,6 @@ namespace RebarSketch
 
             return errorRebars;
         }
+        */
     }
 }

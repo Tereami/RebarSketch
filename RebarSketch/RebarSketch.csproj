@@ -161,6 +161,7 @@
     <Compile Include="App.cs" />
     <Compile Include="CommandConstructor.cs" />
     <Compile Include="CommandCreatePictures3.cs" />
+    <Compile Include="CommandSettings.cs" />
     <Compile Include="FileSupport.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -169,6 +170,12 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="CommandFormGenerator.cs" />
+    <Compile Include="FormGlobalSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormGlobalSettings.Designer.cs">
+      <DependentUpon>FormGlobalSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormSelectPath.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,7 +189,8 @@
     <Compile Include="ScetchTemplate.cs" />
     <Compile Include="SupportMath.cs" />
     <Compile Include="SupportNames.cs" />
-    <Compile Include="SupportSettings.cs" />
+    <Compile Include="GlobalSettings.cs" />
+    <Compile Include="XmlSketchItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="RebarSketch.addin" />
@@ -190,6 +198,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormGlobalSettings.resx">
+      <DependentUpon>FormGlobalSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSelectPath.resx">
       <DependentUpon>FormSelectPath.cs</DependentUpon>
