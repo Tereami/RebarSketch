@@ -259,6 +259,11 @@ namespace RebarSketch
             }
         }
 
+        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            this.RefreshImage();
+        }
+
         //private void InitializeComponent()
         //{
         //    this.SuspendLayout();
