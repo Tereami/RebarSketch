@@ -28,24 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btwNewForm = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.btnLoadTemplate = new System.Windows.Forms.Button();
-            this.btnAddRow = new System.Windows.Forms.Button();
-            this.btnDeleteRow = new System.Windows.Forms.Button();
-            this.buttonOpenLibraryFolder = new System.Windows.Forms.Button();
-            this.buttonResetLibrary = new System.Windows.Forms.Button();
-            this.richTextBoxFamilies = new System.Windows.Forms.RichTextBox();
-            this.buttonHelp = new System.Windows.Forms.Button();
             this.ParameterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Height = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,6 +48,13 @@
             this.Fit = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Round = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MinRound = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnLoadTemplate = new System.Windows.Forms.Button();
+            this.btnAddRow = new System.Windows.Forms.Button();
+            this.btnDeleteRow = new System.Windows.Forms.Button();
+            this.buttonOpenLibraryFolder = new System.Windows.Forms.Button();
+            this.buttonResetLibrary = new System.Windows.Forms.Button();
+            this.richTextBoxFamilies = new System.Windows.Forms.RichTextBox();
+            this.buttonHelp = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -79,7 +79,7 @@
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox1.Location = new System.Drawing.Point(12, 41);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(960, 329);
+            this.pictureBox1.Size = new System.Drawing.Size(960, 350);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
@@ -126,12 +126,97 @@
             this.Round,
             this.MinRound});
             this.dataGridView1.Enabled = false;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 376);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 397);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(764, 264);
+            this.dataGridView1.Size = new System.Drawing.Size(764, 243);
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
+            // 
+            // ParameterName
+            // 
+            this.ParameterName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ParameterName.FillWeight = 150F;
+            this.ParameterName.HeaderText = "Имя параметра";
+            this.ParameterName.MinimumWidth = 80;
+            this.ParameterName.Name = "ParameterName";
+            // 
+            // Value
+            // 
+            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Value.FillWeight = 70F;
+            this.Value.HeaderText = "Значение";
+            this.Value.MinimumWidth = 40;
+            this.Value.Name = "Value";
+            // 
+            // Height
+            // 
+            this.Height.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle7.Format = "N2";
+            dataGridViewCellStyle7.NullValue = null;
+            this.Height.DefaultCellStyle = dataGridViewCellStyle7;
+            this.Height.FillWeight = 50F;
+            this.Height.HeaderText = "Высота";
+            this.Height.Name = "Height";
+            // 
+            // X
+            // 
+            this.X.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle8.Format = "N2";
+            dataGridViewCellStyle8.NullValue = null;
+            this.X.DefaultCellStyle = dataGridViewCellStyle8;
+            this.X.FillWeight = 55.93673F;
+            this.X.HeaderText = "X";
+            this.X.Name = "X";
+            // 
+            // Y
+            // 
+            this.Y.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle9.Format = "N2";
+            dataGridViewCellStyle9.NullValue = null;
+            this.Y.DefaultCellStyle = dataGridViewCellStyle9;
+            this.Y.FillWeight = 55.93673F;
+            this.Y.HeaderText = "Y";
+            this.Y.Name = "Y";
+            // 
+            // Angle
+            // 
+            this.Angle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle10.Format = "N2";
+            dataGridViewCellStyle10.NullValue = null;
+            this.Angle.DefaultCellStyle = dataGridViewCellStyle10;
+            this.Angle.FillWeight = 55.93673F;
+            this.Angle.HeaderText = "α";
+            this.Angle.Name = "Angle";
+            // 
+            // Fit
+            // 
+            this.Fit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Fit.FillWeight = 50F;
+            this.Fit.HeaderText = "Сжатый";
+            this.Fit.Name = "Fit";
+            this.Fit.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Fit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Round
+            // 
+            this.Round.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle11.Format = "N2";
+            dataGridViewCellStyle11.NullValue = null;
+            this.Round.DefaultCellStyle = dataGridViewCellStyle11;
+            this.Round.FillWeight = 50F;
+            this.Round.HeaderText = "Округл.";
+            this.Round.Name = "Round";
+            // 
+            // MinRound
+            // 
+            this.MinRound.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle12.Format = "N2";
+            dataGridViewCellStyle12.NullValue = null;
+            this.MinRound.DefaultCellStyle = dataGridViewCellStyle12;
+            this.MinRound.FillWeight = 50F;
+            this.MinRound.HeaderText = "Порог";
+            this.MinRound.Name = "MinRound";
             // 
             // btnLoadTemplate
             // 
@@ -192,10 +277,10 @@
             this.richTextBoxFamilies.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxFamilies.DetectUrls = false;
             this.richTextBoxFamilies.Enabled = false;
-            this.richTextBoxFamilies.Location = new System.Drawing.Point(785, 376);
+            this.richTextBoxFamilies.Location = new System.Drawing.Point(785, 397);
             this.richTextBoxFamilies.Name = "richTextBoxFamilies";
             this.richTextBoxFamilies.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.richTextBoxFamilies.Size = new System.Drawing.Size(187, 264);
+            this.richTextBoxFamilies.Size = new System.Drawing.Size(187, 243);
             this.richTextBoxFamilies.TabIndex = 10;
             this.richTextBoxFamilies.Text = "";
             this.richTextBoxFamilies.WordWrap = false;
@@ -211,91 +296,6 @@
             this.buttonHelp.UseVisualStyleBackColor = true;
             this.buttonHelp.Visible = false;
             this.buttonHelp.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // ParameterName
-            // 
-            this.ParameterName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ParameterName.FillWeight = 150F;
-            this.ParameterName.HeaderText = "Имя параметра";
-            this.ParameterName.MinimumWidth = 80;
-            this.ParameterName.Name = "ParameterName";
-            // 
-            // Value
-            // 
-            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value.FillWeight = 70F;
-            this.Value.HeaderText = "Значение";
-            this.Value.MinimumWidth = 40;
-            this.Value.Name = "Value";
-            // 
-            // Height
-            // 
-            this.Height.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Format = "N2";
-            dataGridViewCellStyle1.NullValue = null;
-            this.Height.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Height.FillWeight = 50F;
-            this.Height.HeaderText = "Высота";
-            this.Height.Name = "Height";
-            // 
-            // X
-            // 
-            this.X.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle2.Format = "N2";
-            dataGridViewCellStyle2.NullValue = null;
-            this.X.DefaultCellStyle = dataGridViewCellStyle2;
-            this.X.FillWeight = 55.93673F;
-            this.X.HeaderText = "X";
-            this.X.Name = "X";
-            // 
-            // Y
-            // 
-            this.Y.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle3.Format = "N2";
-            dataGridViewCellStyle3.NullValue = null;
-            this.Y.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Y.FillWeight = 55.93673F;
-            this.Y.HeaderText = "Y";
-            this.Y.Name = "Y";
-            // 
-            // Angle
-            // 
-            this.Angle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle4.Format = "N2";
-            dataGridViewCellStyle4.NullValue = null;
-            this.Angle.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Angle.FillWeight = 55.93673F;
-            this.Angle.HeaderText = "α";
-            this.Angle.Name = "Angle";
-            // 
-            // Fit
-            // 
-            this.Fit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Fit.FillWeight = 50F;
-            this.Fit.HeaderText = "Сжатый";
-            this.Fit.Name = "Fit";
-            this.Fit.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Fit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // Round
-            // 
-            this.Round.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle5.Format = "N2";
-            dataGridViewCellStyle5.NullValue = null;
-            this.Round.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Round.FillWeight = 50F;
-            this.Round.HeaderText = "Округл.";
-            this.Round.Name = "Round";
-            // 
-            // MinRound
-            // 
-            this.MinRound.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle6.Format = "N2";
-            dataGridViewCellStyle6.NullValue = null;
-            this.MinRound.DefaultCellStyle = dataGridViewCellStyle6;
-            this.MinRound.FillWeight = 50F;
-            this.MinRound.HeaderText = "Порог";
-            this.MinRound.Name = "MinRound";
             // 
             // Form1
             // 

@@ -59,13 +59,13 @@ namespace RebarSketch
             for (int i = 0; i < xsi.parameters.Count; i++)
             {
                 ScetchParameter sp = xsi.parameters[i];
-                dataGridView1.Rows.Add(sp.Name, i, sp.FontSize,
+                dataGridView1.Rows.Add(sp.Name, sp.Name, sp.FontSize,
                     sp.PositionX, sp.PositionY, sp.Rotation, sp.IsNarrow, sp.LengthAccuracy, sp.MinValueForRound);
             }
 
             richTextBoxFamilies.Lines = xsi.families.ToArray();
 
-            //this.RefreshImage();
+            this.RefreshImage();
         }
 
         private bool LoadAndActivatePicture()
@@ -123,13 +123,14 @@ namespace RebarSketch
                 var cells = row.Cells;
 
                 sparam.Name = row.Cells[0].Value.ToString();
+                sparam.value = row.Cells[1].Value.ToString();
                 sparam.FontSize = float.Parse(cells[2].Value.ToString());
-                sparam.PositionX = (float)cells[3].Value;
-                sparam.PositionY = (float)cells[4].Value;
-                sparam.Rotation = (float)cells[5].Value;
+                sparam.PositionX = float.Parse(cells[3].Value.ToString());
+                sparam.PositionY = float.Parse(cells[4].Value.ToString());
+                sparam.Rotation = float.Parse(cells[5].Value.ToString());
                 sparam.IsNarrow = (bool)cells[6].Value;
-                sparam.LengthAccuracy = (double)cells[7].Value;
-                sparam.MinValueForRound = (double)cells[8].Value;
+                sparam.LengthAccuracy = double.Parse(cells[7].Value.ToString());
+                sparam.MinValueForRound = double.Parse(cells[8].Value.ToString());
 
                 xsi.parameters.Add(sparam);
 
