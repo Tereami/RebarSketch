@@ -52,11 +52,11 @@ namespace RebarSketch
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Location = new System.Drawing.Point(8, 293);
+            this.label1.Location = new System.Drawing.Point(8, 291);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(201, 39);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Изменение настроек в этом окне затронет для всех пользователей в организации.";
+            this.label1.Text = "Изменение настроек в этом окне затронет всех пользователей.";
             // 
             // label2
             // 
@@ -105,9 +105,9 @@ namespace RebarSketch
             this.label4.Location = new System.Drawing.Point(12, 151);
             this.label4.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(164, 13);
+            this.label4.Size = new System.Drawing.Size(181, 13);
             this.label4.TabIndex = 1;
-            this.label4.Text = "Высота шрифта по умолчанию:";
+            this.label4.Text = "Высота шрифта по умолчанию, px:";
             // 
             // numericFontSize
             // 
@@ -134,9 +134,9 @@ namespace RebarSketch
             this.label5.Location = new System.Drawing.Point(12, 196);
             this.label5.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(144, 13);
+            this.label5.Size = new System.Drawing.Size(166, 13);
             this.label5.TabIndex = 1;
-            this.label5.Text = "Округление по умолчанию:";
+            this.label5.Text = "Округление по умолчанию, мм:";
             // 
             // numericRound
             // 
@@ -197,7 +197,7 @@ namespace RebarSketch
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(134, 344);
+            this.buttonCancel.Location = new System.Drawing.Point(134, 333);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -208,7 +208,7 @@ namespace RebarSketch
             // buttonOk
             // 
             this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(53, 344);
+            this.buttonOk.Location = new System.Drawing.Point(53, 333);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
             this.buttonOk.TabIndex = 1;
@@ -222,7 +222,7 @@ namespace RebarSketch
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(221, 379);
+            this.ClientSize = new System.Drawing.Size(221, 368);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.numericRound);

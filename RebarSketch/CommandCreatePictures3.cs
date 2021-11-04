@@ -86,6 +86,18 @@ namespace RebarSketch
 
             ScetchLibrary lib = new ScetchLibrary();
             lib.Activate(App.libraryPath);
+            if(lib.templates.Count == 0)
+            {
+                message = "Библиотека пуста";
+                return Result.Failed;
+            }
+            List<XmlSketchItem> oldFormatTemplates = lib.templates.Where(i => i.IsXmlSource == false).ToList();
+            if(oldFormatTemplates.Count > 0)
+            {
+                message = "Библиотека не обновлена до нового формата. Запустите Конструктор форм или обратитесь в bim-отдел";
+                return Result.Failed;
+            }
+                    
 
             System.IO.Directory.CreateDirectory(sets.tempPath);
             Debug.WriteLine("Create temp folder: " + sets.tempPath);
@@ -96,7 +108,7 @@ namespace RebarSketch
             List<Element> variableRebars = new List<Element>();
             foreach (Element rebar in col)
             {
-                int checkIsVariable = RebarSketch.ScetchTemplate.CheckrebarIsVariableLength(rebar);
+                int checkIsVariable = rebar.IsVariableLength();
                 if (checkIsVariable == -1) continue;
 
                 if (checkIsVariable == 0)
@@ -139,29 +151,25 @@ namespace RebarSketch
                 //заполняю картинки для обычной арматуры
                 foreach (Element rebar in standartRebars)
                 {
-                    string formName = ScetchTemplate.GetFormNameByElement(rebar);
+                    string formName = rebar.GetRebarFormName();
                     if (formName == "") continue;
 
-                    ScetchTemplate st = lib.GetTemlateByFamilyName(formName, rebar);
-                    if (st == null)
+                    XmlSketchItem xsi = lib.FindTemplate(rebar);
+                    if (xsi == null)
                     {
                         errorRebarNames.Add(formName);
                         continue;
                         //return Result.Failed;
                     }
 
-                    //для арматуры округляем размеры, для закладных деталей (класс арматуры меньше нуля) - нет
-                    //bool roundForSmallDimension = SupportMath.CheckNeedsRoundSmallDimension(rebar);
-
-
-                    foreach (ScetchParameter sparam in st.parameters)
+                    foreach (ScetchParameter sparam in xsi.parameters)
                     {
                         string paramName = sparam.Name;
 
                         Parameter lengthParam = rebar.LookupParameter(paramName);
                         if (lengthParam == null)
                         {
-                            message = "Параметр " + paramName + " не найден в " + SupportNames.GetElementName(rebar)
+                            message = "Параметр " + paramName + " не найден в " + rebar.GetElementName()
                                 + ". Возможно, нужно обновить семейство.";
                             Debug.WriteLine(message);
                             return Result.Failed;
@@ -196,7 +204,7 @@ namespace RebarSketch
                         Debug.WriteLine("ScetchParameter name " + sparam.Name + " value = " + textVal);
                     }
 
-                    ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, st, imagesPrefix, sets);
+                    ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, xsi, imagesPrefix, sets);
                 }
 
 
@@ -206,9 +214,9 @@ namespace RebarSketch
                     string mark = kvp.Key;
                     List<Element> rebars = kvp.Value;
 
-                    string formName = ScetchTemplate.GetFormNameByElement(rebars.First());
-                    ScetchTemplate st = lib.GetTemlateByFamilyName(formName, rebars.First());
-                    if (st == null)
+                    string formName = rebars.First().GetRebarFormName();
+                    XmlSketchItem xsi = lib.FindTemplate(rebars.First());
+                    if (xsi == null)
                     {
                         errorRebarNames.Add(formName);
                         continue;
@@ -218,13 +226,13 @@ namespace RebarSketch
                     Dictionary<string, HashSet<double>> variableValues = new Dictionary<string, HashSet<double>>();
                     foreach (Element rebar in rebars)
                     {
-                        foreach (ScetchParameter sparam in st.parameters)
+                        foreach (ScetchParameter sparam in xsi.parameters)
                         {
                             string paramName = sparam.Name;
                             Parameter lengthParam = rebar.LookupParameter(paramName);
                             if (lengthParam == null)
                             {
-                                message = "Параметр " + paramName + " не найден в " + SupportNames.GetElementName(rebar)
+                                message = "Параметр " + paramName + " не найден в " +  rebar.GetRebarFormName()
                                     + ". Возможно, попытка свести в одну позицию стержни разной формы. "
                                     + ". При использовании арматуры \"Переменной длины\" следует вручную назначить разные \"Марки\" для стержней разных позиций.";
                                 Debug.WriteLine("No found parameter " + paramName + " in element " + rebar.Id.IntegerValue.ToString());
@@ -244,7 +252,7 @@ namespace RebarSketch
                         }
                     }
 
-                    foreach (ScetchParameter sparam in st.parameters)
+                    foreach (ScetchParameter sparam in xsi.parameters)
                     {
                         string paramName = sparam.Name;
                         HashSet<double> values = variableValues[paramName];
@@ -256,7 +264,7 @@ namespace RebarSketch
                         double spacing = (maxValue - minValue) / (count - 1);
                         spacing = sparam.LengthAccuracy * Math.Round(spacing / sparam.LengthAccuracy); //Math.Round(spacing, 0);
 
-                        string line = "";
+                        //string line = "";
 
                         if (minValue == maxValue || count == 1)
                         {
@@ -286,9 +294,9 @@ namespace RebarSketch
                     foreach (Element rebar in rebars)
                     {
                         Debug.WriteLine("Processed rebar id " + rebar.Id.IntegerValue.ToString());
-                        ScetchImage si = new ScetchImage(rebar, st);
+                        ScetchImage si = new ScetchImage(rebar, xsi);
 
-                        ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, st, imagesPrefix, sets);
+                        ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, xsi, imagesPrefix, sets);
                     }
                 }
                 t2.Commit();

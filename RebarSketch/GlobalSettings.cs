@@ -32,7 +32,7 @@ namespace RebarSketch
 
 
         public System.Drawing.FontStyle fontStyle = System.Drawing.FontStyle.Regular;
-        public string imageParamName;
+        public string imageParamName = "RebarImage";
 
         public GlobalSettings()
         {
@@ -72,7 +72,14 @@ namespace RebarSketch
             if (File.Exists(settingsFileXml))
             {
                 if (File.Exists(settingsFileTxt))
-                    File.Delete(settingsFileTxt);
+                    try
+                    {
+                        File.Delete(settingsFileTxt);
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("Не удается удалить файл " + settingsFileTxt);
+                    }
 
                 ssets = GlobalSettings.ReadFromXml(settingsFileXml);
             }
@@ -127,8 +134,17 @@ namespace RebarSketch
             ssets.defautLengthAccuracy = double.Parse(settings[3].Split('#').Last());
             ssets.tempPath= settings[4].Split('#').Last();
             ssets.imageParamName = settings[5].Split('#').Last();
+
+            Debug.WriteLine("Read txt settings success");
+
+            try
+            {
+                System.IO.File.Delete(txtPath);
+                GlobalSettings.Save(ssets);
+                Debug.WriteLine("File deleted " + txtPath);
+            }
+            catch { }
             
-            Debug.WriteLine("Read txt settings success, txt file deleted");
             return ssets;
         }
     }

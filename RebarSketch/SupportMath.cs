@@ -36,19 +36,5 @@ namespace RebarSketch
             double rd = Math.Round(degrees, 1);
             return rd;
         }
-
-
-        //public static bool CheckNeedsRoundSmallDimension(Autodesk.Revit.DB.Element elem)
-        //{
-        //    Autodesk.Revit.DB.Parameter classParam = elem.LookupParameter("Арм.КлассЧисло");
-        //    if (classParam != null && classParam.HasValue)
-        //    {
-        //        double rebarClass = classParam.AsDouble();
-        //        if (rebarClass < 0)
-        //            return false;
-        //    }
-        //    return true;
-        //}
-
     }
 }

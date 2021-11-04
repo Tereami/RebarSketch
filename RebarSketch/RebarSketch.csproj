@@ -159,9 +159,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="CommandConstructor.cs" />
     <Compile Include="CommandCreatePictures3.cs" />
     <Compile Include="CommandSettings.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="FileSupport.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -186,9 +186,7 @@
     <Compile Include="ScetchImage.cs" />
     <Compile Include="ScetchLibrary.cs" />
     <Compile Include="ScetchParameter.cs" />
-    <Compile Include="ScetchTemplate.cs" />
     <Compile Include="SupportMath.cs" />
-    <Compile Include="SupportNames.cs" />
     <Compile Include="GlobalSettings.cs" />
     <Compile Include="XmlSketchItem.cs" />
   </ItemGroup>

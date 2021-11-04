@@ -27,21 +27,21 @@ namespace RebarSketch
     {
         public string FontName;
         public string LibraryPath;
-        public List<ScetchTemplate> templates;
+        public List<XmlSketchItem> templates;
 
 
 
         public static void SearchAndApplyScetch(
-            Dictionary<string, ScetchImage> imagesBase, 
+            Dictionary<string, ScetchImage> imagesBase,
             Element rebar,
-            ScetchTemplate st,
+            XmlSketchItem xsi,
             string imagesPrefix,
             GlobalSettings sets)
         {
             Debug.WriteLine("Try to apply scetch for rebar id" + rebar.Id.IntegerValue.ToString());
             Document doc = rebar.Document;
             string imageParamName = sets.imageParamName;
-            ScetchImage si = new ScetchImage(rebar, st);
+            ScetchImage si = new ScetchImage(rebar, xsi);
             ImageType imType2 = null;
 
             Debug.WriteLine("Key: " + si.ImageKey);
@@ -89,7 +89,7 @@ namespace RebarSketch
 
 
 
-        private ScetchTemplate CreateTemplate(string nameFolder, bool AsSubtype)
+        /*private ScetchTemplate CreateTemplate(string nameFolder, bool AsSubtype)
         {
             string name = nameFolder.Split('\\').Last();
             ScetchTemplate st = new ScetchTemplate();
@@ -165,13 +165,13 @@ namespace RebarSketch
 
             Debug.WriteLine("ScetchTemplate is created");
             return st;
-        }
+        }*/
 
 
         public void Activate(string libraryPath)
         {
             Debug.WriteLine("Scetch library activation start");
-            templates = new List<ScetchTemplate>();
+            templates = new List<XmlSketchItem>();
             string[] nameFolders = Directory.GetDirectories(libraryPath);
             Debug.WriteLine("Folders found: " + nameFolders.Length.ToString());
             foreach (string nameFolder in nameFolders)
@@ -181,14 +181,14 @@ namespace RebarSketch
                 if (subFolders.Length == 0)
                 {
                     Debug.WriteLine("No subfolders, create scetch template");
-                    ScetchTemplate st = CreateTemplate(nameFolder, false);
-                    if (st == null)
+                    XmlSketchItem xsi = XmlSketchItem.Load(nameFolder);
+                    if (xsi == null)
                     {
                         Debug.WriteLine("Scetch is null");
                         continue;
                     }
-                    templates.Add(st);
-                    Debug.WriteLine("Scetch succesfuly added to library as form name: " + st.formName);
+                    templates.Add(xsi);
+                    Debug.WriteLine("Scetch succesfuly added to library as form name: " + xsi.formName);
                 }
                 else
                 {
@@ -196,21 +196,25 @@ namespace RebarSketch
                     foreach (string subfolder in subFolders)
                     {
                         Debug.WriteLine("Create template by subfolder: " + subfolder);
-                        ScetchTemplate st2 = CreateTemplate(subfolder, true);
-                        if (st2 == null)
+                        XmlSketchItem xsi2 = XmlSketchItem.Load(subfolder);
+                        if (xsi2 == null)
                         {
                             Debug.WriteLine("Scetch is null");
                             continue;
                         }
-                        templates.Add(st2);
-                        Debug.WriteLine("Scetch succesfuly added to library as form name: " + st2.formName);
+                        xsi2.IsSubtype = true;
+                        string subtypeNumberString = subfolder.Split('_').Last();
+                        int subtypeNumber = int.Parse(subtypeNumberString);
+                        xsi2.SubtypeNumber = subtypeNumber;
+                        templates.Add(xsi2);
+                        Debug.WriteLine("Scetch succesfuly added to library as form name: " + xsi2.formName);
                     }
                 }
             }
             Debug.WriteLine("Scetch library activation start");
         }
 
-        private string CheckFileExists(string path)
+        /*private string CheckFileExists(string path)
         {
             bool check = File.Exists(path);
             if (!check)
@@ -221,39 +225,56 @@ namespace RebarSketch
                 return res;
             }
             return "";
-        }
+        }*/
 
-        public ScetchTemplate GetTemlateByFamilyName(string familyName, Element rebar)
+        public XmlSketchItem FindTemplate(Element rebar)
         {
+            string familyName = rebar.GetRebarFormName();
             Debug.WriteLine("Get template by family name: " + familyName + " for element id " + rebar.Id.IntegerValue.ToString());
-            foreach (ScetchTemplate st in templates)
+            List<XmlSketchItem> curNameSketches = templates.Where(i => i.families.Contains(familyName)).ToList();
+            if (curNameSketches.Count == 0) return null;
+
+            if (curNameSketches[0].IsSubtype)
             {
-                foreach (string name in st.familyNames)
+                Parameter subtypeNumberParam = rebar.LookupParameter("Арм.НомерПодтипаФормы");
+                if (subtypeNumberParam == null)
                 {
-                    if (name == familyName)
-                    {
-
-                        if (st.IsSubtype)
-                        {
-                            Parameter subtypeNumberParam = rebar.LookupParameter("Арм.НомерПодтипаФормы");
-                            if (subtypeNumberParam == null) return null;
-
-                            int subtypeNumber = subtypeNumberParam.AsInteger();
-                            if (st.SubtypeNumber == subtypeNumber)
-                            {
-                                Debug.WriteLine("Scetch template as Subtype " + subtypeNumber.ToString());
-                                return st;
-                            }
-                        }
-                        else
-                        {
-                            Debug.WriteLine("Scetch template found, not subtype");
-                            return st;
-                        }
-                    }
+                    string msg = "Арматура " + familyName + " не содержит параметр Арм.НомерПодтипаФормы";
+                    Autodesk.Revit.UI.TaskDialog.Show("Ошибка", msg);
+                    throw new Exception(msg);
                 }
+
+                int subtypeNumber = subtypeNumberParam.AsInteger();
+                List<XmlSketchItem> curSubtypeTemplate = curNameSketches
+                    .Where(i => i.SubtypeNumber == subtypeNumber)
+                    .ToList();
+                if(curSubtypeTemplate.Count == 0)
+                {
+                    string msg = "Нет шаблона подтипа №" + subtypeNumber + " для арматуры " + familyName;
+                    Autodesk.Revit.UI.TaskDialog.Show("Ошибка", msg);
+                    throw new Exception(msg);
+                }
+                else if(curSubtypeTemplate.Count > 1)
+                {
+                    string msg = "Более 1 шаблона подтипа №" + subtypeNumber + " для арматуры " + familyName;
+                    Autodesk.Revit.UI.TaskDialog.Show("Ошибка", msg);
+                    throw new Exception(msg);
+                }
+
+                return curSubtypeTemplate[0];
             }
-            return null;
+            else
+            {
+                if (curNameSketches.Count > 1)
+                {
+                    string msg = "Арматура " + familyName + " прописана в нескольких шаблонах: ";
+                    msg += string.Join(", ", curNameSketches.Select(i => i.formName));
+                    Autodesk.Revit.UI.TaskDialog.Show("Ошибка", msg);
+                    throw new Exception(msg);
+                }
+                Debug.WriteLine("Scetch template found, not subtype");
+                return curNameSketches[0];
+            }
         }
     }
 }

@@ -26,22 +26,53 @@ namespace RebarSketch
     [Serializable]
     public class XmlSketchItem
     {
+        [System.Xml.Serialization.XmlIgnore]
+        public bool IsSubtype = false;
+        [System.Xml.Serialization.XmlIgnore]
+        public int SubtypeNumber = 0;
+        [System.Xml.Serialization.XmlIgnore]
+        public bool IsXmlSource = false;
+        [System.Xml.Serialization.XmlIgnore]
+        public string formName;
+        [System.Xml.Serialization.XmlIgnore]
+        public string templateImagePath;
+        [System.Xml.Serialization.XmlIgnore]
+        public string folder;
+
         public List<string> families { get; set; }
         public List<ScetchParameter> parameters { get; set; }
+
+
 
         public XmlSketchItem()
         {
             //пустой конструктор для сериализатора
         }
 
-        public XmlSketchItem(ScetchTemplate template)
+        /*public XmlSketchItem(ScetchTemplate template)
         {
             families = template.familyNames;
 
             parameters = template.parameters;
+        }*/
+
+        public static XmlSketchItem Load(string folder)
+        {
+            XmlSketchItem xsi = null;
+
+            string xmlConfigFilePath = System.IO.Path.Combine(folder, "config.xml");
+            if (System.IO.File.Exists(xmlConfigFilePath))
+                xsi = XmlSketchItem.LoadFromXml(xmlConfigFilePath);
+            else
+                xsi = XmlSketchItem.LoadFromTxt(folder);
+
+            xsi.folder = folder;
+            xsi.formName = folder.Split('\\').Last();
+            xsi.templateImagePath = Path.Combine(folder, "scetch.png");
+            return xsi;
         }
 
-        public static XmlSketchItem LoadFromXml(string xmlPath)
+        private static XmlSketchItem LoadFromXml(string xmlPath)
         {
             Debug.WriteLine("Read Xml sketch file: " + xmlPath);
             XmlSketchItem xsi;
@@ -57,13 +88,14 @@ namespace RebarSketch
                     xsi = new XmlSketchItem();
                 }
             }
-
+            xsi.IsXmlSource = true;
             return xsi;
         }
 
-        public static XmlSketchItem LoadFromTxt(string folder)
+        private static XmlSketchItem LoadFromTxt(string folder)
         {
             XmlSketchItem xsi = new XmlSketchItem();
+            xsi.IsXmlSource = false;
 
             string parametersTxtPath = Path.Combine(folder, "parameters.txt");
 
@@ -111,7 +143,7 @@ namespace RebarSketch
             return xsi;
         }
 
-        public static void Save(string folder, XmlSketchItem xsi)
+        public void Save()
         {
             string xmlPath = Path.Combine(folder, "config.xml");
             Debug.WriteLine("Save sketch config to file: " + xmlPath);
@@ -123,7 +155,7 @@ namespace RebarSketch
                 XmlSerializer serializer = new XmlSerializer(typeof(XmlSketchItem));
                 using (FileStream writer = new FileStream(xmlPath, FileMode.OpenOrCreate))
                 {
-                    serializer.Serialize(writer, xsi);
+                    serializer.Serialize(writer, this);
                     Debug.WriteLine("Save settings success");
                 }
             }

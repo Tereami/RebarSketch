@@ -8,10 +8,11 @@ namespace RebarSketch
     public partial class Form1 : Form
     {
         public string executionFolder;
-        public string templateImagePath;
-        public string curTempImage = "";
+        //public string templateImagePath;
+        public string curTempImagePath = "";
 
         private GlobalSettings sets;
+        private XmlSketchItem template;
 
         public Form1(GlobalSettings gsets)
         {
@@ -24,12 +25,13 @@ namespace RebarSketch
 
         private void btnNewForm_Click(object sender, EventArgs e)
         {
-            this.LoadAndActivatePicture();
+            //this.LoadAndActivatePicture();
 
             if (dataGridView1.Rows.Count == 0)
             {
                 dataGridView1.Rows.Add("Арм_А", "000", "100", "200", "0");
             }
+            RefreshImage();
         }
 
         private void btnLoadTemplate_Click(object sender, EventArgs e)
@@ -43,45 +45,31 @@ namespace RebarSketch
             if (openDialog.ShowDialog() != DialogResult.OK)
                 return;
 
-            templateImagePath = openDialog.FileName;
+            string templateImagePath = openDialog.FileName;
             executionFolder = System.IO.Path.GetDirectoryName(templateImagePath);
 
             this.ActivateControls();
             dataGridView1.Rows.Clear();
 
-            string xmlConfigFilePath = System.IO.Path.Combine(executionFolder, "config.xml");
-            XmlSketchItem xsi = null;
-            if (System.IO.File.Exists(xmlConfigFilePath))
-                xsi = XmlSketchItem.LoadFromXml(xmlConfigFilePath);
-            else
-                xsi = XmlSketchItem.LoadFromTxt(executionFolder);
+            template = XmlSketchItem.Load(executionFolder);
 
-            for (int i = 0; i < xsi.parameters.Count; i++)
+            for (int i = 0; i < template.parameters.Count; i++)
             {
-                ScetchParameter sp = xsi.parameters[i];
+                ScetchParameter sp = template.parameters[i];
                 dataGridView1.Rows.Add(sp.Name, sp.Name, sp.FontSize,
                     sp.PositionX, sp.PositionY, sp.Rotation, sp.IsNarrow, sp.LengthAccuracy, sp.MinValueForRound);
             }
 
-            richTextBoxFamilies.Lines = xsi.families.ToArray();
+            richTextBoxFamilies.Lines = template.families.ToArray();
 
             this.RefreshImage();
         }
 
-        private bool LoadAndActivatePicture()
-        {
-
-
-            //pictureBox1.Load(templateImagePath);
-
-            return true;
-        }
-
         private void btnSave_Click(object sender, EventArgs e)
         {
-            XmlSketchItem xsi = CreateSketchItemByGrid();
+            UpdateTemplateByGrid();
 
-            XmlSketchItem.Save(executionFolder, xsi);
+            template.Save();
 
             pictureBox1.Dispose();
             this.Close();
@@ -111,10 +99,9 @@ namespace RebarSketch
             this.RefreshImage();
         }
 
-        private XmlSketchItem CreateSketchItemByGrid()
+        private void UpdateTemplateByGrid()
         {
-            XmlSketchItem xsi = new XmlSketchItem();
-            xsi.parameters = new List<ScetchParameter>();
+            template.parameters = new List<ScetchParameter>();
 
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
@@ -132,39 +119,35 @@ namespace RebarSketch
                 sparam.LengthAccuracy = double.Parse(cells[7].Value.ToString());
                 sparam.MinValueForRound = double.Parse(cells[8].Value.ToString());
 
-                xsi.parameters.Add(sparam);
-
-                //writer.WriteLine(line);
+                template.parameters.Add(sparam);
             }
 
-            xsi.families = new List<string>();
+            template.families = new List<string>();
 
             foreach (string fam in richTextBoxFamilies.Lines)
             {
-                xsi.families.Add(fam);
+                template.families.Add(fam);
             }
-            return xsi;
         }
 
 
         private void RefreshImage()
         {
-            XmlSketchItem xsi = CreateSketchItemByGrid();
-
+            UpdateTemplateByGrid();
             //взять картинку
             //нанести на неё размеры
             //временно сохранить картинку
-            string newTempImage = ScetchImage.GenerateTemporary(sets, templateImagePath, xsi.parameters);
+            string newTempImage = ScetchImage.GenerateTemporary(sets, template.templateImagePath, template.parameters);
 
             //вывести в форму
             pictureBox1.Load(newTempImage);
 
-            if (curTempImage != "")
+            if (!string.IsNullOrEmpty(curTempImagePath))
             {
-                System.IO.File.Delete(curTempImage);
+                System.IO.File.Delete(curTempImagePath);
             }
 
-            curTempImage = newTempImage;
+            curTempImagePath = newTempImage;
         }
 
         private void ActivateControls()
@@ -180,9 +163,9 @@ namespace RebarSketch
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             pictureBox1.Dispose();
-            if (curTempImage != "")
+            if (!string.IsNullOrEmpty(curTempImagePath))
             {
-                System.IO.File.Delete(curTempImage);
+                System.IO.File.Delete(curTempImagePath);
             }
         }
 
@@ -232,6 +215,18 @@ namespace RebarSketch
         private void button1_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://bim-starter.com/plugins/rebarsketch/");
+        }
+
+        private void buttonSettings_Click(object sender, EventArgs e)
+        {
+            FormGlobalSettings formSettings = new FormGlobalSettings(sets);
+            if (formSettings.ShowDialog() != DialogResult.OK)
+                return;
+
+            sets = formSettings.newSettings;
+            GlobalSettings.Save(sets);
+            if(template != null)
+                RefreshImage();
         }
     }
 }

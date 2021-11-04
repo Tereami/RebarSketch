@@ -13,7 +13,7 @@ namespace RebarSketch
     public class ScetchImage : IEquatable<ScetchImage>
     {
         //public List<ScetchParameter> Parameters;
-        public ScetchTemplate Template;
+        public XmlSketchItem Template;
         public Element Elem;
         public ImageType imageType;
         public string ImageKey;
@@ -21,13 +21,11 @@ namespace RebarSketch
 
         //bool roundForSmallDimension;
 
-        public ScetchImage(Element elem, ScetchTemplate template)
+        public ScetchImage(Element elem, XmlSketchItem template)
         {
             Elem = elem;
             Template = template;
             ImageKey = template.formName;
-
-            //roundForSmallDimension = SupportMath.CheckNeedsRoundSmallDimension(elem);
 
             foreach (ScetchParameter param in Template.parameters)
             {
@@ -57,7 +55,7 @@ namespace RebarSketch
 
             WriteBitmap(sets, templateImage, Template.parameters);
 
-            ScetchImagePath = System.IO.Path.Combine(@"C:\RebarScetch\", imagePrefix + "_" + ImageKey + ".bmp");
+            ScetchImagePath = System.IO.Path.Combine(sets.tempPath, imagePrefix + "_" + ImageKey + ".bmp");
             
             templateImage.Save(ScetchImagePath);
             Debug.WriteLine("New bitmap path: " + ScetchImagePath);

@@ -20,11 +20,11 @@ namespace RebarSketch
         public double MinValueForRound = 20;
 
         [System.Xml.Serialization.XmlIgnore]
-        public string value = "Арм_А";
+        public string value = "0000";
         [System.Xml.Serialization.XmlIgnore]
-        public bool IsVariable;
+        public bool IsVariable = false;
         [System.Xml.Serialization.XmlIgnore]
-        public bool HaveSpacing;
+        public bool HaveSpacing = false;
         [System.Xml.Serialization.XmlIgnore]
         public string SpacingValue;
         
