@@ -103,12 +103,12 @@ namespace RebarSketch
                 float angle = param.Rotation;
 
                 float fontSize2 = param.FontSize;
-                if (param.IsVariable) fontSize2 = fontSize2 * 0.8f;
+                //if (param.IsVariable) fontSize2 = fontSize2 * 0.8f;
                 Font fnt = new Font(sets.fontName, fontSize2, sets.fontStyle);
 
                 if(param.value.EndsWith("°"))
                 {
-                    fnt = new Font("Isocpeur", fontSize2, sets.fontStyle);
+                    fnt = new Font("Arial", fontSize2, sets.fontStyle);
                 }
 
                 gr.TranslateTransform(b, h);
@@ -126,16 +126,9 @@ namespace RebarSketch
 
                 gr.DrawString(param.value, fnt, Brushes.Black, 0, 0, format);
 
-                //string unicodeConvert = Uri.UnescapeDataString(param.value);
-                //gr.DrawString(unicodeConvert, fnt, Brushes.Black, 0, 0, format);
-
-                //System.Globalization.CultureInfo _provider = new System.Globalization.CultureInfo("en-us");
-                //String drawString = param.value.ToString(_provider);
-                //gr.DrawString(drawString, fnt, Brushes.Black, 0, 0, format);
-
                 if (param.HaveSpacing)
                 {
-                    float heigthSpacingPlacement = 1.8f * fontSize2;
+                    float heigthSpacingPlacement = sets.linesSpacing * fontSize2;
                     gr.DrawString(param.SpacingValue, fnt, Brushes.Black, 0, heigthSpacingPlacement, format);
                 }
 
@@ -155,27 +148,11 @@ namespace RebarSketch
             for (int i = 0; i < this.Template.parameters.Count; i++)
             {
                 ScetchParameter sparam1 = this.Template.parameters[i];
-                string val1 = sparam1.value;
-
                 ScetchParameter sparam2 = other.Template.parameters[i];
-                string val2 = sparam2.value;
-                double val1double = 0;
-                double val2double = 0;
-                bool check1IsDouble = double.TryParse(val1, out val1double);
-                bool check2IsDouble = double.TryParse(val2, out val2double);
-                if (check1IsDouble && check2IsDouble)
-                {
-                    val1double = SupportMath.RoundMillimeters(val1double, sparam1.MinValueForRound, sparam1.LengthAccuracy);
-                    val2double = SupportMath.RoundMillimeters(val2double, sparam2.MinValueForRound, sparam1.LengthAccuracy);
-                    if (val1double != val2double) return false;
-                }
 
-                if (val1 != val2) return false;
+                if (!sparam1.Equals(sparam2)) return false;
             }
             return true;
         }
-
-
-
     }
 }

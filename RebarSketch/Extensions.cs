@@ -110,5 +110,41 @@ namespace RebarSketch
 
             return selElemName;
         }
+
+
+        public static double GetDoubleValue(this Element rebar, string paramName, out bool isDegrees)
+        {
+            Parameter param = rebar.LookupParameter(paramName);
+            if (param == null)
+            {
+                ElementType rebarType = rebar.Document.GetElement(rebar.GetTypeId()) as ElementType;
+                if (rebarType == null)
+                    throw new Exception("Rebar type is null for element " + rebar.Id.IntegerValue);
+
+                param = rebarType.LookupParameter(paramName);
+            }
+
+            if (param == null || !param.HasValue)
+            {
+                string msg = "Параметр " + paramName + " не найден в " + rebar.GetElementName()
+                    + ". Возможно, нужно обновить семейство.";
+                Autodesk.Revit.UI.TaskDialog.Show("Ошибка", msg);
+                System.Diagnostics.Debug.WriteLine(msg);
+                throw new Exception(msg);
+            }
+            double val = param.AsDouble();
+
+#if R2022
+            double val2 = UnitUtils.ConvertFromInternalUnits(val, lengthParam.GetTypeId());
+            ForgeTypeId forgeType = lengthParam.GetUnitTypeId();
+            string unittype = forgeType.TypeId;
+            isDegrees = unittype.Contains("degrees");
+#else
+            double val2 = UnitUtils.ConvertFromInternalUnits(val, param.DisplayUnitType);
+            isDegrees = param.DisplayUnitType == DisplayUnitType.DUT_DECIMAL_DEGREES;
+#endif
+
+            return val2;
+        }
     }
 }

@@ -49,13 +49,6 @@ namespace RebarSketch
             //пустой конструктор для сериализатора
         }
 
-        /*public XmlSketchItem(ScetchTemplate template)
-        {
-            families = template.familyNames;
-
-            parameters = template.parameters;
-        }*/
-
         public static XmlSketchItem Load(string folder)
         {
             XmlSketchItem xsi = null;

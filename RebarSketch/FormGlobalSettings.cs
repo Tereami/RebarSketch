@@ -34,6 +34,8 @@ namespace RebarSketch
             comboBoxFontStyle.SelectedItem = sets.fontStyle;
 
             numericFontSize.Value = (decimal)sets.defaultFontSize;
+            numericLinesSpacing.Value = (decimal)sets.linesSpacing;
+
             numericRound.Value = (decimal)sets.defautLengthAccuracy;
             textBoxImageParamName.Text = sets.imageParamName;
         }
@@ -46,6 +48,7 @@ namespace RebarSketch
             newSettings.fontName = comboBoxFontName.Text;
             newSettings.fontStyle =  (FontStyle)comboBoxFontStyle.SelectedItem;
             newSettings.defaultFontSize = (int)numericFontSize.Value;
+            newSettings.linesSpacing = (float)numericLinesSpacing.Value;
             newSettings.defautLengthAccuracy = (double)numericRound.Value;
             newSettings.imageParamName = textBoxImageParamName.Text;
 

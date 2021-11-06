@@ -29,7 +29,6 @@ namespace RebarSketch
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxTempPath = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -44,19 +43,12 @@ namespace RebarSketch
             this.textBoxImageParamName = new System.Windows.Forms.TextBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericLinesSpacing = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numericFontSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericRound)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericLinesSpacing)).BeginInit();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Location = new System.Drawing.Point(8, 291);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(201, 39);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Изменение настроек в этом окне затронет всех пользователей.";
             // 
             // label2
             // 
@@ -64,9 +56,9 @@ namespace RebarSketch
             this.label2.Location = new System.Drawing.Point(12, 14);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(183, 13);
+            this.label2.Size = new System.Drawing.Size(166, 13);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Временная папка для сохранения:";
+            this.label2.Text = "Временная папка для эскизов:";
             // 
             // textBoxTempPath
             // 
@@ -131,7 +123,7 @@ namespace RebarSketch
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 196);
+            this.label5.Location = new System.Drawing.Point(12, 241);
             this.label5.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(166, 13);
@@ -142,7 +134,7 @@ namespace RebarSketch
             // 
             this.numericRound.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericRound.Location = new System.Drawing.Point(12, 213);
+            this.numericRound.Location = new System.Drawing.Point(12, 258);
             this.numericRound.Name = "numericRound";
             this.numericRound.Size = new System.Drawing.Size(193, 20);
             this.numericRound.TabIndex = 7;
@@ -176,7 +168,7 @@ namespace RebarSketch
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 241);
+            this.label7.Location = new System.Drawing.Point(12, 286);
             this.label7.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(161, 13);
@@ -187,7 +179,7 @@ namespace RebarSketch
             // 
             this.textBoxImageParamName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxImageParamName.Location = new System.Drawing.Point(11, 258);
+            this.textBoxImageParamName.Location = new System.Drawing.Point(12, 303);
             this.textBoxImageParamName.Name = "textBoxImageParamName";
             this.textBoxImageParamName.Size = new System.Drawing.Size(194, 20);
             this.textBoxImageParamName.TabIndex = 8;
@@ -197,7 +189,7 @@ namespace RebarSketch
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(134, 333);
+            this.buttonCancel.Location = new System.Drawing.Point(134, 350);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -208,7 +200,7 @@ namespace RebarSketch
             // buttonOk
             // 
             this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(53, 333);
+            this.buttonOk.Location = new System.Drawing.Point(53, 350);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
             this.buttonOk.TabIndex = 1;
@@ -216,16 +208,52 @@ namespace RebarSketch
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(12, 196);
+            this.label8.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(141, 13);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "Межстрочное расстояние:";
+            // 
+            // numericLinesSpacing
+            // 
+            this.numericLinesSpacing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.numericLinesSpacing.DecimalPlaces = 1;
+            this.numericLinesSpacing.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericLinesSpacing.Location = new System.Drawing.Point(12, 213);
+            this.numericLinesSpacing.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericLinesSpacing.Name = "numericLinesSpacing";
+            this.numericLinesSpacing.Size = new System.Drawing.Size(193, 20);
+            this.numericLinesSpacing.TabIndex = 6;
+            this.numericLinesSpacing.Value = new decimal(new int[] {
+            18,
+            0,
+            0,
+            65536});
+            // 
             // FormGlobalSettings
             // 
             this.AcceptButton = this.buttonOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(221, 368);
+            this.ClientSize = new System.Drawing.Size(221, 385);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.numericRound);
+            this.Controls.Add(this.numericLinesSpacing);
             this.Controls.Add(this.numericFontSize);
             this.Controls.Add(this.comboBoxFontStyle);
             this.Controls.Add(this.comboBoxFontName);
@@ -233,25 +261,24 @@ namespace RebarSketch
             this.Controls.Add(this.textBoxImageParamName);
             this.Controls.Add(this.textBoxTempPath);
             this.Controls.Add(this.label6);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FormGlobalSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Общие настройки";
+            this.Text = "Глобальные настройки";
             ((System.ComponentModel.ISupportInitialize)(this.numericFontSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericRound)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericLinesSpacing)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxTempPath;
         private System.Windows.Forms.Label label3;
@@ -266,5 +293,7 @@ namespace RebarSketch
         private System.Windows.Forms.TextBox textBoxImageParamName;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonOk;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown numericLinesSpacing;
     }
 }

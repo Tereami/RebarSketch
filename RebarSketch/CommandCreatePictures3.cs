@@ -165,43 +165,12 @@ namespace RebarSketch
                     foreach (ScetchParameter sparam in xsi.parameters)
                     {
                         string paramName = sparam.Name;
+                        bool isDegress = false;
+                        double val = rebar.GetDoubleValue(paramName, out isDegress);
+                        sparam.IsDegrees = isDegress;
+                        sparam.SetValue(new List<double> { val });
 
-                        Parameter lengthParam = rebar.LookupParameter(paramName);
-                        if (lengthParam == null)
-                        {
-                            message = "Параметр " + paramName + " не найден в " + rebar.GetElementName()
-                                + ". Возможно, нужно обновить семейство.";
-                            Debug.WriteLine(message);
-                            return Result.Failed;
-                        }
-
-                        string textVal = lengthParam.Definition.Name;
-                        double val = lengthParam.AsDouble();
-
-
-#if R2022
-                        ForgeTypeId forgeType = lengthParam.GetUnitTypeId();
-                        string unittype = forgeType.TypeId;
-                        bool isMillimeters = unittype.Contains("millimeters");
-                        bool isDegrees = unittype.Contains("degrees");
-#else
-                        bool isMillimeters = lengthParam.DisplayUnitType == DisplayUnitType.DUT_MILLIMETERS;
-                        bool isDegrees = lengthParam.DisplayUnitType == DisplayUnitType.DUT_DECIMAL_DEGREES;
-#endif
-                        if (isDegrees)
-                        {
-                            val = SupportMath.RoundDegrees(val);
-                            textVal = val.ToString("F0") + "°";
-                            sparam.value = textVal;
-                        }
-                        else
-                        {
-                            val = SupportMath.RoundMillimeters(val, sparam.MinValueForRound, sparam.LengthAccuracy);
-                            textVal = val.ToString("F0");
-                            sparam.value = textVal;
-                        }
-
-                        Debug.WriteLine("ScetchParameter name " + sparam.Name + " value = " + textVal);
+                        Debug.WriteLine("ScetchParameter name " + sparam.Name + " value = " + val.ToString("F0"));
                     }
 
                     ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, xsi, imagesPrefix, sets);
@@ -229,20 +198,12 @@ namespace RebarSketch
                         foreach (ScetchParameter sparam in xsi.parameters)
                         {
                             string paramName = sparam.Name;
-                            Parameter lengthParam = rebar.LookupParameter(paramName);
-                            if (lengthParam == null)
-                            {
-                                message = "Параметр " + paramName + " не найден в " +  rebar.GetRebarFormName()
-                                    + ". Возможно, попытка свести в одну позицию стержни разной формы. "
-                                    + ". При использовании арматуры \"Переменной длины\" следует вручную назначить разные \"Марки\" для стержней разных позиций.";
-                                Debug.WriteLine("No found parameter " + paramName + " in element " + rebar.Id.IntegerValue.ToString());
-                                return Result.Failed;
-                            }
-                            double val = rebar.LookupParameter(paramName).AsDouble();
+                            bool isDegrees = false;
+                            double val = rebar.GetDoubleValue(paramName, out isDegrees);
+                            sparam.IsDegrees = isDegrees;
                             if (variableValues.ContainsKey(paramName))
                             {
                                 variableValues[paramName].Add(val);
-                                
                             }
                             else
                             {
@@ -255,40 +216,9 @@ namespace RebarSketch
                     foreach (ScetchParameter sparam in xsi.parameters)
                     {
                         string paramName = sparam.Name;
-                        HashSet<double> values = variableValues[paramName];
-                        int count = values.Count();
-                        double minValue = values.Min();
-                        minValue = SupportMath.RoundMillimeters(minValue, sparam.MinValueForRound, sparam.LengthAccuracy);
-                        double maxValue = values.Max();
-                        maxValue = SupportMath.RoundMillimeters(maxValue, sparam.MinValueForRound, sparam.LengthAccuracy);
-                        double spacing = (maxValue - minValue) / (count - 1);
-                        spacing = sparam.LengthAccuracy * Math.Round(spacing / sparam.LengthAccuracy); //Math.Round(spacing, 0);
-
-                        //string line = "";
-
-                        if (minValue == maxValue || count == 1)
-                        {
-                            sparam.value = minValue.ToString("F0");
-                            sparam.IsVariable = false;
-                            sparam.HaveSpacing = false;
-                        }
-                        else
-                        {
-                            if (count == 2)
-                            {
-                                sparam.value = minValue.ToString("F0") + "..." + maxValue.ToString("F0");
-                                sparam.IsVariable = true;
-                                sparam.HaveSpacing = false;
-                            }
-                            else
-                            {
-                                //sparam.value = minValue.ToString("F0") + "..." + maxValue.ToString("F0") + " (ш." + spacing.ToString("F0") + ")";
-                                sparam.value = minValue.ToString("F0") + "..." + maxValue.ToString("F0");
-                                sparam.HaveSpacing = true;
-                                sparam.IsVariable = true;
-                                sparam.SpacingValue = "ш." + spacing.ToString("F0");
-                            }
-                        }
+                        List<double> values = variableValues[paramName].ToList();
+                        sparam.SetValue(values);
+                        
                     }
 
                     foreach (Element rebar in rebars)

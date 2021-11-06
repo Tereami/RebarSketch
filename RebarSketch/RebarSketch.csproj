@@ -186,7 +186,6 @@
     <Compile Include="ScetchImage.cs" />
     <Compile Include="ScetchLibrary.cs" />
     <Compile Include="ScetchParameter.cs" />
-    <Compile Include="SupportMath.cs" />
     <Compile Include="GlobalSettings.cs" />
     <Compile Include="XmlSketchItem.cs" />
   </ItemGroup>

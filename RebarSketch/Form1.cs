@@ -56,8 +56,9 @@ namespace RebarSketch
             for (int i = 0; i < template.parameters.Count; i++)
             {
                 ScetchParameter sp = template.parameters[i];
+                sp.value = sp.Name;
                 dataGridView1.Rows.Add(sp.Name, sp.Name, sp.FontSize,
-                    sp.PositionX, sp.PositionY, sp.Rotation, sp.IsNarrow, sp.LengthAccuracy, sp.MinValueForRound);
+                    sp.PositionX, sp.PositionY, sp.Rotation, sp.IsNarrow, sp.LengthAccuracy);
             }
 
             richTextBoxFamilies.Lines = template.families.ToArray();
@@ -75,39 +76,26 @@ namespace RebarSketch
             this.Close();
         }
 
-        private void btnAddRow_Click(object sender, EventArgs e)
-        {
-            dataGridView1.Rows.Add("Арм_А", "000", "50", "100", "200", "0", false, 5, 20);
-            btnDeleteRow.Enabled = true;
-        }
-
-        private void btnDeleteRow_Click(object sender, EventArgs e)
-        {
-            DataGridViewRow row = dataGridView1.Rows[dataGridView1.Rows.Count - 1];
-            dataGridView1.Rows.Remove(row);
-
-            if (dataGridView1.Rows.Count == 1)
-            {
-                btnDeleteRow.Enabled = false;
-            }
-
-        }
-
-
-        private void btnRefresh_Click(object sender, EventArgs e)
-        {
-            this.RefreshImage();
-        }
-
         private void UpdateTemplateByGrid()
         {
+            if (template == null) return;
             template.parameters = new List<ScetchParameter>();
 
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                ScetchParameter sparam = new ScetchParameter();
-
+                if (row.IsNewRow) continue;
                 var cells = row.Cells;
+
+                if (cells[0].Value == null) cells[0].Value = "Арм_А";
+                if (cells[1].Value == null) cells[1].Value = "Арм_А";
+                if (cells[2].Value == null) cells[2].Value = sets.defaultFontSize;
+                if (cells[3].Value == null) cells[3].Value = 100;
+                if (cells[4].Value == null) cells[4].Value = 200;
+                if (cells[5].Value == null) cells[5].Value = 0;
+                if (cells[6].Value == null) cells[6].Value = false;
+                if (cells[7].Value == null) cells[7].Value = sets.defautLengthAccuracy;
+
+                ScetchParameter sparam = new ScetchParameter();
 
                 sparam.Name = row.Cells[0].Value.ToString();
                 sparam.value = row.Cells[1].Value.ToString();
@@ -117,7 +105,6 @@ namespace RebarSketch
                 sparam.Rotation = float.Parse(cells[5].Value.ToString());
                 sparam.IsNarrow = (bool)cells[6].Value;
                 sparam.LengthAccuracy = double.Parse(cells[7].Value.ToString());
-                sparam.MinValueForRound = double.Parse(cells[8].Value.ToString());
 
                 template.parameters.Add(sparam);
             }
@@ -133,7 +120,8 @@ namespace RebarSketch
 
         private void RefreshImage()
         {
-            UpdateTemplateByGrid();
+            if (template == null) return;
+            
             //взять картинку
             //нанести на неё размеры
             //временно сохранить картинку
@@ -152,21 +140,23 @@ namespace RebarSketch
 
         private void ActivateControls()
         {
-            btnAddRow.Enabled = true;
-            btnDeleteRow.Enabled = true;
-            btnRefresh.Enabled = true;
             dataGridView1.Enabled = true;
             richTextBoxFamilies.Enabled = true;
             btnSave.Enabled = true;
         }
 
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        private void CloseAndDispose()
         {
             pictureBox1.Dispose();
             if (!string.IsNullOrEmpty(curTempImagePath))
             {
                 System.IO.File.Delete(curTempImagePath);
             }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            CloseAndDispose();
         }
 
         private void buttonOpenLibraryFolder_Click(object sender, EventArgs e)
@@ -209,6 +199,7 @@ namespace RebarSketch
 
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            UpdateTemplateByGrid();
             this.RefreshImage();
         }
 
@@ -225,8 +216,29 @@ namespace RebarSketch
 
             sets = formSettings.newSettings;
             GlobalSettings.Save(sets);
-            if(template != null)
+            if (template != null)
+            {
+                UpdateTemplateByGrid();
                 RefreshImage();
+            }
+        }
+
+
+        private void dataGridView1_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            UpdateTemplateByGrid();
+            RefreshImage();
+        }
+
+        private void dataGridView1_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            UpdateTemplateByGrid();
+            RefreshImage();
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            CloseAndDispose();
         }
     }
 }

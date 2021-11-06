@@ -30,6 +30,8 @@ namespace RebarSketch
         public float defaultFontSize = 25;
         public double defautLengthAccuracy = 5;
 
+        public float linesSpacing = 1.8f;
+
 
         public System.Drawing.FontStyle fontStyle = System.Drawing.FontStyle.Regular;
         public string imageParamName = "RebarImage";
