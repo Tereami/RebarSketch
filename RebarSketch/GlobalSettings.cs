@@ -46,7 +46,18 @@ namespace RebarSketch
             string xmlPath = Path.Combine(App.rebarSketchPath, "settings.xml");
             Debug.WriteLine("Save settings to file: " + xmlPath);
             if (File.Exists(xmlPath))
-                File.Delete(xmlPath);
+            {
+                try
+                {
+                    File.Delete(xmlPath);
+                }
+                catch
+                {
+                    string msg = "Не удалось сохранить файл, проверьте права доступа " + xmlPath;
+                    System.Windows.Forms.MessageBox.Show(msg);
+                    throw new Exception(msg);
+                }
+            }
 
             try
             {

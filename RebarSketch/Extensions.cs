@@ -135,8 +135,8 @@ namespace RebarSketch
             double val = param.AsDouble();
 
 #if R2022
-            double val2 = UnitUtils.ConvertFromInternalUnits(val, lengthParam.GetTypeId());
-            ForgeTypeId forgeType = lengthParam.GetUnitTypeId();
+            ForgeTypeId forgeType = param.GetUnitTypeId();
+            double val2 = UnitUtils.ConvertFromInternalUnits(val, forgeType);
             string unittype = forgeType.TypeId;
             isDegrees = unittype.Contains("degrees");
 #else

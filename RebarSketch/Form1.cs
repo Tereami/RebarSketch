@@ -2,84 +2,63 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.IO;
+using System.Drawing;
 
 namespace RebarSketch
 {
     public partial class Form1 : Form
     {
+        public const int IconWidth = 150;
+        public const int IconHeight = 90;
+
         public string executionFolder;
         //public string templateImagePath;
         public string curTempImagePath = "";
 
         private GlobalSettings sets;
-        private XmlSketchItem template;
+        private XmlSketchItem activeTemplate;
+        private List<XmlSketchItem> allTemplates;
 
-        public Form1(GlobalSettings gsets)
+        public Form1(string libraryPath)
         {
             InitializeComponent();
-            executionFolder = App.libraryPath;
-            sets = gsets;
+            imageList1.ImageSize = new Size(IconWidth, IconHeight);
+
+            ScetchLibrary lib = new ScetchLibrary();
+            lib.Activate(App.libraryPath);
+
+            allTemplates = lib.templates;
+
+            for(int i = 0; i< allTemplates.Count; i++)
+            {
+                XmlSketchItem xsi = allTemplates[i];
+                AddScetchIconToList(xsi);
+            }
+
+            sets = GlobalSettings.Read();
+            executionFolder = libraryPath;
             this.Text = "Редактор форм арматуры. Версия " +
                 System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString();
-        }
-
-        private void btnNewForm_Click(object sender, EventArgs e)
-        {
-            //this.LoadAndActivatePicture();
-
-            if (dataGridView1.Rows.Count == 0)
-            {
-                dataGridView1.Rows.Add("Арм_А", "000", "100", "200", "0");
-            }
-            RefreshImage();
-        }
-
-        private void btnLoadTemplate_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openDialog = new OpenFileDialog();
-            openDialog.InitialDirectory = executionFolder;
-            openDialog.Title = "Выберите картинку";
-            openDialog.Multiselect = false;
-            openDialog.Filter = "PNG images(*.png)| *.png";
-
-            if (openDialog.ShowDialog() != DialogResult.OK)
-                return;
-
-            string templateImagePath = openDialog.FileName;
-            executionFolder = System.IO.Path.GetDirectoryName(templateImagePath);
-
-            this.ActivateControls();
-            dataGridView1.Rows.Clear();
-
-            template = XmlSketchItem.Load(executionFolder);
-
-            for (int i = 0; i < template.parameters.Count; i++)
-            {
-                ScetchParameter sp = template.parameters[i];
-                sp.value = sp.Name;
-                dataGridView1.Rows.Add(sp.Name, sp.Name, sp.FontSize,
-                    sp.PositionX, sp.PositionY, sp.Rotation, sp.IsNarrow, sp.LengthAccuracy);
-            }
-
-            richTextBoxFamilies.Lines = template.families.ToArray();
-
-            this.RefreshImage();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             UpdateTemplateByGrid();
 
-            template.Save();
+            foreach (XmlSketchItem xsi in allTemplates)
+            {
+                xsi.Save();
+            }
 
-            pictureBox1.Dispose();
+            CloseAndDispose();
             this.Close();
         }
 
         private void UpdateTemplateByGrid()
         {
-            if (template == null) return;
-            template.parameters = new List<ScetchParameter>();
+            if (activeTemplate == null) return;
+            activeTemplate.parameters = new List<ScetchParameter>();
 
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
@@ -106,28 +85,24 @@ namespace RebarSketch
                 sparam.IsNarrow = (bool)cells[6].Value;
                 sparam.LengthAccuracy = double.Parse(cells[7].Value.ToString());
 
-                template.parameters.Add(sparam);
+                activeTemplate.parameters.Add(sparam);
             }
 
-            template.families = new List<string>();
+            activeTemplate.families = new List<string>();
 
             foreach (string fam in richTextBoxFamilies.Lines)
             {
-                template.families.Add(fam);
+                activeTemplate.families.Add(fam);
             }
         }
 
 
         private void RefreshImage()
         {
-            if (template == null) return;
+            if (activeTemplate == null) return;
             
-            //взять картинку
-            //нанести на неё размеры
-            //временно сохранить картинку
-            string newTempImage = ScetchImage.GenerateTemporary(sets, template.templateImagePath, template.parameters);
+            string newTempImage = ScetchImage.GenerateTemporary(sets, activeTemplate.templateImagePath, activeTemplate.parameters);
 
-            //вывести в форму
             pictureBox1.Load(newTempImage);
 
             if (!string.IsNullOrEmpty(curTempImagePath))
@@ -171,31 +146,6 @@ namespace RebarSketch
             }
         }
 
-        private void buttonOpenConfigFile_Click(object sender, EventArgs e)
-        {
-            if (System.IO.File.Exists(App.configFilePath))
-            {
-                System.Diagnostics.Process.Start(App.configFilePath);
-            }
-            else
-            {
-                MessageBox.Show("Не найден файл " + App.configFilePath);
-            }
-        }
-
-        private void buttonResetLibrary_Click(object sender, EventArgs e)
-        {
-            if (System.IO.File.Exists(App.configFilePath))
-            {
-                System.IO.File.Delete(App.configFilePath);
-                MessageBox.Show("Настройки сброшены. При запуске Ведомости деталей будет повторен запрос пути к библиотеке.");
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Не найден файл " + App.configFilePath);
-            }
-        }
 
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
@@ -205,7 +155,7 @@ namespace RebarSketch
 
         private void button1_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://bim-starter.com/plugins/rebarsketch/");
+            System.Diagnostics.Process.Start("https://bim-starter.com/plugins/rebarsketch/");
         }
 
         private void buttonSettings_Click(object sender, EventArgs e)
@@ -216,18 +166,11 @@ namespace RebarSketch
 
             sets = formSettings.newSettings;
             GlobalSettings.Save(sets);
-            if (template != null)
+            if (activeTemplate != null)
             {
                 UpdateTemplateByGrid();
                 RefreshImage();
             }
-        }
-
-
-        private void dataGridView1_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        {
-            UpdateTemplateByGrid();
-            RefreshImage();
         }
 
         private void dataGridView1_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
@@ -239,6 +182,130 @@ namespace RebarSketch
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             CloseAndDispose();
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListView lv = sender as ListView;
+            if (lv.SelectedItems.Count == 0) return;
+
+            ListViewItem item = lv.SelectedItems[0];
+
+            string path = item.ImageKey;
+
+            activeTemplate = item.Tag as XmlSketchItem;
+
+            this.ActivateControls();
+            dataGridView1.Rows.Clear();
+
+            for (int i = 0; i < activeTemplate.parameters.Count; i++)
+            {
+                ScetchParameter sp = activeTemplate.parameters[i];
+                sp.value = sp.Name;
+                dataGridView1.Rows.Add(sp.Name, sp.Name, sp.FontSize,
+                    sp.PositionX, sp.PositionY, sp.Rotation, sp.IsNarrow, sp.LengthAccuracy);
+            }
+
+            richTextBoxFamilies.Lines = activeTemplate.families.ToArray();
+
+            this.RefreshImage();
+        }
+
+        private void buttonNewForm_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            openDialog.InitialDirectory = executionFolder;
+            openDialog.Title = "Выберите картинку для эскиза";
+            openDialog.Multiselect = false;
+            openDialog.Filter = "PNG images(*.png)| *.png";
+            if (openDialog.ShowDialog() != DialogResult.OK)
+                return;
+            string templateImagePath = openDialog.FileName;
+
+            FormInputText inputForm = new FormInputText("Имя новой формы:");
+            if (inputForm.ShowDialog() != DialogResult.OK) return;
+            string newFormName = inputForm.UserText;
+
+            foreach(XmlSketchItem xsi in allTemplates)
+            {
+                if(xsi.formName == newFormName)
+                {
+                    MessageBox.Show("Это имя уже используется!");
+                    return;
+                }
+            }
+
+            string newFormDirectory = Path.Combine(executionFolder, newFormName);
+
+            try
+            {
+                Directory.CreateDirectory(newFormDirectory);
+            }
+            catch
+            {
+                throw new Exception("UNABLE TO CREATE FOLDER CHECK PERMISSIONS " + newFormDirectory);
+            }
+
+            Bitmap bmp = new Bitmap(templateImagePath);
+            Bitmap newBmp = new Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            using (Graphics gr = Graphics.FromImage(newBmp))
+            {
+                gr.DrawImage(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
+            }
+
+            string newFormImagePath = Path.Combine(newFormDirectory, "scetch.png");
+            newBmp.Save(newFormImagePath, System.Drawing.Imaging.ImageFormat.Png);
+
+            XmlSketchItem newTemplate = new XmlSketchItem();
+            newTemplate.families = new List<string> { "Rebar form name", "Rebar family name" };
+            newTemplate.folder = newFormDirectory;
+            newTemplate.formName = newFormName;
+            
+            ScetchParameter newParam = new ScetchParameter();
+            newParam.FontSize = sets.defaultFontSize;
+            newParam.LengthAccuracy = sets.defautLengthAccuracy;
+            newParam.value = newParam.Name;
+            newTemplate.parameters = new List<ScetchParameter> { newParam };
+
+            newTemplate.templateImagePath = newFormImagePath;
+            allTemplates.Add(newTemplate);
+            AddScetchIconToList(newTemplate);
+
+            newTemplate.Save();
+
+            int newItemNumber = listView1.Items.Count - 1;
+            listView1.Select();
+            listView1.Items[newItemNumber].Focused = true;
+            listView1.Items[newItemNumber].Selected = true;
+            listView1.Items[newItemNumber].EnsureVisible();
+        }
+
+        private Bitmap ResizeBitmap(Bitmap sourceBitmap)
+        {
+            Bitmap newImage = new Bitmap(IconWidth, IconHeight);
+            using (Graphics gr = Graphics.FromImage(newImage))
+            {
+                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                gr.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                gr.DrawImage(sourceBitmap, new Rectangle(0, 0, IconWidth, IconHeight));
+            }
+            return newImage;
+        }
+
+        private void AddScetchIconToList(XmlSketchItem xsi)
+        {
+            string imagepath = Path.Combine(xsi.folder, "scetch.png");
+            string folderName = xsi.formName;
+
+            Bitmap sourceBitmap = new Bitmap(imagepath);
+
+            Bitmap newImage = ResizeBitmap(sourceBitmap);
+            imageList1.Images.Add(imagepath, newImage);
+
+            ListViewItem newRow = listView1.Items.Add(imagepath, folderName, imagepath);
+            newRow.ToolTipText = imagepath;
+            newRow.Tag = xsi;
         }
     }
 }

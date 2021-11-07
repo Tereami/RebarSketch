@@ -176,6 +176,12 @@
     <Compile Include="FormGlobalSettings.Designer.cs">
       <DependentUpon>FormGlobalSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormInputText.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormInputText.Designer.cs">
+      <DependentUpon>FormInputText.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormSelectPath.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -198,6 +204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormGlobalSettings.resx">
       <DependentUpon>FormGlobalSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormInputText.resx">
+      <DependentUpon>FormInputText.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSelectPath.resx">
       <DependentUpon>FormSelectPath.cs</DependentUpon>

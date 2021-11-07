@@ -54,14 +54,22 @@ namespace RebarSketch
             XmlSketchItem xsi = null;
 
             string xmlConfigFilePath = System.IO.Path.Combine(folder, "config.xml");
+            string parametersTxtPath = Path.Combine(folder, "parameters.txt");
             if (System.IO.File.Exists(xmlConfigFilePath))
+
                 xsi = XmlSketchItem.LoadFromXml(xmlConfigFilePath);
-            else
+            else if (System.IO.File.Exists(parametersTxtPath))
                 xsi = XmlSketchItem.LoadFromTxt(folder);
+            else
+                throw new Exception("Incorrect template " + folder.Replace("\\", "\\ "));
 
             xsi.folder = folder;
             xsi.formName = folder.Split('\\').Last();
             xsi.templateImagePath = Path.Combine(folder, "scetch.png");
+
+            if(!System.IO.File.Exists(xsi.templateImagePath))
+                throw new Exception("Image not found " + xsi.templateImagePath.Replace("\\", "\\ "));
+
             return xsi;
         }
 
@@ -91,10 +99,6 @@ namespace RebarSketch
             xsi.IsXmlSource = false;
 
             string parametersTxtPath = Path.Combine(folder, "parameters.txt");
-
-            if (!File.Exists(parametersTxtPath))
-                throw new Exception("File not found " + parametersTxtPath);
-
 
             string[] paramsArray = FileSupport.ReadFileWithAnyDecoding(parametersTxtPath);
 
@@ -141,7 +145,18 @@ namespace RebarSketch
             string xmlPath = Path.Combine(folder, "config.xml");
             Debug.WriteLine("Save sketch config to file: " + xmlPath);
             if (File.Exists(xmlPath))
-                File.Delete(xmlPath);
+            {
+                try
+                {
+                    File.Delete(xmlPath);
+                }
+                catch
+                {
+                    string msg = "Не удалось сохранить файл, проверьте права доступа " + xmlPath;
+                    System.Windows.Forms.MessageBox.Show(msg);
+                    throw new Exception(msg);
+                }
+            }
 
             try
             {

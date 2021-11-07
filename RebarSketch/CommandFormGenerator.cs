@@ -16,7 +16,7 @@ namespace RebarSketch
         {
             App.ActivatePaths();
 
-            GlobalSettings sets = GlobalSettings.Read();
+            
 
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
@@ -32,7 +32,8 @@ namespace RebarSketch
                 }
             }
 
-            Form1 form = new Form1(sets);
+            string librarypath = App.libraryPath;
+            Form1 form = new Form1(librarypath);
 
             form.ShowDialog();
 
