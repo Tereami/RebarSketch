@@ -44,7 +44,7 @@ namespace RebarSketch
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            UpdateTemplateByGrid();
+            UpdateTemplateByForm();
 
             foreach (XmlSketchItem xsi in allTemplates)
             {
@@ -55,7 +55,7 @@ namespace RebarSketch
             this.Close();
         }
 
-        private void UpdateTemplateByGrid()
+        private void UpdateTemplateByForm()
         {
             if (activeTemplate == null) return;
             activeTemplate.parameters = new List<ScetchParameter>();
@@ -149,7 +149,7 @@ namespace RebarSketch
 
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            UpdateTemplateByGrid();
+            UpdateTemplateByForm();
             this.RefreshImage();
         }
 
@@ -168,14 +168,14 @@ namespace RebarSketch
             GlobalSettings.Save(sets);
             if (activeTemplate != null)
             {
-                UpdateTemplateByGrid();
+                UpdateTemplateByForm();
                 RefreshImage();
             }
         }
 
         private void dataGridView1_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
-            UpdateTemplateByGrid();
+            UpdateTemplateByForm();
             RefreshImage();
         }
 
@@ -188,6 +188,8 @@ namespace RebarSketch
         {
             ListView lv = sender as ListView;
             if (lv.SelectedItems.Count == 0) return;
+
+            UpdateTemplateByForm();
 
             ListViewItem item = lv.SelectedItems[0];
 
@@ -303,7 +305,10 @@ namespace RebarSketch
             Bitmap newImage = ResizeBitmap(sourceBitmap);
             imageList1.Images.Add(imagepath, newImage);
 
-            ListViewItem newRow = listView1.Items.Add(imagepath, folderName, imagepath);
+            string title = folderName;
+            if (xsi.IsSubtype) title += " (подтип)";
+
+            ListViewItem newRow = listView1.Items.Add(imagepath, title, imagepath);
             newRow.ToolTipText = imagepath;
             newRow.Tag = xsi;
         }
