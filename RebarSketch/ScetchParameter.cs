@@ -79,7 +79,7 @@ namespace RebarSketch
             }
 
             if (IsDegrees)
-                value += "°";
+                value += "˚"; //"°";
         }
     }
 }

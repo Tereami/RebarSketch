@@ -45,7 +45,7 @@ namespace RebarSketch
         {
             string xmlPath = Path.Combine(App.rebarSketchPath, "settings.xml");
             Debug.WriteLine("Save settings to file: " + xmlPath);
-            if (File.Exists(xmlPath))
+            /*if (File.Exists(xmlPath))
             {
                 try
                 {
@@ -57,12 +57,15 @@ namespace RebarSketch
                     System.Windows.Forms.MessageBox.Show(msg);
                     throw new Exception(msg);
                 }
-            }
+            }*/
+
+            FileMode filemode = FileMode.Create;
+            if (File.Exists(xmlPath)) filemode = FileMode.Truncate;
 
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(GlobalSettings));
-                using (FileStream writer = new FileStream(xmlPath, FileMode.OpenOrCreate))
+                using (FileStream writer = new FileStream(xmlPath, filemode, FileAccess.Write))
                 {
                     serializer.Serialize(writer, ssets);
                 }
@@ -85,6 +88,7 @@ namespace RebarSketch
             if (File.Exists(settingsFileXml))
             {
                 if (File.Exists(settingsFileTxt))
+                {
                     try
                     {
                         File.Delete(settingsFileTxt);
@@ -93,6 +97,7 @@ namespace RebarSketch
                     {
                         Debug.WriteLine("Не удается удалить файл " + settingsFileTxt);
                     }
+                }
 
                 ssets = GlobalSettings.ReadFromXml(settingsFileXml);
             }

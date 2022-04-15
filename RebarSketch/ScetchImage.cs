@@ -106,10 +106,10 @@ namespace RebarSketch
                 //if (param.IsVariable) fontSize2 = fontSize2 * 0.8f;
                 Font fnt = new Font(sets.fontName, fontSize2, sets.fontStyle);
 
-                if(param.value.EndsWith("°"))
+                /*if(param.value.EndsWith("°"))
                 {
                     fnt = new Font("Arial", fontSize2, sets.fontStyle);
-                }
+                }*/
 
                 gr.TranslateTransform(b, h);
                 gr.RotateTransform(-angle);
