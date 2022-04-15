@@ -144,14 +144,13 @@ namespace RebarSketch
             }
             double val = param.AsDouble();
 
-#if R2022
-            ForgeTypeId forgeType = param.GetUnitTypeId();
-            double val2 = UnitUtils.ConvertFromInternalUnits(val, forgeType);
-            string unittype = forgeType.TypeId;
-            isDegrees = unittype.Contains("degrees");
+#if R2022 || R2023
+            double val2 = UnitUtils.ConvertFromInternalUnits(param.AsDouble(), param.GetUnitTypeId());
+            ForgeTypeId forgeDataType = param.Definition.GetDataType();
+            isDegrees = forgeDataType == SpecTypeId.Angle;
 #else
             double val2 = UnitUtils.ConvertFromInternalUnits(val, param.DisplayUnitType);
-            isDegrees = param.DisplayUnitType == DisplayUnitType.DUT_DECIMAL_DEGREES;
+            isDegrees = param.Definition.UnitType == UnitType.UT_Angle; // .DisplayUnitType == DisplayUnitType.DUT_DECIMAL_DEGREES;
 #endif
 
             return val2;
