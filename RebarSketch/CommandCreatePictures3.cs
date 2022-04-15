@@ -36,7 +36,7 @@ namespace RebarSketch
             }
 
 
-            if (selIds.Count > 0)
+            /*if (selIds.Count > 0)
             {
                 ElementId selId = selIds.First();
                 Element selElem = doc.GetElement(selId);
@@ -46,7 +46,7 @@ namespace RebarSketch
                     Debug.WriteLine("No selected rebar elements");
                     return Result.Failed;
                 }
-            }
+            }*/
 
             List<Element> col = new List<Element>();
             foreach (ElementId rebarId in selIds)
@@ -236,7 +236,7 @@ namespace RebarSketch
 
             if (errorRebarNames.Count > 0)
             {
-                string errorFamilyMessage = "Не удалось обработать семейства. Скорее всего, применены семейства не из библиотеки семейства. Имена семейств: ";
+                string errorFamilyMessage = "Не удалось обработать семейства. Скорее всего, применены семейства не из библиотеки. Имена семейств: ";
                 foreach (string fam in errorRebarNames)
                 {
                     errorFamilyMessage = errorFamilyMessage + fam + "; ";

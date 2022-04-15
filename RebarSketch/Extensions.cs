@@ -20,7 +20,7 @@ namespace RebarSketch
             Document doc = rebar.Document;
             if (rebar is Autodesk.Revit.DB.Structure.Rebar)
             {
-                Autodesk.Revit.DB.Structure.Rebar r = rebar as Autodesk.Revit.DB.Structure.Rebar;
+                var r = rebar as Autodesk.Revit.DB.Structure.Rebar;
 #if R2017
                 Element shape = doc.GetElement(r.RebarShapeId);
 #else
@@ -28,10 +28,20 @@ namespace RebarSketch
 #endif
                 familyName = shape.Name;
             }
+            else if(rebar is Autodesk.Revit.DB.Structure.RebarInSystem)
+            {
+                var r = rebar as Autodesk.Revit.DB.Structure.RebarInSystem;
+                Element shape = doc.GetElement(r.RebarShapeId);
+                familyName = shape.Name;
+            }
             else if (rebar is FamilyInstance)
             {
                 FamilyInstance fi = rebar as FamilyInstance;
                 familyName = fi.Symbol.FamilyName;
+            }
+            else
+            {
+                familyName = rebar.Name;
             }
             return familyName;
         }
