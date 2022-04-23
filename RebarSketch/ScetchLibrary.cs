@@ -57,14 +57,20 @@ namespace RebarSketch
             {
                 si.Generate(sets, imagesPrefix);
 #if R2017 || R2018 || R2019
+                Debug.WriteLine("Create ImageType Revit 2017-2019");
                 imType2 = ImageType.Create(doc, si.ScetchImagePath);
 #elif R2020 
+                Debug.WriteLine("Create ImageType Revit 2020");
                 imType2 = ImageType.Create(doc, new ImageTypeOptions(si.ScetchImagePath));
-#elif R2021 || R2022
+#else
+                Debug.WriteLine("Create ImageType Revit 2021-2023");
                 ImageTypeOptions ito = new ImageTypeOptions(si.ScetchImagePath, false, ImageTypeSource.Import);
                 imType2 = ImageType.Create(doc, ito);
 #endif
-                Debug.WriteLine("Create imagetype id=" + imType2.Id.IntegerValue.ToString());
+                if (imType2 == null)
+                    throw new Exception("Unable to create ImageType");
+
+                Debug.WriteLine("Created imagetype id=" + imType2.Id.IntegerValue.ToString());
                 Parameter imageparam = rebar.LookupParameter(imageParamName);
                 if (imageparam == null)
                 {
