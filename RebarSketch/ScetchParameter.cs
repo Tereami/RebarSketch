@@ -16,6 +16,7 @@ namespace RebarSketch
 
         public float FontSize = 55;
         public bool IsNarrow = false;
+        public bool ShowVariableLengthInterval = true;
 
         public double LengthAccuracy = 5;
         //public double MinValueForRound = 20;
@@ -69,7 +70,7 @@ namespace RebarSketch
             {
                 value = minValue.ToString("F0") + "..." + maxValue.ToString("F0");
                 IsVariable = true;
-                if (count > 2 && !IsDegrees)
+                if (count > 2 && !IsDegrees && ShowVariableLengthInterval)
                 {
                     HaveSpacing = true;
                     double spacing = (maxValue - minValue) / (count - 1);
