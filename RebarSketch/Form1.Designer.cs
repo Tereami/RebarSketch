@@ -58,6 +58,8 @@
             this.Fit = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Round = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ShowVarLengInterval = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Prefix = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Suffix = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -70,7 +72,7 @@
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox1.Location = new System.Drawing.Point(242, 29);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(919, 362);
+            this.pictureBox1.Size = new System.Drawing.Size(1028, 393);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
@@ -80,7 +82,7 @@
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.Enabled = false;
             this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnSave.Location = new System.Drawing.Point(741, 646);
+            this.btnSave.Location = new System.Drawing.Point(850, 677);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(350, 27);
             this.btnSave.TabIndex = 1;
@@ -91,7 +93,7 @@
             // buttonOpenLibraryFolder
             // 
             this.buttonOpenLibraryFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonOpenLibraryFolder.Location = new System.Drawing.Point(128, 646);
+            this.buttonOpenLibraryFolder.Location = new System.Drawing.Point(128, 677);
             this.buttonOpenLibraryFolder.Name = "buttonOpenLibraryFolder";
             this.buttonOpenLibraryFolder.Size = new System.Drawing.Size(108, 27);
             this.buttonOpenLibraryFolder.TabIndex = 8;
@@ -104,7 +106,7 @@
             this.richTextBoxFamilies.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxFamilies.DetectUrls = false;
             this.richTextBoxFamilies.Enabled = false;
-            this.richTextBoxFamilies.Location = new System.Drawing.Point(905, 414);
+            this.richTextBoxFamilies.Location = new System.Drawing.Point(1014, 445);
             this.richTextBoxFamilies.Name = "richTextBoxFamilies";
             this.richTextBoxFamilies.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.richTextBoxFamilies.Size = new System.Drawing.Size(256, 226);
@@ -115,7 +117,7 @@
             // buttonHelp
             // 
             this.buttonHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonHelp.Location = new System.Drawing.Point(356, 646);
+            this.buttonHelp.Location = new System.Drawing.Point(356, 677);
             this.buttonHelp.Name = "buttonHelp";
             this.buttonHelp.Size = new System.Drawing.Size(27, 27);
             this.buttonHelp.TabIndex = 5;
@@ -126,7 +128,7 @@
             // buttonSettings
             // 
             this.buttonSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonSettings.Location = new System.Drawing.Point(242, 646);
+            this.buttonSettings.Location = new System.Drawing.Point(242, 677);
             this.buttonSettings.Name = "buttonSettings";
             this.buttonSettings.Size = new System.Drawing.Size(108, 27);
             this.buttonSettings.TabIndex = 6;
@@ -138,7 +140,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(242, 396);
+            this.label1.Location = new System.Drawing.Point(242, 427);
             this.label1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(388, 13);
@@ -149,7 +151,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(902, 396);
+            this.label2.Location = new System.Drawing.Point(1011, 427);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 13);
@@ -160,7 +162,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(1097, 646);
+            this.buttonCancel.Location = new System.Drawing.Point(1206, 677);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(64, 27);
             this.buttonCancel.TabIndex = 4;
@@ -179,7 +181,7 @@
             this.listView1.Name = "listView1";
             this.listView1.ShowGroups = false;
             this.listView1.ShowItemToolTips = true;
-            this.listView1.Size = new System.Drawing.Size(224, 611);
+            this.listView1.Size = new System.Drawing.Size(224, 642);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
@@ -193,7 +195,7 @@
             // buttonNewForm
             // 
             this.buttonNewForm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonNewForm.Location = new System.Drawing.Point(12, 646);
+            this.buttonNewForm.Location = new System.Drawing.Point(12, 677);
             this.buttonNewForm.Name = "buttonNewForm";
             this.buttonNewForm.Size = new System.Drawing.Size(110, 27);
             this.buttonNewForm.TabIndex = 7;
@@ -236,12 +238,14 @@
             this.Angle,
             this.Fit,
             this.Round,
-            this.ShowVarLengInterval});
+            this.ShowVarLengInterval,
+            this.Prefix,
+            this.Suffix});
             this.dataGridView1.Enabled = false;
-            this.dataGridView1.Location = new System.Drawing.Point(242, 414);
+            this.dataGridView1.Location = new System.Drawing.Point(242, 445);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(657, 226);
+            this.dataGridView1.Size = new System.Drawing.Size(766, 226);
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
             this.dataGridView1.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridView1_UserDeletedRow);
@@ -249,7 +253,7 @@
             // ParameterName
             // 
             this.ParameterName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ParameterName.FillWeight = 106.3368F;
+            this.ParameterName.FillWeight = 80.64876F;
             this.ParameterName.HeaderText = "Имя параметра";
             this.ParameterName.MinimumWidth = 80;
             this.ParameterName.Name = "ParameterName";
@@ -257,7 +261,7 @@
             // Value
             // 
             this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Value.FillWeight = 49.62383F;
+            this.Value.FillWeight = 37.63608F;
             this.Value.HeaderText = "Значение";
             this.Value.MinimumWidth = 40;
             this.Value.Name = "Value";
@@ -268,7 +272,7 @@
             dataGridViewCellStyle1.Format = "N2";
             dataGridViewCellStyle1.NullValue = null;
             this.FontSize.DefaultCellStyle = dataGridViewCellStyle1;
-            this.FontSize.FillWeight = 35.44559F;
+            this.FontSize.FillWeight = 26.88291F;
             this.FontSize.HeaderText = "Размер";
             this.FontSize.Name = "FontSize";
             // 
@@ -278,7 +282,7 @@
             dataGridViewCellStyle2.Format = "N2";
             dataGridViewCellStyle2.NullValue = null;
             this.X.DefaultCellStyle = dataGridViewCellStyle2;
-            this.X.FillWeight = 39.65421F;
+            this.X.FillWeight = 30.07484F;
             this.X.HeaderText = "X";
             this.X.Name = "X";
             // 
@@ -288,7 +292,7 @@
             dataGridViewCellStyle3.Format = "N2";
             dataGridViewCellStyle3.NullValue = null;
             this.Y.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Y.FillWeight = 39.65421F;
+            this.Y.FillWeight = 30.07484F;
             this.Y.HeaderText = "Y";
             this.Y.Name = "Y";
             // 
@@ -298,14 +302,14 @@
             dataGridViewCellStyle4.Format = "N2";
             dataGridViewCellStyle4.NullValue = null;
             this.Angle.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Angle.FillWeight = 39.65421F;
+            this.Angle.FillWeight = 30.07484F;
             this.Angle.HeaderText = "α";
             this.Angle.Name = "Angle";
             // 
             // Fit
             // 
             this.Fit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Fit.FillWeight = 34.07368F;
+            this.Fit.FillWeight = 25.84242F;
             this.Fit.HeaderText = "Сжатый";
             this.Fit.Name = "Fit";
             this.Fit.Resizable = System.Windows.Forms.DataGridViewTriState.True;
@@ -317,23 +321,37 @@
             dataGridViewCellStyle5.Format = "N2";
             dataGridViewCellStyle5.NullValue = null;
             this.Round.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Round.FillWeight = 35.44559F;
+            this.Round.FillWeight = 25F;
             this.Round.HeaderText = "Округл.";
             this.Round.Name = "Round";
             // 
             // ShowVarLengInterval
             // 
             this.ShowVarLengInterval.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ShowVarLengInterval.FillWeight = 40F;
+            this.ShowVarLengInterval.FillWeight = 30.3371F;
             this.ShowVarLengInterval.HeaderText = "Шаг";
             this.ShowVarLengInterval.Name = "ShowVarLengInterval";
+            // 
+            // Prefix
+            // 
+            this.Prefix.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Prefix.FillWeight = 25F;
+            this.Prefix.HeaderText = "Префикс";
+            this.Prefix.Name = "Prefix";
+            // 
+            // Suffix
+            // 
+            this.Suffix.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Suffix.FillWeight = 25F;
+            this.Suffix.HeaderText = "Суффикс";
+            this.Suffix.Name = "Suffix";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(1173, 681);
+            this.ClientSize = new System.Drawing.Size(1282, 712);
             this.Controls.Add(this.buttonNewForm);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.buttonCancel);
@@ -386,6 +404,8 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn Fit;
         private System.Windows.Forms.DataGridViewTextBoxColumn Round;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ShowVarLengInterval;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Prefix;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Suffix;
     }
 
 }

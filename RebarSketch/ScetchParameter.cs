@@ -17,6 +17,8 @@ namespace RebarSketch
         public float FontSize = 55;
         public bool IsNarrow = false;
         public bool ShowVariableLengthInterval = true;
+        public string Suffix = "";
+        public string Prefix = "";
 
         public double LengthAccuracy = 5;
         //public double MinValueForRound = 20;
@@ -81,6 +83,8 @@ namespace RebarSketch
 
             if (IsDegrees)
                 value += "˚"; //"°";
+
+            value = Prefix + value + Suffix;
         }
     }
 }

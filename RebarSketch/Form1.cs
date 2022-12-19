@@ -73,7 +73,10 @@ namespace RebarSketch
                 if (cells[5].Value == null) cells[5].Value = 0;
                 if (cells[6].Value == null) cells[6].Value = false;
                 if (cells[7].Value == null) cells[7].Value = sets.defautLengthAccuracy;
-                if (cells[8].Value == null) cells[6].Value = true;
+                if (cells[8].Value == null) cells[8].Value = true;
+                if (cells[9].Value == null) cells[9].Value = "";
+                if (cells[10].Value == null) cells[10].Value = "";
+
 
                 ScetchParameter sparam = new ScetchParameter();
 
@@ -86,6 +89,8 @@ namespace RebarSketch
                 sparam.IsNarrow = (bool)cells[6].Value;
                 sparam.LengthAccuracy = double.Parse(cells[7].Value.ToString());
                 sparam.ShowVariableLengthInterval = (bool)cells[8].Value;
+                sparam.Prefix = row.Cells[9].Value.ToString();
+                sparam.Suffix = row.Cells[10].Value.ToString();
 
                 activeTemplate.parameters.Add(sparam);
             }
@@ -207,7 +212,7 @@ namespace RebarSketch
                 ScetchParameter sp = activeTemplate.parameters[i];
                 sp.value = sp.Name;
                 dataGridView1.Rows.Add(sp.Name, sp.Name, sp.FontSize,
-                    sp.PositionX, sp.PositionY, sp.Rotation, sp.IsNarrow, sp.LengthAccuracy, sp.ShowVariableLengthInterval);
+                    sp.PositionX, sp.PositionY, sp.Rotation, sp.IsNarrow, sp.LengthAccuracy, sp.ShowVariableLengthInterval, sp.Prefix, sp.Suffix);
             }
 
             richTextBoxFamilies.Lines = activeTemplate.families.ToArray();
