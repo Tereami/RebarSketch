@@ -25,7 +25,7 @@ namespace RebarSketch
             List<XmlSketchItem> oldFormatTemplates = lib.templates.Where(i => i.IsXmlSource == false).ToList();
             if (oldFormatTemplates.Count > 0)
             {
-                TaskDialog.Show("Инфо", "Библиотека эскизов будет обновлена до нового формата");
+                TaskDialog.Show(MyStrings.Info, MyStrings.MessageLibraryWillBeUpdated);
                 foreach(XmlSketchItem xsi in lib.templates)
                 {
                     xsi.Save();

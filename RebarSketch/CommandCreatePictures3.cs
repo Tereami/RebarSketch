@@ -17,6 +17,8 @@ namespace RebarSketch
         {
             App.ActivatePaths();
             Debug.WriteLine("Start rebar sketch, revit version" + commandData.Application.Application.VersionName);
+            string dllVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            Debug.WriteLine($"Assembly version: {dllVersion}");
 
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
@@ -30,7 +32,7 @@ namespace RebarSketch
             //bool checkSelectionRebar = true;
             if (selIds.Count == 0)
             {
-                message = "Перед запуском перейдите в Ведомость деталей, выберите все строчки и после этого запускайте плагин.";
+                message = MyStrings.MessageNoSelectedRows;
                 Debug.WriteLine("No selected elements");
                 return Result.Failed;
             }
@@ -59,7 +61,7 @@ namespace RebarSketch
             ViewSchedule vs = activeView as ViewSchedule;
             if (vs == null)
             {
-                message = "Перед запуском перейдите в Ведомость деталей, выберите все строчки и после этого запускайте плагин.";
+                message = MyStrings.MessageNoSelectedRows;
                 Debug.WriteLine("Active view is not ViewSchedule");
                 return Result.Failed;
             }
@@ -88,13 +90,13 @@ namespace RebarSketch
             lib.Activate(App.libraryPath);
             if(lib.templates.Count == 0)
             {
-                message = "Библиотека пуста";
+                message = MyStrings.MessageEmptyLibrary;
                 return Result.Failed;
             }
             List<XmlSketchItem> oldFormatTemplates = lib.templates.Where(i => i.IsXmlSource == false).ToList();
             if(oldFormatTemplates.Count > 0)
             {
-                message = "Библиотека не обновлена до нового формата. Запустите Конструктор форм или обратитесь в bim-отдел";
+                message = MyStrings.ErrorLibraryOldVersion;
                 return Result.Failed;
             }
                     
@@ -127,10 +129,8 @@ namespace RebarSketch
                 string mark = vRebar.get_Parameter(BuiltInParameter.ALL_MODEL_MARK).AsString();
                 if (mark == null)
                 {
-                    string msg = "Обнаружены арматурные стержни переменной длины, для которых не назначена Марки. ";
-                    msg += "Группировка для таких стержней выполняется по Марке, которую нужно назначить заранее.";
                     Debug.WriteLine("Non-marked variable rebars is found");
-                    TaskDialog.Show("Ошибка", msg);
+                    TaskDialog.Show("Ошибка", MyStrings.ErrorRebarVariableLengthNoMark);
                     return Result.Failed;
                 }
 
@@ -146,7 +146,7 @@ namespace RebarSketch
 
             using (Transaction t2 = new Transaction(doc))
             {
-                t2.Start("Ведомость деталей");
+                t2.Start(MyStrings.TransactionRebarSketch);
 
                 //заполняю картинки для обычной арматуры
                 foreach (Element rebar in standartRebars)
@@ -236,13 +236,13 @@ namespace RebarSketch
 
             if (errorRebarNames.Count > 0)
             {
-                string errorFamilyMessage = "Не удалось обработать семейства. Скорее всего, применены семейства не из библиотеки. Имена семейств: ";
+                string errorFamilyMessage = MyStrings.ErrorNoFamiliesInLibrary;
                 foreach (string fam in errorRebarNames)
                 {
                     errorFamilyMessage = errorFamilyMessage + fam + "; ";
                 }
                 Debug.WriteLine(errorFamilyMessage);
-                TaskDialog.Show("Отчет", errorFamilyMessage);
+                TaskDialog.Show(MyStrings.Report, errorFamilyMessage);
             }
 
             Debug.WriteLine("Scetches finish success");

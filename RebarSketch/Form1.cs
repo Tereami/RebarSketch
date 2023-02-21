@@ -38,8 +38,8 @@ namespace RebarSketch
 
             sets = GlobalSettings.Read();
             executionFolder = libraryPath;
-            this.Text = "Редактор форм арматуры. Версия " +
-                System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString();
+            string dllVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.Text = $"{MyStrings.TitleSketchConstructor} {dllVersion}";
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -65,8 +65,8 @@ namespace RebarSketch
                 if (row.IsNewRow) continue;
                 var cells = row.Cells;
 
-                if (cells[0].Value == null) cells[0].Value = "Арм_А";
-                if (cells[1].Value == null) cells[1].Value = "Арм_А";
+                if (cells[0].Value == null) cells[0].Value = MyStrings.RebarAparam; //Rbr_A
+                if (cells[1].Value == null) cells[1].Value = MyStrings.RebarAparam;
                 if (cells[2].Value == null) cells[2].Value = sets.defaultFontSize;
                 if (cells[3].Value == null) cells[3].Value = 100;
                 if (cells[4].Value == null) cells[4].Value = 200;
@@ -149,7 +149,7 @@ namespace RebarSketch
             }
             else
             {
-                MessageBox.Show("Не найдена папка " + App.libraryPath);
+                MessageBox.Show($"{MyStrings.ErrorFolderNotFound}: {App.libraryPath}");
             }
         }
 
@@ -224,14 +224,14 @@ namespace RebarSketch
         {
             OpenFileDialog openDialog = new OpenFileDialog();
             openDialog.InitialDirectory = executionFolder;
-            openDialog.Title = "Выберите картинку для эскиза";
+            openDialog.Title = MyStrings.SelectImage;
             openDialog.Multiselect = false;
             openDialog.Filter = "PNG images(*.png)| *.png";
             if (openDialog.ShowDialog() != DialogResult.OK)
                 return;
             string templateImagePath = openDialog.FileName;
 
-            FormInputText inputForm = new FormInputText("Имя новой формы:");
+            FormInputText inputForm = new FormInputText(MyStrings.NewFormName);
             if (inputForm.ShowDialog() != DialogResult.OK) return;
             string newFormName = inputForm.UserText;
 
@@ -239,7 +239,7 @@ namespace RebarSketch
             {
                 if(xsi.formName == newFormName)
                 {
-                    MessageBox.Show("Это имя уже используется!");
+                    MessageBox.Show(MyStrings.NameIsAlreadyInUse);
                     return;
                 }
             }
@@ -252,7 +252,7 @@ namespace RebarSketch
             }
             catch
             {
-                throw new Exception("UNABLE TO CREATE FOLDER CHECK PERMISSIONS " + newFormDirectory);
+                throw new Exception("FAILED TO CREATE FOLDER! CHECK USER PERMISSIONS " + newFormDirectory);
             }
 
             Bitmap bmp = new Bitmap(templateImagePath);
@@ -313,7 +313,7 @@ namespace RebarSketch
             imageList1.Images.Add(imagepath, newImage);
 
             string title = folderName;
-            if (xsi.IsSubtype) title += " (подтип)";
+            if (xsi.IsSubtype) title += " (subtype)";
 
             ListViewItem newRow = listView1.Items.Add(imagepath, title, imagepath);
             newRow.ToolTipText = imagepath;

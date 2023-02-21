@@ -43,7 +43,7 @@ namespace RebarSketch
             string tabName = "BIM-STARTER TEST";
             try { application.CreateRibbonTab(tabName); } catch { }
 
-            RibbonPanel panel1 = application.CreateRibbonPanel(tabName, "Ведомость деталей");
+            RibbonPanel panel1 = application.CreateRibbonPanel(tabName, "Rebar sketch");
 
             PushButton btnCreatePictures = panel1.AddItem(new PushButtonData(
                 "CreatePictures",

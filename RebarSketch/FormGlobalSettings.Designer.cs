@@ -29,6 +29,7 @@ namespace RebarSketch
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGlobalSettings));
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxTempPath = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -52,68 +53,39 @@ namespace RebarSketch
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 14);
-            this.label2.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(166, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Временная папка для эскизов:";
             // 
             // textBoxTempPath
             // 
-            this.textBoxTempPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxTempPath.Location = new System.Drawing.Point(12, 31);
+            resources.ApplyResources(this.textBoxTempPath, "textBoxTempPath");
             this.textBoxTempPath.Name = "textBoxTempPath";
-            this.textBoxTempPath.Size = new System.Drawing.Size(194, 20);
-            this.textBoxTempPath.TabIndex = 3;
-            this.textBoxTempPath.Text = "C:\\RebarSketch";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 59);
-            this.label3.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
+            resources.ApplyResources(this.label3, "label3");
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(44, 13);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "Шрифт:";
             // 
             // comboBoxFontName
             // 
-            this.comboBoxFontName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.comboBoxFontName, "comboBoxFontName");
             this.comboBoxFontName.FormattingEnabled = true;
-            this.comboBoxFontName.Location = new System.Drawing.Point(12, 76);
             this.comboBoxFontName.Name = "comboBoxFontName";
-            this.comboBoxFontName.Size = new System.Drawing.Size(194, 21);
-            this.comboBoxFontName.TabIndex = 4;
-            this.comboBoxFontName.Text = "Isocpeur";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 151);
-            this.label4.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
+            resources.ApplyResources(this.label4, "label4");
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(181, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Высота шрифта по умолчанию, px:";
             // 
             // numericFontSize
             // 
-            this.numericFontSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericFontSize.Location = new System.Drawing.Point(12, 168);
+            resources.ApplyResources(this.numericFontSize, "numericFontSize");
             this.numericFontSize.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.numericFontSize.Name = "numericFontSize";
-            this.numericFontSize.Size = new System.Drawing.Size(193, 20);
-            this.numericFontSize.TabIndex = 6;
             this.numericFontSize.Value = new decimal(new int[] {
             50,
             0,
@@ -122,22 +94,13 @@ namespace RebarSketch
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 241);
-            this.label5.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
+            resources.ApplyResources(this.label5, "label5");
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(166, 13);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "Округление по умолчанию, мм:";
             // 
             // numericRound
             // 
-            this.numericRound.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericRound.Location = new System.Drawing.Point(12, 258);
+            resources.ApplyResources(this.numericRound, "numericRound");
             this.numericRound.Name = "numericRound";
-            this.numericRound.Size = new System.Drawing.Size(193, 20);
-            this.numericRound.TabIndex = 7;
             this.numericRound.Value = new decimal(new int[] {
             5,
             0,
@@ -146,97 +109,60 @@ namespace RebarSketch
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 105);
-            this.label6.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
+            resources.ApplyResources(this.label6, "label6");
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(112, 13);
-            this.label6.TabIndex = 1;
-            this.label6.Text = "Начертание шрифта:";
             // 
             // comboBoxFontStyle
             // 
-            this.comboBoxFontStyle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.comboBoxFontStyle, "comboBoxFontStyle");
             this.comboBoxFontStyle.FormattingEnabled = true;
-            this.comboBoxFontStyle.Location = new System.Drawing.Point(12, 122);
             this.comboBoxFontStyle.Name = "comboBoxFontStyle";
-            this.comboBoxFontStyle.Size = new System.Drawing.Size(194, 21);
-            this.comboBoxFontStyle.TabIndex = 5;
-            this.comboBoxFontStyle.Text = "Обычный";
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 286);
-            this.label7.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
+            resources.ApplyResources(this.label7, "label7");
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(161, 13);
-            this.label7.TabIndex = 1;
-            this.label7.Text = "Имя параметра изображения:";
             // 
             // textBoxImageParamName
             // 
-            this.textBoxImageParamName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxImageParamName.Location = new System.Drawing.Point(12, 303);
+            resources.ApplyResources(this.textBoxImageParamName, "textBoxImageParamName");
             this.textBoxImageParamName.Name = "textBoxImageParamName";
-            this.textBoxImageParamName.Size = new System.Drawing.Size(194, 20);
-            this.textBoxImageParamName.TabIndex = 8;
-            this.textBoxImageParamName.Text = "RebarImage";
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.buttonCancel, "buttonCancel");
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(134, 350);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 2;
-            this.buttonCancel.Text = "Отмена";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // buttonOk
             // 
-            this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(53, 350);
+            resources.ApplyResources(this.buttonOk, "buttonOk");
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(75, 23);
-            this.buttonOk.TabIndex = 1;
-            this.buttonOk.Text = "ОК";
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 196);
-            this.label8.Margin = new System.Windows.Forms.Padding(3, 5, 3, 1);
+            resources.ApplyResources(this.label8, "label8");
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(141, 13);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "Межстрочное расстояние:";
             // 
             // numericLinesSpacing
             // 
-            this.numericLinesSpacing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.numericLinesSpacing, "numericLinesSpacing");
             this.numericLinesSpacing.DecimalPlaces = 1;
             this.numericLinesSpacing.Increment = new decimal(new int[] {
             1,
             0,
             0,
             65536});
-            this.numericLinesSpacing.Location = new System.Drawing.Point(12, 213);
             this.numericLinesSpacing.Maximum = new decimal(new int[] {
             5,
             0,
             0,
             0});
             this.numericLinesSpacing.Name = "numericLinesSpacing";
-            this.numericLinesSpacing.Size = new System.Drawing.Size(193, 20);
-            this.numericLinesSpacing.TabIndex = 6;
             this.numericLinesSpacing.Value = new decimal(new int[] {
             18,
             0,
@@ -246,10 +172,9 @@ namespace RebarSketch
             // FormGlobalSettings
             // 
             this.AcceptButton = this.buttonOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(221, 385);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.numericRound);
@@ -268,8 +193,6 @@ namespace RebarSketch
             this.Controls.Add(this.label2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FormGlobalSettings";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Глобальные настройки";
             ((System.ComponentModel.ISupportInitialize)(this.numericFontSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericRound)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericLinesSpacing)).EndInit();

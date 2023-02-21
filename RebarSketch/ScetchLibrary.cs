@@ -68,20 +68,20 @@ namespace RebarSketch
                 imType2 = ImageType.Create(doc, ito);
 #endif
                 if (imType2 == null)
-                    throw new Exception("Unable to create ImageType");
+                    throw new Exception("Failed to create ImageType");
 
                 Debug.WriteLine("Created imagetype id=" + imType2.Id.IntegerValue.ToString());
                 Parameter imageparam = rebar.LookupParameter(imageParamName);
                 if (imageparam == null)
                 {
-                    string msg = "Нет параметра " + imageParamName + " в элементе id" + rebar.Id.IntegerValue.ToString();
+                    string msg = $"{MyStrings.Parameter} {imageParamName} {MyStrings.NotFound} id {rebar.Id.IntegerValue}";
                     Debug.WriteLine(msg);
                     System.Windows.Forms.MessageBox.Show(msg);
                     throw new Exception(msg);
                 }
                 if (imageparam.StorageType != StorageType.ElementId)
                 {
-                    string msg = "Неверный тип параметра " + imageParamName;
+                    string msg = $"{MyStrings.IncorrectParameterType} {imageParamName}";
                     Debug.WriteLine(msg);
                     System.Windows.Forms.MessageBox.Show(msg);
                     System.Environment.Exit(1);
@@ -162,11 +162,13 @@ namespace RebarSketch
 
             if (curNameSketches[0].IsSubtype)
             {
-                Parameter subtypeNumberParam = rebar.LookupParameter("Арм.НомерПодтипаФормы");
+                Guid rebarSubtypeNumberGuid = new Guid("83c6264a-5865-49d0-8876-2c150631527f");
+                Parameter subtypeNumberParam = rebar.get_Parameter(rebarSubtypeNumberGuid);
+                //Parameter subtypeNumberParam = rebar.LookupParameter("Арм.НомерПодтипаФормы");
                 if (subtypeNumberParam == null)
                 {
-                    string msg = "Арматура " + familyName + " не содержит параметр Арм.НомерПодтипаФормы";
-                    Autodesk.Revit.UI.TaskDialog.Show("Ошибка", msg);
+                    string msg = $"{MyStrings.Parameter} {MyStrings.ParameterSubtypeNumber} {MyStrings.NotFound} {familyName}";
+                    Autodesk.Revit.UI.TaskDialog.Show(MyStrings.Error, msg);
                     throw new Exception(msg);
                 }
 
@@ -176,14 +178,14 @@ namespace RebarSketch
                     .ToList();
                 if(curSubtypeTemplate.Count == 0)
                 {
-                    string msg = "Нет шаблона подтипа №" + subtypeNumber + " для арматуры " + familyName;
-                    Autodesk.Revit.UI.TaskDialog.Show("Ошибка", msg);
+                    string msg = $"{MyStrings.NoSubtype} № {subtypeNumber} {MyStrings.ForRebar} {familyName}";
+                    Autodesk.Revit.UI.TaskDialog.Show(MyStrings.Error, msg);
                     throw new Exception(msg);
                 }
                 else if(curSubtypeTemplate.Count > 1)
                 {
-                    string msg = "Более 1 шаблона подтипа №" + subtypeNumber + " для арматуры " + familyName;
-                    Autodesk.Revit.UI.TaskDialog.Show("Ошибка", msg);
+                    string msg = $"{MyStrings.MoreOneSubtype} № {subtypeNumber} {MyStrings.ForRebar} {familyName}";
+                    Autodesk.Revit.UI.TaskDialog.Show(MyStrings.Error, msg);
                     throw new Exception(msg);
                 }
 
@@ -193,9 +195,9 @@ namespace RebarSketch
             {
                 if (curNameSketches.Count > 1)
                 {
-                    string msg = "Арматура " + familyName + " прописана в нескольких шаблонах: ";
+                    string msg = $"{MyStrings.Rebar} {familyName} {MyStrings.MoreOneTemplate}";
                     msg += string.Join(", ", curNameSketches.Select(i => i.formName));
-                    Autodesk.Revit.UI.TaskDialog.Show("Ошибка", msg);
+                    Autodesk.Revit.UI.TaskDialog.Show(MyStrings.Error, msg);
                     throw new Exception(msg);
                 }
                 Debug.WriteLine("Scetch template found, not subtype");

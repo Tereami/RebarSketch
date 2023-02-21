@@ -63,13 +63,9 @@ namespace RebarSketch
         public static int IsVariableLength(this Element rebar)
         {
             Document doc = rebar.Document;
-            //Guid variableLengthParamGuid = new Guid("ee8d35b0-e2d7-47b3-8b8a-adb31eedac30");
-            //List<Parameter> parameters = rebar.GetOrderedParameters()
-            //    .Where(p => p.IsShared)
-            //    .Where(p => p.GUID == variableLengthParamGuid)
-            //    .ToList();
 
-            Parameter variableLengthParam = rebar.LookupParameter("Рзм.ПеременнаяДлина");
+            Guid variableLengthParamGuid = new Guid("ee8d35b0-e2d7-47b3-8b8a-adb31eedac30");
+            Parameter variableLengthParam = rebar.get_Parameter(variableLengthParamGuid);
 
             if (variableLengthParam == null)
             {
@@ -84,7 +80,7 @@ namespace RebarSketch
                     //if (typeParameters.Count == 0) return -1;
 
                     //variableLengthParam = typeParameters.First();
-                    variableLengthParam = rebarType.LookupParameter("Рзм.ПеременнаяДлина");
+                    variableLengthParam = rebarType.get_Parameter(variableLengthParamGuid);
                 }
                 catch { return 0; }
             }
@@ -144,9 +140,8 @@ namespace RebarSketch
 
             if (param == null || !param.HasValue)
             {
-                string msg = "Параметр " + paramName + " не найден в " + rebar.GetElementName()
-                    + ". Возможно, нужно обновить семейство.";
-                Autodesk.Revit.UI.TaskDialog.Show("Ошибка", msg);
+                string msg = $"{MyStrings.Parameter} {paramName} {MyStrings.NotFound} {rebar.GetElementName()} {MyStrings.MaybeUpdateFamily}.";
+                Autodesk.Revit.UI.TaskDialog.Show(MyStrings.Error, msg);
                 System.Diagnostics.Debug.WriteLine(msg);
                 throw new Exception(msg);
             }

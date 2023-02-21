@@ -84,7 +84,7 @@ namespace RebarSketch
                 xsi = (XmlSketchItem)serializer.Deserialize(reader);
                 if (xsi == null)
                 {
-                    System.Windows.Forms.MessageBox.Show("Не удалось загрузить настройки, установлены по-умолчанию");
+                    System.Windows.Forms.MessageBox.Show(MyStrings.ErrorFailedToLoadSettings);
                     Debug.WriteLine("Unable to get setiings, set default");
                     xsi = new XmlSketchItem();
                 }
@@ -152,7 +152,7 @@ namespace RebarSketch
                 }
                 catch
                 {
-                    string msg = "Не удалось сохранить файл, проверьте права доступа " + xmlPath;
+                    string msg = $"{MyStrings.ErrorNoPermission} {xmlPath}";
                     System.Windows.Forms.MessageBox.Show(msg);
                     throw new Exception(msg);
                 }

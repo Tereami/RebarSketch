@@ -30,7 +30,7 @@ namespace RebarSketch
             bool check = File.Exists(filePath);
             if (!check)
             {
-                throw new Exception("Не найден файл: " + filePath);
+                throw new Exception($"{MyStrings.ErrorFileNotFound}: {filePath}");
             }
             Encoding e = GetEncoding(filePath);
             string[] familiesNames = File.ReadAllLines(filePath, e);

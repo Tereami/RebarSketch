@@ -9,7 +9,7 @@ namespace RebarSketch
 {
     public class ScetchParameter : IEquatable<ScetchParameter>
     {
-        public string Name = "Арм_А";
+        public string Name = MyStrings.RebarAparam;
         public float PositionX = 200;
         public float PositionY = 100;
         public float Rotation = 0;
@@ -77,7 +77,7 @@ namespace RebarSketch
                     HaveSpacing = true;
                     double spacing = (maxValue - minValue) / (count - 1);
                     double spacingRound = LengthAccuracy * Math.Round(spacing / LengthAccuracy);
-                    SpacingValue = "ш." + spacing.ToString("F0");
+                    SpacingValue = MyStrings.SpacingPrefix + spacing.ToString("F0");
                 }
             }
 

@@ -129,7 +129,7 @@ namespace RebarSketch
                 ssets = (GlobalSettings)serializer.Deserialize(reader);
                 if (ssets == null)
                 {
-                    System.Windows.Forms.MessageBox.Show("Не удалось загрузить настройки, установлены по-умолчанию");
+                    System.Windows.Forms.MessageBox.Show(MyStrings.ErrorFailedToLoadSettings);
                     Debug.WriteLine("Unable to get setiings, set default");
                     ssets = new GlobalSettings();
                 }
