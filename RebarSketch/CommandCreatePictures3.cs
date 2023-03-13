@@ -110,6 +110,8 @@ namespace RebarSketch
             List<Element> variableRebars = new List<Element>();
             foreach (Element rebar in col)
             {
+                if (!rebar.IsValidObject)
+                    continue;
                 int checkIsVariable = rebar.IsVariableLength();
                 if (checkIsVariable == -1) continue;
 
