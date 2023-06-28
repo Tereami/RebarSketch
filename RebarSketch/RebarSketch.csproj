@@ -76,10 +76,19 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <AssemblyName>$(AssemblyName)_2023</AssemblyName>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2024|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\R2024\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;R2024</DefineConstants>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AssemblyName>$(AssemblyName)_2024</AssemblyName>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="RbsLogger">
-      <HintPath>..\..\..\..\..\AppData\Roaming\Autodesk\Revit\Addins\20xx\BimStarter\RbsLogger.dll</HintPath>
+      <HintPath>..\..\RbsLogger\RbsLogger\bin\Debug\RbsLogger.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -173,6 +182,18 @@
         </Reference>
         <Reference Include="RevitAPIUI">
           <HintPath>C:\Program Files\Autodesk\Revit 2023\RevitAPIUI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+	<When Condition=" '$(Configuration)'=='R2024' ">
+      <ItemGroup>
+        <Reference Include="RevitAPI">
+          <HintPath>C:\Program Files\Autodesk\Revit 2024\RevitAPI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="RevitAPIUI">
+          <HintPath>C:\Program Files\Autodesk\Revit 2024\RevitAPIUI.dll</HintPath>
           <Private>False</Private>
         </Reference>
       </ItemGroup>

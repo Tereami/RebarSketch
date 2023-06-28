@@ -67,7 +67,7 @@ namespace RebarSketch
             }
 
             //очищаю ранее созданные картинки для данной ведомости деталей
-            string imagesPrefix = vs.Id.IntegerValue.ToString();
+            string imagesPrefix = vs.GetElementId().ToString();
             List<ElementId> oldImageIds = new FilteredElementCollector(doc)
                 .WhereElementIsElementType()
                 .OfClass(typeof(ImageType))
@@ -225,7 +225,7 @@ namespace RebarSketch
 
                     foreach (Element rebar in rebars)
                     {
-                        Debug.WriteLine("Processed rebar id " + rebar.Id.IntegerValue.ToString());
+                        Debug.WriteLine($"Processed rebar id {rebar.GetElementId()}");
                         ScetchImage si = new ScetchImage(rebar, xsi);
 
                         ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, xsi, imagesPrefix, sets);

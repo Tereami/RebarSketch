@@ -107,18 +107,18 @@ namespace RebarSketch
             Parameter familyParam = elem.get_Parameter(BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM);
             if (elem is Autodesk.Revit.DB.Structure.Rebar)
             {
-                selElemName = elem.Name + ", ID: " + elem.Id.IntegerValue.ToString();
+                selElemName = $"{elem.Name}, ID: {elem.GetElementId()}";
             }
             else
             {
                 string famName = familyParam.AsValueString();
                 if (string.IsNullOrEmpty(famName))
                 {
-                    selElemName = elem.Name + ", ID: " + elem.Id.IntegerValue.ToString();
+                    selElemName = $"{elem.Name}, ID: {elem.GetElementId()}";
                 }
                 else
                 {
-                    selElemName = familyParam.AsValueString() + ", ID: " + elem.Id.IntegerValue.ToString();
+                    selElemName = $"{familyParam.AsValueString()}, ID: {elem.GetElementId()}";
                 }
             }
 
@@ -133,7 +133,7 @@ namespace RebarSketch
             {
                 ElementType rebarType = rebar.Document.GetElement(rebar.GetTypeId()) as ElementType;
                 if (rebarType == null)
-                    throw new Exception("Rebar type is null for element " + rebar.Id.IntegerValue);
+                    throw new Exception($"Rebar type is null for element {rebar.GetElementId()}");
 
                 param = rebarType.LookupParameter(paramName);
             }
@@ -147,16 +147,26 @@ namespace RebarSketch
             }
             double val = param.AsDouble();
 
-#if R2022 || R2023
+
+#if R2017 || R2018 || R2019 || R2020 || R2021
+            double val2 = UnitUtils.ConvertFromInternalUnits(val, param.DisplayUnitType);
+            isDegrees = param.Definition.UnitType == UnitType.UT_Angle; // .DisplayUnitType == DisplayUnitType.DUT_DECIMAL_DEGREES;
+#else
             double val2 = UnitUtils.ConvertFromInternalUnits(param.AsDouble(), param.GetUnitTypeId());
             ForgeTypeId forgeDataType = param.Definition.GetDataType();
             isDegrees = forgeDataType == SpecTypeId.Angle;
-#else
-            double val2 = UnitUtils.ConvertFromInternalUnits(val, param.DisplayUnitType);
-            isDegrees = param.Definition.UnitType == UnitType.UT_Angle; // .DisplayUnitType == DisplayUnitType.DUT_DECIMAL_DEGREES;
 #endif
 
             return val2;
+        }
+
+        public static long GetElementId(this Element elem)
+        {
+#if R2017 || R2018 || R2019 || R2020 || R2021 || R2022 || R2023
+            return elem.Id.IntegerValue;
+#else
+            return elem.Id.Value;
+#endif
         }
     }
 }

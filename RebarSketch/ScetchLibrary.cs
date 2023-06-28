@@ -38,7 +38,7 @@ namespace RebarSketch
             string imagesPrefix,
             GlobalSettings sets)
         {
-            Debug.WriteLine("Try to apply scetch for rebar id" + rebar.Id.IntegerValue.ToString());
+            Debug.WriteLine($"Try to apply scetch for rebar id {rebar.GetElementId()}");
             Document doc = rebar.Document;
             string imageParamName = sets.imageParamName;
             ScetchImage si = new ScetchImage(rebar, xsi);
@@ -51,7 +51,7 @@ namespace RebarSketch
                 Debug.WriteLine("Scetch exists, get from base");
                 var baseImage = imagesBase[si.ImageKey];
                 rebar.LookupParameter(imageParamName).Set(baseImage.imageType.Id);
-                Debug.WriteLine("Set imagetype id" + baseImage.imageType.Id.IntegerValue.ToString() + " to rebar id" + rebar.Id.IntegerValue.ToString());
+                Debug.WriteLine($"Set imagetype id {baseImage.imageType.GetElementId()} to rebar id {rebar.GetElementId()}");
             }
             else //такая картинка еще не генерировалась - генерируем, добавляем в базу
             {
@@ -70,11 +70,11 @@ namespace RebarSketch
                 if (imType2 == null)
                     throw new Exception("Failed to create ImageType");
 
-                Debug.WriteLine("Created imagetype id=" + imType2.Id.IntegerValue.ToString());
+                Debug.WriteLine($"Created imagetype id {imType2.GetElementId()}");
                 Parameter imageparam = rebar.LookupParameter(imageParamName);
                 if (imageparam == null)
                 {
-                    string msg = $"{MyStrings.Parameter} {imageParamName} {MyStrings.NotFound} id {rebar.Id.IntegerValue}";
+                    string msg = $"{MyStrings.Parameter} {imageParamName} {MyStrings.NotFound} id {rebar.GetElementId()}";
                     Debug.WriteLine(msg);
                     System.Windows.Forms.MessageBox.Show(msg);
                     throw new Exception(msg);
@@ -89,7 +89,7 @@ namespace RebarSketch
                 imageparam.Set(imType2.Id);
                 si.imageType = imType2;
                 imagesBase.Add(si.ImageKey, si);
-                Debug.WriteLine("Scetch is created, ImageType id=" + imType2.Id.IntegerValue.ToString());
+                Debug.WriteLine($"Scetch is created, ImageType id{imType2.GetElementId()}");
             }
         }
 
@@ -156,7 +156,7 @@ namespace RebarSketch
         public XmlSketchItem FindTemplate(Element rebar)
         {
             string familyName = rebar.GetRebarFormName();
-            Debug.WriteLine("Get template by family name: " + familyName + " for element id " + rebar.Id.IntegerValue.ToString());
+            Debug.WriteLine($"Get template by family name: {familyName} for element id {rebar.GetElementId()}");
             List<XmlSketchItem> curNameSketches = templates.Where(i => i.families.Contains(familyName)).ToList();
             if (curNameSketches.Count == 0) return null;
 
