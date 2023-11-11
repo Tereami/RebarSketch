@@ -87,8 +87,6 @@ namespace RebarSketch
 
             assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
-            //string assemblyFolder = System.IO.Path.GetDirectoryName(assemblyName);
-
             string appdataFolder =
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string bimstarterRootFolder =
@@ -100,13 +98,32 @@ namespace RebarSketch
             }
             configFilePath = Path.Combine(bimstarterRootFolder, "config.ini");
 
-            string bimstarterStoragePath = "";
+            string bimstarterStoragePath = string.Empty;
             if (File.Exists(configFilePath))
             {
                 Debug.WriteLine("Read file: " + configFilePath);
-                bimstarterStoragePath = File.ReadAllLines(configFilePath)[0];
+                string[] lines = File.ReadAllLines(configFilePath);
+                if (lines.Length > 0)
+                {
+                    bimstarterStoragePath = lines[0];
+                    Debug.WriteLine($"Storage path: {bimstarterStoragePath}");
+                }
+                else
+                {
+                    try
+                    {
+                        System.IO.File.Delete(configFilePath);
+                        Debug.WriteLine($"File is deleted: {configFilePath}");
+                    }
+                    catch
+                    {
+                        Debug.WriteLine($"Invalid file: {configFilePath}");
+                        throw new Exception($"Invalid file: {configFilePath}");
+                    }
+                }
             }
-            else
+
+            if(bimstarterStoragePath == string.Empty)
             {
                 Debug.WriteLine("First start, show dialog window and select config folder");
                 string configDefaultFolder = Path.Combine(appdataFolder, @"Autodesk\Revit\Addins\20xx\BimStarter");
