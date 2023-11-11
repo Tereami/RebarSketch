@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Structure;
 
 namespace RebarSketch
 {
@@ -67,32 +68,27 @@ namespace RebarSketch
             Guid variableLengthParamGuid = new Guid("ee8d35b0-e2d7-47b3-8b8a-adb31eedac30");
             Parameter variableLengthParam = rebar.get_Parameter(variableLengthParamGuid);
 
-            if (variableLengthParam == null)
+            if (variableLengthParam == null || !variableLengthParam.HasValue)
             {
-                try
-                {
-                    ElementId typeId = rebar.GetTypeId();
-                    Element rebarType = doc.GetElement(typeId);
-                    //List<Parameter> typeParameters = rebar.GetOrderedParameters()
-                    //    .Where(p => p.IsShared)
-                    //    .Where(p => p.GUID == variableLengthParamGuid)
-                    //    .ToList();
-                    //if (typeParameters.Count == 0) return -1;
+                ElementId typeId = rebar.GetTypeId();
+                if (typeId == null || typeId == ElementId.InvalidElementId)
+                    return 0;
 
-                    //variableLengthParam = typeParameters.First();
-                    variableLengthParam = rebarType.get_Parameter(variableLengthParamGuid);
-                }
-                catch { return 0; }
+                Element rebarType = doc.GetElement(typeId);
+                if (rebarType == null)
+                    return 0;
+
+                variableLengthParam = rebarType.get_Parameter(variableLengthParamGuid);
             }
-            //else
-            //{
-            //    //variableLengthParam = parameters.First();
-            //}
 
-            if (variableLengthParam == null) return 0;
+            if (variableLengthParam == null || !variableLengthParam.HasValue)
+                return 0;
 
             int checkIsVariable = variableLengthParam.AsInteger();
-            return checkIsVariable;
+            if (checkIsVariable == 1)
+                return 1;
+            else
+                return 0;
         }
 
         /// <summary>
