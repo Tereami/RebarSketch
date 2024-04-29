@@ -1,114 +1,97 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F9403064-2CB4-4784-A8BD-A6436E229DFB}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RebarSketch</RootNamespace>
-    <AssemblyName>RebarSketch</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2017|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\R2017\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;R2017</DefineConstants>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <AssemblyName>$(AssemblyName)_2017</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2018|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\R2018\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;R2018</DefineConstants>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <AssemblyName>$(AssemblyName)_2018</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2019|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\R2019\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;R2019</DefineConstants>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
-    <AssemblyName>$(AssemblyName)_2019</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2020|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\R2020\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;R2020</DefineConstants>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <AssemblyName>$(AssemblyName)_2020</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2021|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\R2021\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;R2021</DefineConstants>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <AssemblyName>$(AssemblyName)_2021</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2022|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\R2022\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;R2022</DefineConstants>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <AssemblyName>$(AssemblyName)_2022</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2023|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\R2023\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;R2023</DefineConstants>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <AssemblyName>$(AssemblyName)_2023</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2024|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\R2024\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;R2024</DefineConstants>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <AssemblyName>$(AssemblyName)_2024</AssemblyName>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2025|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\R2025\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;R2025</DefineConstants>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <AssemblyName>$(AssemblyName)_2025</AssemblyName>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<UseWindowsForms>true</UseWindowsForms>
+		<UseWPF>true</UseWPF>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+			None
+		</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+		<AppendTargetFrameworkToOutputpath>false</AppendTargetFrameworkToOutputpath>
+		<Configurations>R2017;R2018;R2019;R2020;R2021;R2022;R2023;R2024;R2025</Configurations>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2017|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>false</Optimize>
+		<TargetFramework>net46</TargetFramework>
+		<OutputPath>bin\R2017\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;R2017</DefineConstants>
+		<AssemblyName>$(AssemblyName)_2017</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2018|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>false</Optimize>
+		<TargetFramework>net46</TargetFramework>
+		<OutputPath>bin\R2018\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;R2018</DefineConstants>
+		<AssemblyName>$(AssemblyName)_2018</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2019|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>false</Optimize>
+		<TargetFramework>net47</TargetFramework>
+		<OutputPath>bin\R2019\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;R2019</DefineConstants>
+		<AssemblyName>$(AssemblyName)_2019</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2020|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>false</Optimize>
+		<TargetFramework>net47</TargetFramework>
+		<OutputPath>bin\R2020\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;R2020</DefineConstants>
+		<AssemblyName>$(AssemblyName)_2020</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2021|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>false</Optimize>
+		<TargetFramework>net48</TargetFramework>
+		<OutputPath>bin\R2021\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;R2021</DefineConstants>
+		<AssemblyName>$(AssemblyName)_2021</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2022|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>false</Optimize>
+		<TargetFramework>net48</TargetFramework>
+		<OutputPath>bin\R2022\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;R2022</DefineConstants>
+		<AssemblyName>$(AssemblyName)_2022</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2023|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>false</Optimize>
+		<TargetFramework>net48</TargetFramework>
+		<OutputPath>bin\R2023\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;R2023</DefineConstants>
+		<AssemblyName>$(AssemblyName)_2023</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2024|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>false</Optimize>
+		<TargetFramework>net48</TargetFramework>
+		<OutputPath>bin\R2024\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;R2024</DefineConstants>
+		<AssemblyName>$(AssemblyName)_2024</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2025|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<Optimize>false</Optimize>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<OutputPath>bin\R2025\</OutputPath>
+		<DefineConstants>TRACE;DEBUG;R2025</DefineConstants>
+		<AssemblyName>$(AssemblyName)_2025</AssemblyName>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="RbsLogger">
+			<HintPath>..\..\RbsLogger\RbsLogger\bin\Debug\RbsLogger.dll</HintPath>
+		</Reference>
+	</ItemGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
     <Reference Include="RbsLogger">
       <HintPath>..\..\RbsLogger\RbsLogger\bin\Debug\RbsLogger.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <Choose>
     <When Condition=" '$(Configuration)'=='R2017' or '$(Configuration)'=='Debug'">
@@ -195,7 +178,7 @@
         </Reference>
       </ItemGroup>
     </When>
-	<When Condition=" '$(Configuration)'=='R2024' ">
+    <When Condition=" '$(Configuration)'=='R2024' ">
       <ItemGroup>
         <Reference Include="RevitAPI">
           <HintPath>C:\Program Files\Autodesk\Revit 2024\RevitAPI.dll</HintPath>
@@ -207,7 +190,7 @@
         </Reference>
       </ItemGroup>
     </When>
-	<When Condition=" '$(Configuration)'=='R2025' ">
+    <When Condition=" '$(Configuration)'=='R2025' ">
       <ItemGroup>
         <Reference Include="RevitAPI">
           <HintPath>C:\Program Files\Autodesk\Revit 2025\RevitAPI.dll</HintPath>
@@ -221,93 +204,10 @@
     </When>
   </Choose>
   <ItemGroup>
-    <Compile Include="App.cs" />
-    <Compile Include="CommandCreatePictures3.cs" />
-    <Compile Include="CommandSettings.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="FileSupport.cs" />
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CommandFormGenerator.cs" />
-    <Compile Include="FormGlobalSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormGlobalSettings.Designer.cs">
-      <DependentUpon>FormGlobalSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormInputText.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormInputText.Designer.cs">
-      <DependentUpon>FormInputText.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormSelectPath.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormSelectPath.Designer.cs">
-      <DependentUpon>FormSelectPath.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MyStrings.ru-RU.Designer.cs">
-      <DependentUpon>MyStrings.ru-RU.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="MyStrings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MyStrings.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScetchImage.cs" />
-    <Compile Include="ScetchLibrary.cs" />
-    <Compile Include="ScetchParameter.cs" />
-    <Compile Include="GlobalSettings.cs" />
-    <Compile Include="XmlSketchItem.cs" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="RebarSketch.addin" />
+    <Folder Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form1.ru-RU.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormGlobalSettings.resx">
-      <DependentUpon>FormGlobalSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormGlobalSettings.ru-RU.resx">
-      <DependentUpon>FormGlobalSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormInputText.resx">
-      <DependentUpon>FormInputText.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormSelectPath.resx">
-      <DependentUpon>FormSelectPath.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormSelectPath.ru-RU.resx">
-      <DependentUpon>FormSelectPath.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MyStrings.ru-RU.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MyStrings.ru-RU.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MyStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MyStrings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -138,7 +138,7 @@ namespace RebarSketch
             {
                 string msg = $"{MyStrings.Parameter} {paramName} {MyStrings.NotFound} {rebar.GetElementName()} {MyStrings.MaybeUpdateFamily}.";
                 Autodesk.Revit.UI.TaskDialog.Show(MyStrings.Error, msg);
-                System.Diagnostics.Debug.WriteLine(msg);
+                System.Diagnostics.Trace.WriteLine(msg);
                 throw new Exception(msg);
             }
             double val = param.AsDouble();

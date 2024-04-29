@@ -38,94 +38,94 @@ namespace RebarSketch
             string imagesPrefix,
             GlobalSettings sets)
         {
-            Debug.WriteLine($"Try to apply scetch for rebar id {rebar.GetElementId()}");
+            Trace.WriteLine($"Try to apply scetch for rebar id {rebar.GetElementId()}");
             Document doc = rebar.Document;
             string imageParamName = sets.imageParamName;
             ScetchImage si = new ScetchImage(rebar, xsi);
             ImageType imType2 = null;
 
-            Debug.WriteLine("Key: " + si.ImageKey);
+            Trace.WriteLine("Key: " + si.ImageKey);
 
             if (imagesBase.ContainsKey(si.ImageKey)) //такая картинка уже ранее генерировалась и есть в проекте
             {
-                Debug.WriteLine("Scetch exists, get from base");
+                Trace.WriteLine("Scetch exists, get from base");
                 var baseImage = imagesBase[si.ImageKey];
                 rebar.LookupParameter(imageParamName).Set(baseImage.imageType.Id);
-                Debug.WriteLine($"Set imagetype id {baseImage.imageType.GetElementId()} to rebar id {rebar.GetElementId()}");
+                Trace.WriteLine($"Set imagetype id {baseImage.imageType.GetElementId()} to rebar id {rebar.GetElementId()}");
             }
             else //такая картинка еще не генерировалась - генерируем, добавляем в базу
             {
                 si.Generate(sets, imagesPrefix);
 #if R2017 || R2018 || R2019
-                Debug.WriteLine("Create ImageType Revit 2017-2019");
+                Trace.WriteLine("Create ImageType Revit 2017-2019");
                 imType2 = ImageType.Create(doc, si.ScetchImagePath);
 #elif R2020 
-                Debug.WriteLine("Create ImageType Revit 2020");
+                Trace.WriteLine("Create ImageType Revit 2020");
                 imType2 = ImageType.Create(doc, new ImageTypeOptions(si.ScetchImagePath));
 #else
-                Debug.WriteLine("Create ImageType Revit 2021-2023");
+                Trace.WriteLine("Create ImageType Revit 2021-2023");
                 ImageTypeOptions ito = new ImageTypeOptions(si.ScetchImagePath, false, ImageTypeSource.Import);
                 imType2 = ImageType.Create(doc, ito);
 #endif
                 if (imType2 == null)
                     throw new Exception("Failed to create ImageType");
 
-                Debug.WriteLine($"Created imagetype id {imType2.GetElementId()}");
+                Trace.WriteLine($"Created imagetype id {imType2.GetElementId()}");
                 Parameter imageparam = rebar.LookupParameter(imageParamName);
                 if (imageparam == null)
                 {
                     string msg = $"{MyStrings.Parameter} {imageParamName} {MyStrings.NotFound} id {rebar.GetElementId()}";
-                    Debug.WriteLine(msg);
+                    Trace.WriteLine(msg);
                     System.Windows.Forms.MessageBox.Show(msg);
                     throw new Exception(msg);
                 }
                 if (imageparam.StorageType != StorageType.ElementId)
                 {
                     string msg = $"{MyStrings.IncorrectParameterType} {imageParamName}";
-                    Debug.WriteLine(msg);
+                    Trace.WriteLine(msg);
                     System.Windows.Forms.MessageBox.Show(msg);
                     System.Environment.Exit(1);
                 }
                 imageparam.Set(imType2.Id);
                 si.imageType = imType2;
                 imagesBase.Add(si.ImageKey, si);
-                Debug.WriteLine($"Scetch is created, ImageType id{imType2.GetElementId()}");
+                Trace.WriteLine($"Scetch is created, ImageType id{imType2.GetElementId()}");
             }
         }
 
 
         public void Activate(string libraryPath)
         {
-            Debug.WriteLine("Scetch library activation start");
+            Trace.WriteLine("Scetch library activation start");
             templates = new List<XmlSketchItem>();
             string[] nameFolders = Directory.GetDirectories(libraryPath);
-            Debug.WriteLine("Folders found: " + nameFolders.Length.ToString());
+            Trace.WriteLine("Folders found: " + nameFolders.Length.ToString());
             foreach (string nameFolder in nameFolders)
             {
-                Debug.WriteLine("Check folder: " + nameFolder);
+                Trace.WriteLine("Check folder: " + nameFolder);
                 string[] subFolders = System.IO.Directory.GetDirectories(nameFolder);
                 if (subFolders.Length == 0)
                 {
-                    Debug.WriteLine("No subfolders, create scetch template");
+                    Trace.WriteLine("No subfolders, create scetch template");
                     XmlSketchItem xsi = XmlSketchItem.Load(nameFolder);
                     if (xsi == null)
                     {
-                        Debug.WriteLine("Scetch is null");
+                        Trace.WriteLine("Scetch is null");
                         continue;
                     }
                     templates.Add(xsi);
-                    Debug.WriteLine("Scetch succesfuly added to library as form name: " + xsi.formName);
+                    Trace.WriteLine("Scetch succesfuly added to library as form name: " + xsi.formName);
                 }
                 else
                 {
-                    Debug.WriteLine("Subfolders found");
+                    Trace.WriteLine("Subfolders found");
                     foreach (string subfolder in subFolders)
                     {
-                        Debug.WriteLine("Create template by subfolder: " + subfolder);
+                        Trace.WriteLine("Create template by subfolder: " + subfolder);
                         XmlSketchItem xsi2 = XmlSketchItem.Load(subfolder);
                         if (xsi2 == null)
                         {
-                            Debug.WriteLine("Scetch is null");
+                            Trace.WriteLine("Scetch is null");
                             continue;
                         }
                         xsi2.IsSubtype = true;
@@ -133,11 +133,11 @@ namespace RebarSketch
                         int subtypeNumber = int.Parse(subtypeNumberString);
                         xsi2.SubtypeNumber = subtypeNumber;
                         templates.Add(xsi2);
-                        Debug.WriteLine("Scetch succesfuly added to library as form name: " + xsi2.formName);
+                        Trace.WriteLine("Scetch succesfuly added to library as form name: " + xsi2.formName);
                     }
                 }
             }
-            Debug.WriteLine("Scetch library activation start");
+            Trace.WriteLine("Scetch library activation start");
         }
 
         /*private string CheckFileExists(string path)
@@ -147,7 +147,7 @@ namespace RebarSketch
             {
                 string res = "Не найден файл: " + path;
                 res = res.Replace("\\", " \\ ");
-                Debug.WriteLine(res);
+                Trace.WriteLine(res);
                 return res;
             }
             return "";
@@ -156,7 +156,7 @@ namespace RebarSketch
         public XmlSketchItem FindTemplate(Element rebar)
         {
             string familyName = rebar.GetRebarFormName();
-            Debug.WriteLine($"Get template by family name: {familyName} for element id {rebar.GetElementId()}");
+            Trace.WriteLine($"Get template by family name: {familyName} for element id {rebar.GetElementId()}");
             List<XmlSketchItem> curNameSketches = templates.Where(i => i.families.Contains(familyName)).ToList();
             if (curNameSketches.Count == 0) return null;
 
@@ -200,7 +200,7 @@ namespace RebarSketch
                     Autodesk.Revit.UI.TaskDialog.Show(MyStrings.Error, msg);
                     throw new Exception(msg);
                 }
-                Debug.WriteLine("Scetch template found, not subtype");
+                Trace.WriteLine("Scetch template found, not subtype");
                 return curNameSketches[0];
             }
         }

@@ -44,7 +44,7 @@ namespace RebarSketch
         public static bool Save(GlobalSettings ssets)
         {
             string xmlPath = Path.Combine(App.rebarSketchPath, "settings.xml");
-            Debug.WriteLine("Save settings to file: " + xmlPath);
+            Trace.WriteLine("Save settings to file: " + xmlPath);
             /*if (File.Exists(xmlPath))
             {
                 try
@@ -73,7 +73,7 @@ namespace RebarSketch
             }
             catch
             {
-                Debug.WriteLine("Save settings failed");
+                Trace.WriteLine("Save settings failed");
                 return false;
             }
         }
@@ -81,7 +81,7 @@ namespace RebarSketch
         public static GlobalSettings Read()
         {
             string rebarSketchPath = App.rebarSketchPath;
-            Debug.WriteLine("Read settings from folder " + rebarSketchPath);
+            Trace.WriteLine("Read settings from folder " + rebarSketchPath);
             GlobalSettings ssets = null;
             string settingsFileXml = Path.Combine(rebarSketchPath, "settings.xml");
             string settingsFileTxt = Path.Combine(rebarSketchPath, "settings.txt");
@@ -95,7 +95,7 @@ namespace RebarSketch
                     }
                     catch
                     {
-                        Debug.WriteLine("Не удается удалить файл " + settingsFileTxt);
+                        Trace.WriteLine("Не удается удалить файл " + settingsFileTxt);
                     }
                 }
 
@@ -110,7 +110,7 @@ namespace RebarSketch
                 ssets = new GlobalSettings();
             }
 
-            Debug.WriteLine("Settings activate success");
+            Trace.WriteLine("Settings activate success");
 
             //на всякий случай очистить временную папку с эскизами
             FileSupport.CheckAndDeleteFolder(ssets.tempPath);
@@ -120,7 +120,7 @@ namespace RebarSketch
 
         public static GlobalSettings ReadFromXml(string xmlPath)
         {
-            Debug.WriteLine("Read Xml settings file: " + xmlPath);
+            Trace.WriteLine("Read Xml settings file: " + xmlPath);
             GlobalSettings ssets;
             XmlSerializer serializer = new XmlSerializer(typeof(GlobalSettings));
 
@@ -130,7 +130,7 @@ namespace RebarSketch
                 if (ssets == null)
                 {
                     System.Windows.Forms.MessageBox.Show(MyStrings.ErrorFailedToLoadSettings);
-                    Debug.WriteLine("Unable to get setiings, set default");
+                    Trace.WriteLine("Unable to get setiings, set default");
                     ssets = new GlobalSettings();
                 }
             }
@@ -140,7 +140,7 @@ namespace RebarSketch
 
         public static GlobalSettings ReadFromTxt(string txtPath)
         {
-            Debug.WriteLine("Read txt settings file: " + txtPath);
+            Trace.WriteLine("Read txt settings file: " + txtPath);
 
             GlobalSettings ssets = new GlobalSettings();
 
@@ -153,13 +153,13 @@ namespace RebarSketch
             ssets.tempPath= settings[4].Split('#').Last();
             ssets.imageParamName = settings[5].Split('#').Last();
 
-            Debug.WriteLine("Read txt settings success");
+            Trace.WriteLine("Read txt settings success");
 
             try
             {
                 System.IO.File.Delete(txtPath);
                 GlobalSettings.Save(ssets);
-                Debug.WriteLine("File deleted " + txtPath);
+                Trace.WriteLine("File deleted " + txtPath);
             }
             catch { }
             

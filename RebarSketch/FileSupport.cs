@@ -52,22 +52,22 @@ namespace RebarSketch
 
             if (bom[0] == 0xd0 && bom[1] == 0xbe && bom[2] == 0xd0 && bom[3] == 0xb1)
             {
-                Debug.WriteLine("Encoding: UTF8");
+                Trace.WriteLine("Encoding: UTF8");
                 return Encoding.UTF8;
             }
             if (bom[0] == 0x32 && bom[1] == 0x36 && bom[2] == 0x31 && bom[3] == 0x5f)
             {
-                Debug.WriteLine("Encoding: 1251");
+                Trace.WriteLine("Encoding: 1251");
                 return Encoding.GetEncoding(1251);
             }
-            Debug.WriteLine("Encoding: UTF8 as default");
+            Trace.WriteLine("Encoding: UTF8 as default");
             return Encoding.UTF8;
         }
 
 
         public static void CheckAndDeleteFolder(string path)
         {
-            Debug.WriteLine("Try to delete folder: " + path);
+            Trace.WriteLine("Try to delete folder: " + path);
             bool checkExists = System.IO.Directory.Exists(path);
             if (!checkExists) return;
 
@@ -83,7 +83,7 @@ namespace RebarSketch
             }
 
             System.IO.Directory.Delete(path);
-            Debug.WriteLine("Folder deleted: " + path);
+            Trace.WriteLine("Folder deleted: " + path);
         }
 
 
@@ -91,22 +91,22 @@ namespace RebarSketch
         {
             if (text == "Bold")
             {
-                Debug.WriteLine("Font style: bold");
+                Trace.WriteLine("Font style: bold");
                 return System.Drawing.FontStyle.Bold;
             }
             if (text == "Italic")
             {
-                Debug.WriteLine("Font style: italic");
+                Trace.WriteLine("Font style: italic");
                 return System.Drawing.FontStyle.Italic;
             }
-            Debug.WriteLine("Font style: regular");
+            Trace.WriteLine("Font style: regular");
             return System.Drawing.FontStyle.Regular;
         }
 
         //можно хранить информацию прямо в addin-файле и считывать его как xml, может еще где-то пригодится
         //public static string GetMainWeandrevitFolder(string addinPath)
         //{
-        //    Debug.WriteLine("Font style italic");
+        //    Trace.WriteLine("Font style italic");
         //    bool check = File.Exists(addinPath);
         //    string gatesPath = "";
         //    XmlDocument xDoc = new XmlDocument();

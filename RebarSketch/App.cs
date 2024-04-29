@@ -82,8 +82,8 @@ namespace RebarSketch
 
         public static void ActivatePaths()
         {
-            Debug.Listeners.Clear();
-            Debug.Listeners.Add(new RbsLogger.Logger("RebarSketch"));
+            Trace.Listeners.Clear();
+            Trace.Listeners.Add(new RbsLogger.Logger("RebarSketch"));
 
             assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
@@ -93,7 +93,7 @@ namespace RebarSketch
                 System.IO.Path.Combine(appdataFolder, "bim-starter");
             if (!System.IO.Directory.Exists(bimstarterRootFolder))
             {
-                Debug.WriteLine("Create folder: " + bimstarterRootFolder);
+                Trace.WriteLine("Create folder: " + bimstarterRootFolder);
                 System.IO.Directory.CreateDirectory(bimstarterRootFolder);
             }
             configFilePath = Path.Combine(bimstarterRootFolder, "config.ini");
@@ -101,23 +101,23 @@ namespace RebarSketch
             string bimstarterStoragePath = string.Empty;
             if (File.Exists(configFilePath))
             {
-                Debug.WriteLine("Read file: " + configFilePath);
+                Trace.WriteLine("Read file: " + configFilePath);
                 string[] lines = File.ReadAllLines(configFilePath);
                 if (lines.Length > 0)
                 {
                     bimstarterStoragePath = lines[0];
-                    Debug.WriteLine($"Storage path: {bimstarterStoragePath}");
+                    Trace.WriteLine($"Storage path: {bimstarterStoragePath}");
                 }
                 else
                 {
                     try
                     {
                         System.IO.File.Delete(configFilePath);
-                        Debug.WriteLine($"File is deleted: {configFilePath}");
+                        Trace.WriteLine($"File is deleted: {configFilePath}");
                     }
                     catch
                     {
-                        Debug.WriteLine($"Invalid file: {configFilePath}");
+                        Trace.WriteLine($"Invalid file: {configFilePath}");
                         throw new Exception($"Invalid file: {configFilePath}");
                     }
                 }
@@ -125,7 +125,7 @@ namespace RebarSketch
 
             if(bimstarterStoragePath == string.Empty)
             {
-                Debug.WriteLine("First start, show dialog window and select config folder");
+                Trace.WriteLine("First start, show dialog window and select config folder");
                 string configDefaultFolder = Path.Combine(appdataFolder, @"Autodesk\Revit\Addins\20xx\BimStarter");
                 FormSelectPath form = new FormSelectPath(configFilePath, configDefaultFolder);
                 if (form.ShowDialog() != System.Windows.Forms.DialogResult.OK) 
@@ -139,17 +139,17 @@ namespace RebarSketch
                 {
                     bimstarterStoragePath = configDefaultFolder;
                 }
-                Debug.WriteLine("Selected user path: " + bimstarterStoragePath);
+                Trace.WriteLine("Selected user path: " + bimstarterStoragePath);
                 File.WriteAllText(configFilePath, bimstarterStoragePath);
-                Debug.WriteLine("Success write to file: " + configFilePath);
+                Trace.WriteLine("Success write to file: " + configFilePath);
             }
 
             rebarSketchPath = Path.Combine(bimstarterStoragePath, "RebarSketch");
             libraryPath = Path.Combine(rebarSketchPath, "library");
-            Debug.WriteLine("Library path: " + libraryPath);
+            Trace.WriteLine("Library path: " + libraryPath);
             if (!Directory.Exists(libraryPath))
             {
-                Debug.WriteLine("Library isnt found");
+                Trace.WriteLine("Library isnt found");
                 TaskDialog.Show("Rebar Sketch", "Library directory isnt found: " + libraryPath);
             }
         }

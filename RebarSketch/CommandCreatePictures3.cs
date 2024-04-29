@@ -16,13 +16,13 @@ namespace RebarSketch
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             App.ActivatePaths();
-            Debug.WriteLine("Start rebar sketch, revit version" + commandData.Application.Application.VersionName);
+            Trace.WriteLine("Start rebar sketch, revit version" + commandData.Application.Application.VersionName);
             string dllVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            Debug.WriteLine($"Assembly version: {dllVersion}");
+            Trace.WriteLine($"Assembly version: {dllVersion}");
 
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
-            Debug.WriteLine("Read settings");
+            Trace.WriteLine("Read settings");
             //считываем файл настроек
             GlobalSettings sets = GlobalSettings.Read();
             
@@ -33,7 +33,7 @@ namespace RebarSketch
             if (selIds.Count == 0)
             {
                 message = MyStrings.MessageNoSelectedRows;
-                Debug.WriteLine("No selected elements");
+                Trace.WriteLine("No selected elements");
                 return Result.Failed;
             }
 
@@ -45,7 +45,7 @@ namespace RebarSketch
                 if (selElem.Category.Id.IntegerValue != new ElementId(BuiltInCategory.OST_Rebar).IntegerValue)
                 {
                     message = "Перед запуском перейдите в Ведомость деталей, выберите все строчки и после этого запускайте плагин.";
-                    Debug.WriteLine("No selected rebar elements");
+                    Trace.WriteLine("No selected rebar elements");
                     return Result.Failed;
                 }
             }*/
@@ -62,7 +62,7 @@ namespace RebarSketch
             if (vs == null)
             {
                 message = MyStrings.MessageNoSelectedRows;
-                Debug.WriteLine("Active view is not ViewSchedule");
+                Trace.WriteLine("Active view is not ViewSchedule");
                 return Result.Failed;
             }
 
@@ -74,7 +74,7 @@ namespace RebarSketch
                 .Where(i => i.Name.StartsWith(imagesPrefix))
                 .Select(i => i.Id)
                 .ToList();
-            Debug.WriteLine("Old scetch images found: " + oldImageIds.Count.ToString());
+            Trace.WriteLine("Old scetch images found: " + oldImageIds.Count.ToString());
 
             if (oldImageIds.Count > 0)
             {
@@ -102,7 +102,7 @@ namespace RebarSketch
                     
 
             System.IO.Directory.CreateDirectory(sets.tempPath);
-            Debug.WriteLine("Create temp folder: " + sets.tempPath);
+            Trace.WriteLine("Create temp folder: " + sets.tempPath);
 
 
             //разделяю арматуру на обычную и переменной длины
@@ -121,7 +121,7 @@ namespace RebarSketch
                     variableRebars.Add(rebar);
             }
 
-            Debug.WriteLine("Standart rebars: " + standartRebars.Count.ToString() + ", variable rebars: " + variableRebars.Count.ToString());
+            Trace.WriteLine("Standart rebars: " + standartRebars.Count.ToString() + ", variable rebars: " + variableRebars.Count.ToString());
 
 
             //группировка арматуры переменной длины по марке
@@ -131,7 +131,7 @@ namespace RebarSketch
                 string mark = vRebar.get_Parameter(BuiltInParameter.ALL_MODEL_MARK).AsString();
                 if (mark == null)
                 {
-                    Debug.WriteLine("Non-marked variable rebars is found");
+                    Trace.WriteLine("Non-marked variable rebars is found");
                     TaskDialog.Show("Ошибка", MyStrings.ErrorRebarVariableLengthNoMark);
                     return Result.Failed;
                 }
@@ -172,7 +172,7 @@ namespace RebarSketch
                         sparam.IsDegrees = isDegress;
                         sparam.SetValue(new List<double> { val });
 
-                        Debug.WriteLine("ScetchParameter name " + sparam.Name + " value = " + val.ToString("F0"));
+                        Trace.WriteLine("ScetchParameter name " + sparam.Name + " value = " + val.ToString("F0"));
                     }
 
                     ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, xsi, imagesPrefix, sets);
@@ -211,7 +211,7 @@ namespace RebarSketch
                             {
                                 variableValues.Add(paramName, new HashSet<double> { val });
                             }
-                            Debug.WriteLine("Add variableValues " + paramName + " = " + val.ToString());
+                            Trace.WriteLine("Add variableValues " + paramName + " = " + val.ToString());
                         }
                     }
 
@@ -225,7 +225,7 @@ namespace RebarSketch
 
                     foreach (Element rebar in rebars)
                     {
-                        Debug.WriteLine($"Processed rebar id {rebar.GetElementId()}");
+                        Trace.WriteLine($"Processed rebar id {rebar.GetElementId()}");
                         ScetchImage si = new ScetchImage(rebar, xsi);
 
                         ScetchLibrary.SearchAndApplyScetch(imagesBase, rebar, xsi, imagesPrefix, sets);
@@ -243,11 +243,11 @@ namespace RebarSketch
                 {
                     errorFamilyMessage = errorFamilyMessage + fam + "; ";
                 }
-                Debug.WriteLine(errorFamilyMessage);
+                Trace.WriteLine(errorFamilyMessage);
                 TaskDialog.Show(MyStrings.Report, errorFamilyMessage);
             }
 
-            Debug.WriteLine("Scetches finish success");
+            Trace.WriteLine("Scetches finish success");
             return Result.Succeeded;
         }
     }

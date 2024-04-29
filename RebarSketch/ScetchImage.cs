@@ -50,7 +50,7 @@ namespace RebarSketch
 
         public void Generate(GlobalSettings sets, string imagePrefix)
         {
-            Debug.WriteLine("Generate new image, prefix " + imagePrefix);
+            Trace.WriteLine("Generate new image, prefix " + imagePrefix);
             Bitmap templateImage = ScetchImage.GetBitmap(Template.templateImagePath);
 
             WriteBitmap(sets, templateImage, Template.parameters);
@@ -58,7 +58,7 @@ namespace RebarSketch
             ScetchImagePath = System.IO.Path.Combine(sets.tempPath, imagePrefix + "_" + ImageKey + ".bmp");
             
             templateImage.Save(ScetchImagePath);
-            Debug.WriteLine("New bitmap path: " + ScetchImagePath);
+            Trace.WriteLine("New bitmap path: " + ScetchImagePath);
         }
 
         public static Bitmap GetBitmap(string path)
@@ -69,7 +69,7 @@ namespace RebarSketch
             {
                 string msg = "INCORRECT IMAGE FORMAT: " + path.Replace("\\", " \\")
                     + ", PLEASE RESAVE IMAGE WITH 24bit ColorDepth, PaintNET strongly recommended";
-                Debug.WriteLine(msg);
+                Trace.WriteLine(msg);
                 throw new Exception(msg);
             }
             return bmp;
@@ -80,7 +80,7 @@ namespace RebarSketch
 
         public static void WriteBitmap(GlobalSettings sets, Bitmap templateImage, List<ScetchParameter> parameters)
         {
-            Debug.WriteLine("Write text to bitmap, parameters count: " + parameters.Count.ToString());
+            Trace.WriteLine("Write text to bitmap, parameters count: " + parameters.Count.ToString());
             
             Graphics gr = Graphics.FromImage(templateImage);
             gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
@@ -136,7 +136,7 @@ namespace RebarSketch
                 gr.RotateTransform(angle);
                 gr.TranslateTransform(-b, -h);
             }
-            Debug.WriteLine("Write bitmap success");
+            Trace.WriteLine("Write bitmap success");
         }
 
 

@@ -75,7 +75,7 @@ namespace RebarSketch
 
         private static XmlSketchItem LoadFromXml(string xmlPath)
         {
-            Debug.WriteLine("Read Xml sketch file: " + xmlPath);
+            Trace.WriteLine("Read Xml sketch file: " + xmlPath);
             XmlSketchItem xsi;
             XmlSerializer serializer = new XmlSerializer(typeof(XmlSketchItem));
 
@@ -85,7 +85,7 @@ namespace RebarSketch
                 if (xsi == null)
                 {
                     System.Windows.Forms.MessageBox.Show(MyStrings.ErrorFailedToLoadSettings);
-                    Debug.WriteLine("Unable to get setiings, set default");
+                    Trace.WriteLine("Unable to get setiings, set default");
                     xsi = new XmlSketchItem();
                 }
             }
@@ -143,7 +143,7 @@ namespace RebarSketch
         public void Save()
         {
             string xmlPath = Path.Combine(folder, "config.xml");
-            Debug.WriteLine("Save sketch config to file: " + xmlPath);
+            Trace.WriteLine("Save sketch config to file: " + xmlPath);
             if (File.Exists(xmlPath))
             {
                 try
@@ -164,12 +164,12 @@ namespace RebarSketch
                 using (FileStream writer = new FileStream(xmlPath, FileMode.OpenOrCreate))
                 {
                     serializer.Serialize(writer, this);
-                    Debug.WriteLine("Save settings success");
+                    Trace.WriteLine("Save settings success");
                 }
             }
             catch
             {
-                Debug.WriteLine("Save settings failed");
+                Trace.WriteLine("Save settings failed");
                 throw new Exception("Error save file " + xmlPath);
             }
 
@@ -177,14 +177,14 @@ namespace RebarSketch
             if (File.Exists(txtParametersFile))
             {
                 File.Move(txtParametersFile, txtParametersFile + "old");
-                Debug.WriteLine("File deleted: " + txtParametersFile);
+                Trace.WriteLine("File deleted: " + txtParametersFile);
             }
 
             string txtFamiliesFile = Path.Combine(folder, "families.txt");
             if (File.Exists(txtFamiliesFile))
             {
                 File.Move(txtFamiliesFile, txtFamiliesFile + "old");
-                Debug.WriteLine("File deleted: " + txtFamiliesFile);
+                Trace.WriteLine("File deleted: " + txtFamiliesFile);
             }
         }
     }
